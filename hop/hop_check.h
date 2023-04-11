@@ -22,23 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "hop_check.h"
+#ifndef __HOP_CHECK_H__
+#define __HOP_CHECK_H__
 
-/* Source translation */
-#if defined(HOP_SOURCE_HIP)
-#include "source/hip/hip/hip_runtime.h"
-
-#elif defined(HOP_SOURCE_CUDA)
-#include "source/cuda/cuda_runtime.h"
+#if defined(HOP_SOURCE_HIP) and defined(HOP_TARGET_HIP) \
+ or defined(HOP_SOURCE_CUDA) and defined(HOP_TARGET_CUDA)
+#error HOP source and target are the same: no need to HOP?
 #endif
 
-/* Target translation */
-#if defined(HOP_TARGET_HIP)
-#include "hop_runtime_hip.h"
-
-#elif defined(HOP_TARGET_CUDA)
-#include "hop_runtime_cuda.h"
-
-#else
-#error HOP target undefined (cf. HOP_TARGET_*)
 #endif
