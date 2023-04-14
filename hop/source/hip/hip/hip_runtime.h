@@ -38,14 +38,6 @@ SOFTWARE.
 #define hipError_t                gpuError_t
 #define hipDeviceProp_t           gpuDeviceProp_t
 
-#define hipDoubleComplex          gpuDoubleComplex
-#define make_hipDoubleComplex     make_gpuDoubleComplex
-#define hipCreal                  gpuCreal
-#define hipCimag                  gpuCimag
-#define hipCadd                   gpuCadd
-#define hipCmul                   gpuCmul
-#define hipConj                   gpuConj
-
 #define hipGetLastError           gpuGetLastError
 #define hipGetErrorString         gpuGetErrorString
 

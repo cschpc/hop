@@ -40,14 +40,6 @@ SOFTWARE.
 #define gpuError_t                hipError_t
 #define gpuDeviceProp_t           hipDeviceProp_t
 
-#define gpuDoubleComplex          hipDoubleComplex
-#define make_gpuDoubleComplex     make_hipDoubleComplex
-#define gpuCreal                  hipCreal
-#define gpuCimag                  hipCimag
-#define gpuCadd                   hipCadd
-#define gpuCmul                   hipCmul
-#define gpuConj                   hipConj
-
 #define gpuGetLastError           hipGetLastError
 #define gpuGetErrorString         hipGetErrorString
 

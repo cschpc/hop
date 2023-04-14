@@ -40,14 +40,6 @@ SOFTWARE.
 #define gpuError_t                cudaError_t
 #define gpuDeviceProp_t           cudaDeviceProp
 
-#define gpuDoubleComplex          cuDoubleComplex
-#define make_gpuDoubleComplex     make_cuDoubleComplex
-#define gpuCreal                  cuCreal
-#define gpuCimag                  cuCimag
-#define gpuCadd                   cuCadd
-#define gpuCmul                   cuCmul
-#define gpuConj                   cuConj
-
 #define gpuGetLastError           cudaGetLastError
 #define gpuGetErrorString         cudaGetErrorString
 
