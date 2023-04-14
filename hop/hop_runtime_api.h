@@ -22,13 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_RUNTIME_CUDA_H__
-#define __HOP_RUNTIME_CUDA_H__
+#include "hop_check.h"
 
-#include <cuda_runtime.h>
+/* Source translation */
+#if defined(HOP_SOURCE_HIP)
+#include "source/hip/hip/hip_runtime_api.h"
+
+#elif defined(HOP_SOURCE_CUDA)
+#include "source/cuda/cuda_runtime_api.h"
+#endif
+
+/* Target translation */
+#if defined(HOP_TARGET_HIP)
+#include "hop_runtime_api_hip.h"
+
+#elif defined(HOP_TARGET_CUDA)
 #include "hop_runtime_api_cuda.h"
 
-#define gpuLaunchKernel(kernel, dimGrid, dimBlock, shared, stream, ...) \
-        kernel<<<dimGrid, dimBlock, shared, stream>>>(__VA_ARGS__)
-
+#else
+#error HOP target undefined (cf. HOP_TARGET_*)
 #endif
