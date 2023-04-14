@@ -32,16 +32,22 @@ SOFTWARE.
 
 #define gpuSetDevice              cudaSetDevice
 #define gpuGetDevice              cudaGetDevice
+#define gpuGetDeviceCount         cudaGetDeviceCount
 #define gpuGetDeviceProperties    cudaGetDeviceProperties
 #define gpuDeviceSynchronize      cudaDeviceSynchronize
+#define gpuDeviceReset            cudaDeviceReset
 
 #define gpuFree                   cudaFree
 #define gpuFreeHost               cudaFreeHost
+#define gpuFreeAsync              cudaFreeAsync
 #define gpuMalloc                 cudaMalloc
+#define gpuMallocAsync            cudaMallocAsync
 #define gpuHostMalloc             cudaHostAlloc
 #define gpuHostMallocPortable     cudaHostAllocPortable
 #define gpuMemcpy                 cudaMemcpy
 #define gpuMemcpyAsync            cudaMemcpyAsync
+#define gpuMemset                 cudaMemset
+#define gpuMemsetAsync            cudaMemsetAsync
 
 #define gpuStreamCreate           cudaStreamCreate
 #define gpuStreamDestroy          cudaStreamDestroy
@@ -71,5 +77,6 @@ SOFTWARE.
 #define gpuMemcpyKind             cudaMemcpyKind
 #define gpuMemcpyDeviceToHost     cudaMemcpyDeviceToHost
 #define gpuMemcpyHostToDevice     cudaMemcpyHostToDevice
+#define gpuMemcpyDeviceToDevice   cudaMemcpyDeviceToDevice
 
 #endif

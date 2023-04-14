@@ -30,16 +30,22 @@ SOFTWARE.
 
 #define cudaSetDevice             gpuSetDevice
 #define cudaGetDevice             gpuGetDevice
+#define cudaGetDeviceCount        gpuGetDeviceCount
 #define cudaGetDeviceProperties   gpuGetDeviceProperties
 #define cudaDeviceSynchronize     gpuDeviceSynchronize
+#define cudaDeviceReset           gpuDeviceReset
 
 #define cudaFree                  gpuFree
 #define cudaFreeHost              gpuFreeHost
+#define cudaFreeAsync             gpuFreeAsync
 #define cudaMalloc                gpuMalloc
+#define cudaMallocAsync           gpuMallocAsync
 #define cudaHostAlloc             gpuHostMalloc
 #define cudaHostAllocPortable     gpuHostMallocPortable
 #define cudaMemcpy                gpuMemcpy
 #define cudaMemcpyAsync           gpuMemcpyAsync
+#define cudaMemset                gpuMemset
+#define cudaMemsetAsync           gpuMemsetAsync
 
 #define cudaStreamCreate          gpuStreamCreate
 #define cudaStreamDestroy         gpuStreamDestroy
@@ -69,6 +75,7 @@ SOFTWARE.
 #define cudaMemcpyKind            gpuMemcpyKind
 #define cudaMemcpyDeviceToHost    gpuMemcpyDeviceToHost
 #define cudaMemcpyHostToDevice    gpuMemcpyHostToDevice
+#define cudaMemcpyDeviceToDevice  gpuMemcpyDeviceToDevice
 
 #include <hop/hop_runtime_api.h>
 

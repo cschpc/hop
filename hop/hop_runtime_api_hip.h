@@ -32,16 +32,22 @@ SOFTWARE.
 
 #define gpuSetDevice              hipSetDevice
 #define gpuGetDevice              hipGetDevice
+#define gpuGetDeviceCount         hipGetDeviceCount
 #define gpuGetDeviceProperties    hipGetDeviceProperties
 #define gpuDeviceSynchronize      hipDeviceSynchronize
+#define gpuDeviceReset            hipDeviceReset
 
 #define gpuFree                   hipFree
 #define gpuFreeHost               hipHostFree
+#define gpuFreeAsync              hipFreeAsync
 #define gpuMalloc                 hipMalloc
+#define gpuMallocAsync            hipMallocAsync
 #define gpuHostMalloc             hipHostMalloc
 #define gpuHostMallocPortable     hipHostMallocPortable
 #define gpuMemcpy                 hipMemcpy
 #define gpuMemcpyAsync            hipMemcpyAsync
+#define gpuMemset                 hipMemset
+#define gpuMemsetAsync            hipMemsetAsync
 
 #define gpuStreamCreate           hipStreamCreate
 #define gpuStreamDestroy          hipStreamDestroy
@@ -71,5 +77,6 @@ SOFTWARE.
 #define gpuMemcpyKind             hipMemcpyKind
 #define gpuMemcpyDeviceToHost     hipMemcpyDeviceToHost
 #define gpuMemcpyHostToDevice     hipMemcpyHostToDevice
+#define gpuMemcpyDeviceToDevice   hipMemcpyDeviceToDevice
 
 #endif

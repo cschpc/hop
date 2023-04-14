@@ -30,16 +30,22 @@ SOFTWARE.
 
 #define hipSetDevice              gpuSetDevice
 #define hipGetDevice              gpuGetDevice
+#define hipGetDeviceCount         gpuGetDeviceCount
 #define hipGetDeviceProperties    gpuGetDeviceProperties
 #define hipDeviceSynchronize      gpuDeviceSynchronize
+#define hipDeviceReset            gpuDeviceReset
 
 #define hipFree                   gpuFree
 #define hipHostFree               gpuFreeHost
+#define hipFreeAsync              gpuFreeAsync
 #define hipMalloc                 gpuMalloc
+#define hipMallocAsync            gpuMallocAsync
 #define hipHostMalloc             gpuHostMalloc
 #define hipHostMallocPortable     gpuHostMallocPortable
 #define hipMemcpy                 gpuMemcpy
 #define hipMemcpyAsync            gpuMemcpyAsync
+#define hipMemset                 gpuMemset
+#define hipMemsetAsync            gpuMemsetAsync
 
 #define hipStreamCreate           gpuStreamCreate
 #define hipStreamDestroy          gpuStreamDestroy
@@ -69,6 +75,7 @@ SOFTWARE.
 #define hipMemcpyKind             gpuMemcpyKind
 #define hipMemcpyDeviceToHost     gpuMemcpyDeviceToHost
 #define hipMemcpyHostToDevice     gpuMemcpyHostToDevice
+#define hipMemcpyDeviceToDevice   gpuMemcpyDeviceToDevice
 
 #include <hop/hop_runtime_api.h>
 
