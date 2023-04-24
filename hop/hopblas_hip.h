@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef __HOPBLAS_HIP_H__
 #define __HOPBLAS_HIP_H__
 
-#include <hipblas.h>
+#include <hipblas/hipblas.h>
 
 #define gpublasStatus_t           hipblasStatus_t
 #define gpublasHandle_t           hipblasHandle_t

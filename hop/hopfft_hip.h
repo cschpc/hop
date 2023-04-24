@@ -36,6 +36,6 @@ SOFTWARE.
 #define GPUFFT_D2Z               HIPFFT_D2Z
 #define GPUFFT_Z2D               HIPFFT_Z2D
 
-#include <hipfft.h>
+#include <hipfft/hipfft.h>
 
 #endif
