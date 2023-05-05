@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIPBLAS_H__
 #define __HOP_SOURCE_HIPBLAS_H__
 
+#define HOP_SOURCE_HIP
+
 #define hipblasStatus_t          gpublasStatus_t
 #define hipblasHandle_t          gpublasHandle_t
 #define hipblasOperation_t       gpublasOperation_t

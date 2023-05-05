@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIP_COMPLEX_H__
 #define __HOP_SOURCE_HIP_COMPLEX_H__
 
+#define HOP_SOURCE_HIP
+
 #define hipDoubleComplex          gpuDoubleComplex
 #define make_hipDoubleComplex     make_gpuDoubleComplex
 #define hipCreal                  gpuCreal

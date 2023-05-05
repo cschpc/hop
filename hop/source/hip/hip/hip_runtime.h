@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIP_RUNTIME_H__
 #define __HOP_SOURCE_HIP_RUNTIME_H__
 
+#define HOP_SOURCE_HIP
+
 #define hipLaunchKernelGGL        gpuLaunchKernel
 
 #include "hip_runtime_api.h"

@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_RUNTIME_API_H__
 #define __HOP_SOURCE_CUDA_RUNTIME_API_H__
 
+#define HOP_SOURCE_CUDA
+
 #define cudaGetLastError          gpuGetLastError
 #define cudaGetErrorString        gpuGetErrorString
 

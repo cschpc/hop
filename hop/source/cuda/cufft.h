@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUFFT_H__
 #define __HOP_SOURCE_CUFFT_H__
 
+#define HOP_SOURCE_CUDA
+
 #define cufftDoubleComplex       gpufftDoubleComplex
 #define cufftDoubleReal          gpufftDoubleReal
 #define cufftHandle              gpufftHandle

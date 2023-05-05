@@ -30,4 +30,12 @@ SOFTWARE.
 #error HOP source and target are the same: no need to HOP?
 #endif
 
+#if defined(HOP_SOURCE_HIP) and !defined(HOP_TARGET_CUDA)
+#define HOP_TARGET_CUDA
+#endif
+
+#if defined(HOP_SOURCE_CUDA) and !defined(HOP_TARGET_HIP)
+#define HOP_TARGET_HIP
+#endif
+
 #endif

@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUCOMPLEX_H__
 #define __HOP_SOURCE_CUCOMPLEX_H__
 
+#define HOP_SOURCE_CUDA
+
 #define cuDoubleComplex           gpuDoubleComplex
 #define make_cuDoubleComplex      make_gpuDoubleComplex
 #define cuCreal                   gpuCreal

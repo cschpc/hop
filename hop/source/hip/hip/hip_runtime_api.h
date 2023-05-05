@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIP_RUNTIME_API_H__
 #define __HOP_SOURCE_HIP_RUNTIME_API_H__
 
+#define HOP_SOURCE_HIP
+
 #define hipGetLastError           gpuGetLastError
 #define hipGetErrorString         gpuGetErrorString
 

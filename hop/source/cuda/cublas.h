@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUBLAS_H__
 #define __HOP_SOURCE_CUBLAS_H__
 
+#define HOP_SOURCE_CUDA
+
 #define cublasStatus_t           gpublasStatus_t
 #define cublasHandle_t           gpublasHandle_t
 #define cublasOperation_t        gpublasOperation_t

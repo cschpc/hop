@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_RUNTIME_H__
 #define __HOP_SOURCE_CUDA_RUNTIME_H__
 
+#define HOP_SOURCE_CUDA
+
 #include "cuda_runtime_api.h"
 #include <hop/hop_runtime.h>
 

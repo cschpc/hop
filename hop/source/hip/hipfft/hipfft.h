@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIPFFt_H__
 #define __HOP_SOURCE_HIPFFt_H__
 
+#define HOP_SOURCE_HIP
+
 #define hipfftDoubleComplex      gpufftDoubleComplex
 #define hipfftDoubleReal         gpufftDoubleReal
 #define hipfftHandle             gpufftHandle
