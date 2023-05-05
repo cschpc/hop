@@ -27,7 +27,7 @@ SOFTWARE.
 
 #if defined(HOP_SOURCE_HIP) and defined(HOP_TARGET_HIP) \
  or defined(HOP_SOURCE_CUDA) and defined(HOP_TARGET_CUDA)
-#error HOP source and target are the same: no need to HOP?
+#error "HOP source and target are the same: no need to HOP?"
 #endif
 
 #if defined(HOP_SOURCE_HIP) and !defined(HOP_TARGET_CUDA)

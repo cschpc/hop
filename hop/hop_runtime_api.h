@@ -40,5 +40,5 @@ SOFTWARE.
 #include "hop_runtime_api_cuda.h"
 
 #else
-#error HOP target undefined (cf. HOP_TARGET_*)
+#error "HOP target undefined (cf. HOP_TARGET_*)"
 #endif
