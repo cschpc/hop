@@ -33,19 +33,20 @@ Translate from HIP to CUDA:
 
 #### List of compile flags
 
-- Include HOP headers:<br> `-I$HOP_ROOT`
+- Include path for HOP headers:<br>
+  `-I$HOP_ROOT`
 - Catch source code headers:<br>
   `-I$HOP_ROOT/source/cuda` or `-I$HOP_ROOT/source/hip`
 - Define target GPU backend:<br>
   `-DHOP_TARGET_HIP` or `-DHOP_TARGET_CUDA`
 - (optional) Override automatic filetype detection:<br>
   `-x cu` (if target is CUDA) or `-x hip` (if target is HIP)
-- (optional) Define source language (e.g. if no headers are included in the source
-  code):<br>
+- (optional) Define source language (e.g. if no headers are included in the
+  source code):<br>
   `-DHOP_SOURCE_CUDA` or `-DHOP_SOURCE_HIP`
-- (optional) Manually include HOP headers (e.g. if some header includes are missing in
-  the source code):<br>
-  `-include $HOP_ROOT/hop/hop_runtime.h`
+- (optional) Manually include HOP headers (e.g. if some header includes are
+  missing in the source code):<br>
+  `-include $HOP_ROOT/hop/hop_runtime.h` or similar
 
 
 ## Examples
