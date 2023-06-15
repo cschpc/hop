@@ -3,6 +3,8 @@ import os
 import string
 import inspect
 
+from common.map import Map
+
 # match '[file path] ...' grouped as '[\1] \2'
 regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
 # match an identifier, e.g. 'id(foo, bar)' or 'id'
@@ -58,7 +60,10 @@ def read_map(filename, source=False):
     else:
         order = lambda k,v: (k,v)
 
-    id_maps = {'hip': {}, 'cuda': {}}
+    id_maps = {
+            'hip': Map(label='hip', source=source),
+            'cuda': Map(label='cuda', source=source),
+            }
     for block in regex_block.finditer(txt):
         label = block.group(1).strip().lower()
         content = block.group(2).strip()
