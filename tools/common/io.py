@@ -9,6 +9,16 @@ regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
 regex_id = re.compile('(\w+(\([\w\s,]*\))?)')
 
 
+def _root_path():
+    src = inspect.getsourcefile(lambda:42)
+    path = os.path.join(os.path.dirname(src), '../..')
+    return os.path.abspath(path)
+
+
+def file_path(filename):
+    return os.path.join(_root_path(), filename)
+
+
 def read_tree(filename):
     with open(filename) as fp:
         txt = fp.read()
@@ -94,24 +104,14 @@ def read_list(filename):
     return id_lists
 
 
-def _root_path():
-    src = inspect.getsourcefile(lambda:42)
-    path = os.path.join(os.path.dirname(src), '../..')
-    return os.path.abspath(path)
-
-
-def _file_path(filename):
-    return os.path.join(_root_path(), filename)
-
-
 def read_template(filename):
-    with open(_file_path(filename)) as fp:
+    with open(file_path(filename)) as fp:
         template = string.Template(fp.read())
     return template
 
 
 def read_license():
-    with open(_file_path('LICENSE')) as fp:
+    with open(file_path('LICENSE')) as fp:
         txt = fp.read()
     return re.sub('^MIT License\s*', '', txt)
 
@@ -124,7 +124,7 @@ def _ok_to_overwrite(path):
 
 
 def write_header(path, content, force=False):
-    path = _file_path(path)
+    path = file_path(path)
     if not force and os.path.exists(path) and not _ok_to_overwrite(path):
         return
     with open(path, 'w') as fp:
