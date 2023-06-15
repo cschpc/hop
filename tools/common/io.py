@@ -1,4 +1,7 @@
 import re
+import os
+import string
+import inspect
 
 # match '[file path] ...' grouped as '[\1] \2'
 regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
@@ -89,3 +92,25 @@ def read_list(filename):
                 continue
             id_lists[filename].append(line)
     return id_lists
+
+
+def _root_path():
+    src = inspect.getsourcefile(lambda:42)
+    path = os.path.join(os.path.dirname(src), '../..')
+    return os.path.abspath(path)
+
+
+def _file_path(filename):
+    return os.path.join(_root_path(), filename)
+
+
+def read_template(filename):
+    with open(_file_path(filename)) as fp:
+        template = string.Template(fp.read())
+    return template
+
+
+def read_license():
+    with open(_file_path('LICENSE')) as fp:
+        txt = fp.read()
+    return re.sub('^MIT License\s*', '', txt)
