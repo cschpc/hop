@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from common.headers import make_headers
 from common.io import read_tree, read_map, read_list, write_header
 from common.parser import ArgumentParser
