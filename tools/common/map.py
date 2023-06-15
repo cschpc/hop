@@ -1,7 +1,8 @@
 import re
+import collections
 
 
-class Map(dict):
+class Map(collections.UserDict):
     """Custom dictionary for identifier maps
 
     Tries to guess correct translation for non-defined identifiers.
@@ -14,9 +15,9 @@ class Map(dict):
         super().__init__(*args, **kwargs)
 
     def __getitem__(self, key):
-        if key not in self:
+        if key not in self.data:
             return self._guess(key)
-        return self[key]
+        return self.data[key]
 
     def _prep_regex(self):
         # match the correct identifier prefix
