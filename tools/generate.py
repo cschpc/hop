@@ -1,7 +1,6 @@
-import argparse
-
 from common.headers import make_headers
 from common.io import read_tree, read_map, read_list, write_header
+from common.parser import ArgumentParser
 
 
 def generate(args):
@@ -27,7 +26,7 @@ def generate(args):
 if __name__ == '__main__':
     usage = '%(prog)s [options]'
     desc = 'Generate header files based on metadata (in ../data/).'
-    parser = argparse.ArgumentParser(usage=usage, description=desc)
+    parser = ArgumentParser(usage=usage, description=desc)
     parser.add_argument('-d', '--dry-run', action='store_true', default=False,
             help='run without modifying any files')
     parser.add_argument('-f', '--force', action='store_true', default=False,
