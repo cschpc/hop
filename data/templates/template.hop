@@ -1,0 +1,20 @@
+#include "hop_check.h"
+
+/* Source translation */
+#if defined(HOP_SOURCE_HIP)
+#include "source/hip/${source_hip}"
+
+#elif defined(HOP_SOURCE_CUDA)
+#include "source/cuda/${source_cuda}"
+#endif
+
+/* Target translation */
+#if defined(HOP_TARGET_HIP)
+#include "${corename}_hip.h"
+
+#elif defined(HOP_TARGET_CUDA)
+#include "${corename}_cuda.h"
+
+#else
+#error "HOP target undefined (cf. HOP_TARGET_*)"
+#endif
