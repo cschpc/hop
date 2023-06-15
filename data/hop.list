@@ -1,0 +1,15 @@
+[hop_runtime_api.h]
+
+gpuGetLastError
+gpuSetDevice
+gpuFreeHost
+gpuMemcpy
+gpuStreamCreate
+gpuError_t
+gpuStream_t
+
+
+[driver_types.h]
+
+gpuMemcpyKind
+gpuMemcpyDeviceToHost

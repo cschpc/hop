@@ -1,0 +1,15 @@
+[hip/hip_runtime_api.h]
+
+hipGetLastError
+hipSetDevice
+hipFreeHost
+hipMemcpy
+hipStreamCreate
+hipError_t
+hipStream_t
+
+
+[hip/driver_types.h]
+
+hipMemcpyKind
+hipMemcpyDeviceToHost

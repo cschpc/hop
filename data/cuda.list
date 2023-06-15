@@ -1,0 +1,15 @@
+[cuda_runtime_api.h]
+
+cudaGetLastError
+cudaSetDevice
+cudaFreeHost
+cudaMemcpy
+cudaStreamCreate
+
+
+[driver_types.h]
+
+cudaMemcpyKind
+cudaMemcpyDeviceToHost
+cudaError_t
+cudaStream_t

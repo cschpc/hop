@@ -1,0 +1,17 @@
+[*]
+gpuGetLastError        hipGetLastError        cudaGetLastError
+gpuSetDevice           hipSetDevice           cudaSetDevice
+gpuFreeHost            hipFreeHost            cudaFreeHost
+gpuMemcpy              hipMemcpy              cudaMemcpy
+gpuStreamCreate        hipStreamCreate        cudaStreamCreate
+gpuError_t             hipError_t             cudaError_t
+gpuStream_t            hipStream_t            cudaStream_t
+gpuMemcpyKind          hipMemcpyKind          cudaMemcpyKind
+gpuMemcpyDeviceToHost  hipMemcpyDeviceToHost  cudaMemcpyDeviceToHost
+
+[hip]
+gpuHostMalloc          hipHostMalloc
+
+[cuda]
+gpuProp                cudaProp
+gpuHostMalloc          cudaHostMalloc
