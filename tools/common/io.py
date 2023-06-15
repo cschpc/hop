@@ -114,3 +114,18 @@ def read_license():
     with open(_file_path('LICENSE')) as fp:
         txt = fp.read()
     return re.sub('^MIT License\s*', '', txt)
+
+
+def _ok_to_overwrite(path):
+    answer = input('File {} exists. Overwrite? [Y/n] '.format(path))
+    if answer.lower() in ['n', 'no']:
+        return False
+    return True
+
+
+def write_header(path, content, force=False):
+    path = _file_path(path)
+    if not force and os.path.exists(path) and not _ok_to_overwrite(path):
+        return
+    with open(path, 'w') as fp:
+        fp.write(content)
