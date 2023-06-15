@@ -4,15 +4,15 @@ from common.parser import ArgumentParser
 
 
 def generate(args):
-    tree = read_tree('../data/file.tree')
+    tree = read_tree('data/file.tree')
     id_maps = {
-            'source': read_map('../data/source.map', source=True),
-            'target': read_map('../data/target.map'),
+            'source': read_map('data/source.map', source=True),
+            'target': read_map('data/target.map'),
             }
     id_lists = {
-            'hop': read_list('../data/hop.list'),
-            'hip': read_list('../data/hip.list'),
-            'cuda': read_list('../data/cuda.list'),
+            'hop': read_list('data/hop.list'),
+            'hip': read_list('data/hip.list'),
+            'cuda': read_list('data/cuda.list'),
             }
 
     headers = make_headers(tree, id_maps, id_lists)

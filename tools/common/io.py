@@ -20,7 +20,7 @@ def file_path(filename):
 
 
 def read_tree(filename):
-    with open(filename) as fp:
+    with open(file_path(filename)) as fp:
         txt = fp.read()
 
     tree = {}
@@ -49,7 +49,7 @@ def _find_identifiers(line):
 
 
 def read_map(filename, source=False):
-    with open(filename) as fp:
+    with open(file_path(filename)) as fp:
         txt = fp.read()
 
     # if source translation, reverse order of mapping
@@ -87,7 +87,7 @@ def read_map(filename, source=False):
 
 
 def read_list(filename):
-    with open(filename) as fp:
+    with open(file_path(filename)) as fp:
         txt = fp.read()
 
     id_lists = {}
