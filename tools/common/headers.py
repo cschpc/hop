@@ -3,16 +3,16 @@ import os
 import string
 import inspect
 
-from common.io import corename, lang, read_license, read_template
+from common import io
 
 
-_license = read_license()
+_license = io.read_license()
 
 
 def _fill_template(template, args):
-    template = read_template('data/templates/' + template)
+    template = io.read_template('data/templates/' + template)
     args['template'] = template.safe_substitute(args)
-    header = read_template('data/templates/template.h')
+    header = io.read_template('data/templates/template.h')
     return header.safe_substitute(args)
 
 
@@ -21,9 +21,9 @@ def source_header(filename, content):
     args = {
             'license': _license,
             'sentinel': 'HOP_SOURCE_{}'.format(sentinel),
-            'lang': lang(filename),
+            'lang': io.lang(filename),
             'content': content,
-            'include': 'hop_{}.h'.format(corename(filename)),
+            'include': 'hop_{}.h'.format(io.corename(filename)),
             }
     return _fill_template('template.source', args)
 
@@ -46,7 +46,7 @@ def hop_header(filename, source_hip, source_cuda):
             'sentinel': sentinel,
             'source_hip': source_hip,
             'source_cuda': source_cuda,
-            'corename': corename(filename),
+            'corename': io.corename(filename),
             }
     return _fill_template('template.hop', args)
 
@@ -80,7 +80,7 @@ def _coretree(tree):
     for root in tree:
         cores[root] = {}
         for filename in tree[root]:
-            cores[root][corename(filename)] = filename
+            cores[root][io.corename(filename)] = filename
     return cores
 
 
@@ -89,7 +89,7 @@ def make_headers(tree, id_maps, id_lists):
     headers = {}
     branch = tree['hop']
     for filename in branch:
-        corename = corename(filename)
+        corename = io.corename(filename)
 
         # main hop header
         path = os.path.join('hop', filename)
