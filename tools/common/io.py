@@ -150,3 +150,127 @@ def write_header(path, content, force=False):
         return
     with open(path, 'w') as fp:
         fp.write(content)
+
+
+def write_tree(filename, tree, force=False):
+    path = file_path(filename)
+    if not force and os.path.exists(path) and not _ok_to_overwrite(path):
+        return
+    with open(path, 'w') as fp:
+        print('# HOP file tree', file=fp)
+        for root in tree:
+            print('', file=fp)
+            print('[{}]'.format(root), file=fp)
+            for parent in tree[root]:
+                print(parent, file=fp)
+                for name in tree[root][parent]:
+                    print('+ {}'.format(name), file=fp)
+
+
+def _join_map(id_map, source=False):
+    # if source map, order is reversed
+    if source:
+        order = lambda x: [(v,k) for k,v in x]
+    else:
+        order = lambda x: x
+
+    joint_map = {}
+    for label in id_map:
+        for key, value in order(id_map[label].items()):
+            joint_map.setdefault(key, {})
+            joint_map[key].setdefault(label, [])
+            joint_map[key][label].append(value)
+    return joint_map
+
+
+def _closest_match(hop, mapping, key):
+    if key not in mapping or not len(mapping[key]):
+        return None
+    if len(mapping[key]) == 1:
+        return mapping[key][0]
+    regex_core = re.compile('^(gpu|hip|cuda|cu)')
+    # identical core name with default prefix (hip | cuda)
+    best = regex_core.sub(key, hop)
+    if best in mapping[key]:
+        return best
+    # identical core name
+    core = regex_core.sub('', hop)
+    for other in mapping[key]:
+        if core == regex_core.sub('', other):
+            return other
+    # no idea, just return the first
+    return mapping[key][0]
+
+
+def _max_width(data):
+    if not data:
+        return 0
+    width = [0] * len(data[0])
+    for line in data:
+        for i, column in enumerate(line):
+            if len(column) > width[i]:
+                width[i] = len(column)
+    return width
+
+
+def _format_columns(values, width):
+    if len(width) == 3:
+        template = '{:%d}  {:%d}  {:%d}' % tuple(width)
+    else:
+        template = '{:%d}  {:%d}' % tuple(width)
+    return template.format(*values)
+
+
+def write_map(filename, id_map, source=False, force=False):
+    path = file_path(filename)
+    if not force and os.path.exists(path) and not _ok_to_overwrite(path):
+        return
+    output = {
+            '*': [],
+            'hip': [],
+            'cuda': [],
+            }
+    for hop, mapping in _join_map(id_map, source=source).items():
+        hip = _closest_match(hop, mapping, 'hip')
+        cuda = _closest_match(hop, mapping, 'cuda')
+        if hip and cuda:
+            output['*'].append((hop, hip, cuda))
+            mapping['hip'].remove(hip)
+            mapping['cuda'].remove(cuda)
+        for label in mapping:
+            for other in mapping[label]:
+                output[label].append((hop, other))
+    with open(path, 'w') as fp:
+        print('# HOP identifier map', file=fp)
+        for label in ['*', 'hip', 'cuda']:
+            print('', file=fp)
+            print('[{}]'.format(label), file=fp)
+            width = _max_width(output[label])
+            for ids in sorted(output[label]):
+                line = _format_columns(ids, width)
+                print(line, file=fp)
+
+
+def write_all_maps(id_maps, force=False):
+    write_map('data/source.map', id_maps['source'], source=True, force=force)
+    write_map('data/target.map', id_maps['target'], force=force)
+
+
+def write_list(filename, id_list, force=False):
+    label, _ = os.path.splitext(filename)
+    path = file_path(filename)
+    if not force and os.path.exists(path) and not _ok_to_overwrite(path):
+        return
+    with open(path, 'w') as fp:
+        print('# HOP identifier list for: {}'.format(label.upper()), file=fp)
+        for key in id_list:
+            print('', file=fp)
+            print('[{}]'.format(key), file=fp)
+            for identifier in sorted(id_list[key]):
+                print(identifier, file=fp)
+
+
+def write_all_lists(id_lists, force=False):
+    for key in id_lists:
+        filename = 'data/{}.list'.format(key)
+        write_list(filename, id_lists[key], force=force)
