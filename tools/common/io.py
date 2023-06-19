@@ -21,6 +21,22 @@ def file_path(filename):
     return os.path.join(_root_path(), filename)
 
 
+def corename(filename):
+    core = re.sub('^(hop_|hop|hip_|hip|cuda_|cuda|cu)', '',
+                  os.path.basename(filename))
+    return re.sub('.h$', '', core)
+
+
+def lang(filename):
+    basename = os.path.basename(filename)
+    if basename.startswith('hip'):
+        return 'HIP'
+    elif basename.startswith('cu'):
+        return 'CUDA'
+    else:
+        return 'HOP'
+
+
 def read_tree(filename):
     with open(file_path(filename)) as fp:
         txt = fp.read()

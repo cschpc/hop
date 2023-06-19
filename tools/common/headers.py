@@ -3,26 +3,10 @@ import os
 import string
 import inspect
 
-from common.io import read_template, read_license
+from common.io import corename, lang, read_license, read_template
 
 
 _license = read_license()
-
-
-def _corename(filename):
-    corename = re.sub('^(hop_|hop|hip_|hip|cuda_|cuda|cu)', '',
-                      os.path.basename(filename))
-    return re.sub('.h$', '', corename)
-
-
-def _lang(filename):
-    basename = os.path.basename(filename)
-    if basename.startswith('hip'):
-        return 'HIP'
-    elif basename.startswith('cu'):
-        return 'CUDA'
-    else:
-        return 'HOP'
 
 
 def _fill_template(template, args):
@@ -33,14 +17,13 @@ def _fill_template(template, args):
 
 
 def source_header(filename, content):
-    corename = _corename(filename)
     sentinel = os.path.basename(filename).replace('.', '_').upper()
     args = {
             'license': _license,
             'sentinel': 'HOP_SOURCE_{}'.format(sentinel),
-            'lang': _lang(filename),
+            'lang': lang(filename),
             'content': content,
-            'include': 'hop_{}.h'.format(corename),
+            'include': 'hop_{}.h'.format(corename(filename)),
             }
     return _fill_template('template.source', args)
 
@@ -63,7 +46,7 @@ def hop_header(filename, source_hip, source_cuda):
             'sentinel': sentinel,
             'source_hip': source_hip,
             'source_cuda': source_cuda,
-            'corename': _corename(filename),
+            'corename': corename(filename),
             }
     return _fill_template('template.hop', args)
 
@@ -97,7 +80,7 @@ def _coretree(tree):
     for root in tree:
         cores[root] = {}
         for filename in tree[root]:
-            cores[root][_corename(filename)] = filename
+            cores[root][corename(filename)] = filename
     return cores
 
 
@@ -106,7 +89,7 @@ def make_headers(tree, id_maps, id_lists):
     headers = {}
     branch = tree['hop']
     for filename in branch:
-        corename = _corename(filename)
+        corename = corename(filename)
 
         # main hop header
         path = os.path.join('hop', filename)
