@@ -28,13 +28,17 @@ def corename(filename):
 
 
 def lang(filename):
-    basename = os.path.basename(filename)
+    basename = os.path.basename(filename).lower()
     if basename.startswith('hip'):
         return 'HIP'
     elif basename.startswith('cu'):
         return 'CUDA'
-    else:
+    elif basename.startswith('hop'):
         return 'HOP'
+    elif filename:
+        return lang(os.path.dirname(filename))
+    else:
+        return None
 
 
 def read_tree(filename):
