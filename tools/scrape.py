@@ -32,18 +32,6 @@ def translate(identifier, target):
     return identifier
 
 
-def known_mapping(id_maps, ):
-    if cuda in id_maps['source']['cuda']:
-        if not id_maps['source']['cuda'][cuda] == hop:
-            return True
-    if hip in id_maps['target']['hip']:
-        if not id_maps['target']['hip'][hop] == hip:
-            return True
-
-    hop = src_map[key]
-    return tgt_map[src_map[key]]
-
-
 def update_maps(args, id_maps, triplets):
     count = 0
     for hop, hip, cuda in triplets:
@@ -151,7 +139,24 @@ def _ctags(path):
     return output.split('\n')
 
 
-def scrape_header(args, path, id_lists, known_ids, known_maps):
+def _includes(path):
+    regex_include = re.compile('^#include [<"]([^>"]*)[">]')
+    includes = []
+    for line in open(path):
+        if regex_include.match(line):
+            includes.append(regex_include.match(line).group(1))
+    return includes
+
+
+def _included_ids(path, id_lists):
+    label = lang(path).lower()
+    ids = id_lists[label].get(_filename(path), [])
+    for include in _includes(path):
+        ids.extend(id_lists[label].get(include, []))
+    return ids
+
+
+def scrape_header(args, path, tree, id_lists, known_ids, known_maps):
     """
     cpp -I. -DN
     ctags -x --c-kinds=defgtuvp --file-scope=no
@@ -163,6 +168,7 @@ def scrape_header(args, path, id_lists, known_ids, known_maps):
     moved = 0
     if args.verbose:
         print('Scrape header: {}'.format(filename))
+    included_ids = _included_ids(path, id_lists)
     for line in _ctags(path):
         name = line.split()[0]
         if name not in known_maps:
@@ -170,10 +176,7 @@ def scrape_header(args, path, id_lists, known_ids, known_maps):
         if (name.startswith('_')
                 or name.endswith('_H')
                 or not regex_lang.match(name)
-                or name in id_lists[label].get(filename, [])):
-            continue
-        id_lists[label].setdefault(filename, [])
-        if name in id_lists[label][filename]:
+                or name in included_ids):
             continue
         if name in known_ids:
             _remove_id(name, id_lists[label])
@@ -185,6 +188,7 @@ def scrape_header(args, path, id_lists, known_ids, known_maps):
             if args.debug:
                 print('  New identifier: ', name)
             count += 1
+        id_lists[label].setdefault(filename, [])
         id_lists[label][filename].append(name)
     if args.verbose:
         print('  Moved identifiers: {}'.format(moved))
@@ -245,7 +249,8 @@ def scrape(args):
     for path in args.files:
         basename = os.path.basename(path)
         if basename.endswith('.h'):
-            c, m = scrape_header(args, path, id_lists, known_ids, known_maps)
+            c, m = scrape_header(args, path, tree, id_lists, known_ids,
+                                 known_maps)
             count_id += c
             moved_id += m
         else:
