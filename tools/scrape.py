@@ -44,7 +44,7 @@ def known_mapping(id_maps, ):
     return tgt_map[src_map[key]]
 
 
-def update_maps(id_maps, triplets, verbose=False):
+def update_maps(args, id_maps, triplets):
     count = 0
     for hop, hip, cuda in triplets:
         # cuda -> hip translation
@@ -55,7 +55,8 @@ def update_maps(id_maps, triplets, verbose=False):
             id_maps['source']['cuda'][cuda] = _hop
             id_maps['target']['hip'][_hop] = hip
             count += 1
-            print('New mapping: {} -> {} -> {}'.format(cuda, _hop, hip))
+            if args.debug:
+                print('  New mapping: {} -> {} -> {}'.format(cuda, _hop, hip))
         # hip -> cuda translation
         _hop = hop
         if hip in id_maps['source']['hip']:
@@ -64,12 +65,14 @@ def update_maps(id_maps, triplets, verbose=False):
             id_maps['source']['hip'][hip] = _hop
             id_maps['target']['cuda'][_hop] = cuda
             count += 1
-            if verbose:
-                print('New mapping: {} -> {} -> {}'.format(hip, _hop, cuda))
+            if args.debug:
+                print('  New mapping: {} -> {} -> {}'.format(hip, _hop, cuda))
     return count
 
 
-def scrape_hipify(args, path, known_ids, id_maps):
+def scrape_hipify(args, path, known_ids):
+    if args.verbose:
+        print('Scrape hipify: {}'.format(path))
     txt = open(path).read()
     subs = []
     subs.extend(_find_subst(txt, 'simpleSubstitutions'))
@@ -94,11 +97,10 @@ def scrape_hipify(args, path, known_ids, id_maps):
             continue
         hop = translate(hip, 'gpu')
         triplets.append((hop, hip, cuda))
-    count = update_maps(id_maps, triplets, args.verbose)
     if args.verbose:
+        print('  Substitutions found: {}'.format(len(triplets)))
         print('')
-        print('Substitutions found: {}'.format(len(triplets)))
-        print('New mapping chains:  {}'.format(count))
+    return triplets
 
 
 def _regex_lang(path):
@@ -126,11 +128,10 @@ def _root(path):
     return dirname
 
 
-def _remove_id(name, known_ids, id_list):
+def _remove_id(name, id_list):
     for filename in id_list:
         if name in id_list[filename]:
             id_list[filename].remove(name)
-    known_ids.remove(name)
 
 
 def _ctags(path):
@@ -159,6 +160,9 @@ def scrape_header(args, path, id_lists, known_ids, known_maps):
     filename = _filename(path)
     regex_lang = _regex_lang(path)
     count = 0
+    moved = 0
+    if args.verbose:
+        print('Scrape header: {}'.format(filename))
     for line in _ctags(path):
         name = line.split()[0]
         if name not in known_maps:
@@ -168,14 +172,25 @@ def scrape_header(args, path, id_lists, known_ids, known_maps):
                 or not regex_lang.match(name)
                 or name in id_lists[label].get(filename, [])):
             continue
-        if name in known_ids:
-            _remove_id(name, known_ids, id_lists[label])
         id_lists[label].setdefault(filename, [])
+        if name in id_lists[label][filename]:
+            continue
+        if name in known_ids:
+            _remove_id(name, id_lists[label])
+            if args.debug:
+                print('  Moved identifier: ', name)
+            moved += 1
+        else:
+            known_ids.append(name)
+            if args.debug:
+                print('  New identifier: ', name)
+            count += 1
         id_lists[label][filename].append(name)
-        if args.verbose:
-            print('New identifier: ', name)
-        count += 1
-    print('New identifiers: {}'.format(count))
+    if args.verbose:
+        print('  Moved identifiers: {}'.format(moved))
+        print('  New identifiers:   {}'.format(count))
+        print('')
+    return (count, moved)
 
 
 def _all_identifiers(id_lists):
@@ -186,13 +201,24 @@ def _all_identifiers(id_lists):
     return ids
 
 
-def _known_maps(id_maps):
+def _known_maps(id_maps, triplets):
     ids = []
     for direction in id_maps.values():
         for lang in direction.values():
             ids.extend(lang.keys())
             ids.extend(lang.values())
+    for hop, hip, cuda in triplets:
+        ids.append(hop)
+        ids.append(hip)
+        ids.append(cuda)
     return ids
+
+def _known_triplets(triplets, known_ids):
+    known = []
+    for hop, hip, cuda in triplets:
+        if hop in known_ids:
+            known.append((hop, hip, cuda))
+    return known
 
 
 def scrape(args):
@@ -211,15 +237,24 @@ def scrape(args):
     path = os.path.join(args.hipify, 'bin/hipify-perl')
     if not os.path.exists(path):
         raise FileNotFoundError(path)
-    scrape_hipify(args, path, known_ids, id_maps)
-    known_maps = _known_maps(id_maps)
+    triplets = scrape_hipify(args, path, known_ids)
+    known_maps = _known_maps(id_maps, triplets)
 
+    count_id = 0
+    moved_id = 0
     for path in args.files:
         basename = os.path.basename(path)
         if basename.endswith('.h'):
-            scrape_header(args, path, id_lists, known_ids, known_maps)
+            c, m = scrape_header(args, path, id_lists, known_ids, known_maps)
+            count_id += c
+            moved_id += m
         else:
-            print('Unable to scrape {}'.format(path))
+            print('Unable to scrape: {}'.format(path))
+    triplets = _known_triplets(triplets, known_ids)
+    count_map = update_maps(args, id_maps, triplets)
+    print('Moved identifiers:  {}'.format(moved_id))
+    print('New identifiers:    {}'.format(count_id))
+    print('New mapping chains: {}'.format(count_map))
 
 
 if __name__ == '__main__':
@@ -243,6 +278,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--dry-run', action='store_true', default=False,
             help='run without modifying any files')
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
+            help='display additional information while running')
+    parser.add_argument('--debug', action='store_true', default=False,
             help='display additional information while running')
 
     args = parser.parse_args()
