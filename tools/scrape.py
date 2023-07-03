@@ -97,7 +97,7 @@ def scrape_hipify(args, path, known_ids, id_maps):
     count = update_maps(id_maps, triplets, args.verbose)
     if args.verbose:
         print('')
-        print('Substitutions: found: {}'.format(len(triplets)))
+        print('Substitutions found: {}'.format(len(triplets)))
         print('New mapping chains:  {}'.format(count))
 
 
@@ -150,7 +150,7 @@ def _ctags(path):
     return output.split('\n')
 
 
-def scrape_header(args, path, known_ids, id_lists):
+def scrape_header(args, path, id_lists, known_ids, known_maps):
     """
     cpp -I. -DN
     ctags -x --c-kinds=defgtuvp --file-scope=no
@@ -161,6 +161,8 @@ def scrape_header(args, path, known_ids, id_lists):
     count = 0
     for line in _ctags(path):
         name = line.split()[0]
+        if name not in known_maps:
+            continue
         if (name.startswith('_')
                 or name.endswith('_H')
                 or not regex_lang.match(name)
@@ -184,6 +186,15 @@ def _all_identifiers(id_lists):
     return ids
 
 
+def _known_maps(id_maps):
+    ids = []
+    for direction in id_maps.values():
+        for lang in direction.values():
+            ids.extend(lang.keys())
+            ids.extend(lang.values())
+    return ids
+
+
 def scrape(args):
     tree = read_tree('data/file.tree')
     id_maps = {
@@ -197,22 +208,28 @@ def scrape(args):
             }
     known_ids = _all_identifiers(id_lists)
 
+    path = os.path.join(args.hipify, 'bin/hipify-perl')
+    if not os.path.exists(path):
+        raise FileNotFoundError(path)
+    scrape_hipify(args, path, known_ids, id_maps)
+    known_maps = _known_maps(id_maps)
+
     for path in args.files:
         basename = os.path.basename(path)
-        if basename == 'hipify-perl':
-            scrape_hipify(args, path, known_ids, id_maps)
-        elif basename.endswith('.h'):
-            scrape_header(args, path, known_ids, id_lists)
+        if basename.endswith('.h'):
+            scrape_header(args, path, id_lists, known_ids, known_maps)
         else:
             print('Unable to scrape {}'.format(path))
 
 
 if __name__ == '__main__':
-    usage = '%(prog)s [options] file {file2 ...}'
+    usage = '%(prog)s [options] hipify file.h {file2.h ...}'
     desc = 'Scrape files to suggest new identifiers and mappings.'
     parser = ArgumentParser(usage=usage, description=desc)
+    parser.add_argument('hipify',
+            help='path to HIPIFY git repository / installation')
     parser.add_argument('files', nargs='+',
-            help='files to scrape')
+            help='header files to scrape')
     parser.add_argument('-e', '--include-experimental',
             action='store_true', default=False,
             help='(hipify) include experimental substitutions')
