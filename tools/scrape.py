@@ -21,12 +21,15 @@ def _find_subst(txt, name):
     return []
 
 
-regex_lower = re.compile('^(.*?)(hop|hip|Hip|cuda|Cuda|cu|Cu)')
-regex_upper = re.compile('^(.*?)(HOP|HIP|CUDA|CU)')
+regex_lower = re.compile('^(.*?)(gpu|hip|cuda|cu)')
+regex_camel = re.compile('^(.*?)(Gpu|Hip|Cuda|Cu)')
+regex_upper = re.compile('^(.*?)(GPU|HIP|CUDA|CU)')
 
 def translate(identifier, target):
     if regex_lower.match(identifier):
         return regex_lower.sub(r'\1' + target, identifier)
+    if regex_camel.match(identifier):
+        return regex_camel.sub(r'\1' + target.capitalize(), identifier)
     if regex_upper.match(identifier):
         return regex_upper.sub(r'\1' + target.upper(), identifier)
     return identifier
