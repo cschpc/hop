@@ -21,19 +21,19 @@ def _find_subst(txt, name):
     return []
 
 
-def update_maps(args, id_maps, triplets):
+def update_maps(args, id_maps, triplets, known_ids):
     count = 0
     for hop, hip, cuda in triplets:
         # cuda -> hip translation
         _hop = hop
         if cuda in id_maps['source']['cuda']:
             _hop = id_maps['source']['cuda'][cuda]
-        if _hop not in id_maps['target']['hip']:
-            if not translate.is_default_cuda(_hop, cuda):
-                id_maps['source']['cuda'][cuda] = _hop
-                count += 1
-                if args.debug:
-                    print('  New mapping: {} -> {}'.format(cuda, _hop))
+        elif cuda in known_ids and not translate.is_default_cuda(_hop, cuda):
+            id_maps['source']['cuda'][cuda] = _hop
+            count += 1
+            if args.debug:
+                print('  New mapping: {} -> {}'.format(cuda, _hop))
+        if hip in known_ids and _hop not in id_maps['target']['hip']:
             if not translate.is_default_hip(_hop, hip):
                 id_maps['target']['hip'][_hop] = hip
                 count += 1
@@ -43,12 +43,12 @@ def update_maps(args, id_maps, triplets):
         _hop = hop
         if hip in id_maps['source']['hip']:
             _hop = id_maps['source']['hip'][hip]
-        if _hop not in id_maps['target']['cuda']:
-            if not translate.is_default_hip(_hop, hip):
-                id_maps['source']['hip'][hip] = _hop
-                count += 1
-                if args.debug:
-                    print('  New mapping: {} -> {}'.format(hip, _hop))
+        elif hip in known_ids and not translate.is_default_hip(_hop, hip):
+            id_maps['source']['hip'][hip] = _hop
+            count += 1
+            if args.debug:
+                print('  New mapping: {} -> {}'.format(hip, _hop))
+        if cuda in known_ids and _hop not in id_maps['target']['cuda']:
             if not translate.is_default_cuda(_hop, cuda):
                 id_maps['target']['cuda'][_hop] = cuda
                 count += 1
@@ -273,7 +273,7 @@ def scrape(args):
         else:
             print('Unable to scrape: {}'.format(path))
     triplets = _known_triplets(triplets, known_ids)
-    count['map'] = update_maps(args, id_maps, triplets)
+    count['map'] = update_maps(args, id_maps, triplets, known_ids)
     print('Moved identifiers:  {}'.format(count['move']))
     print('New identifiers:    {}'.format(count['new']))
     print('New mapping chains: {}'.format(count['map']))
