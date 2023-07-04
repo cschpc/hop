@@ -8,7 +8,7 @@ import subprocess
 from common.headers import make_headers
 from common.io import lang, read_tree, read_map, read_list, write_header
 from common.parser import ArgumentParser
-from common.map import Map
+from common.map import Map, translate
 
 
 regex_perl_sub = re.compile('\nsub (\w+)\s+{([^}]*)}')
@@ -21,20 +21,6 @@ def _find_subst(txt, name):
     return []
 
 
-regex_lower = re.compile('^(.*?)(gpu|hip|cuda|cu)')
-regex_camel = re.compile('^(.*?)(Gpu|Hip|Cuda|Cu)')
-regex_upper = re.compile('^(.*?)(GPU|HIP|CUDA|CU)')
-
-def translate(identifier, target):
-    if regex_lower.match(identifier):
-        return regex_lower.sub(r'\1' + target, identifier)
-    if regex_camel.match(identifier):
-        return regex_camel.sub(r'\1' + target.capitalize(), identifier)
-    if regex_upper.match(identifier):
-        return regex_upper.sub(r'\1' + target.upper(), identifier)
-    return identifier
-
-
 def update_maps(args, id_maps, triplets):
     count = 0
     for hop, hip, cuda in triplets:
@@ -43,21 +29,31 @@ def update_maps(args, id_maps, triplets):
         if cuda in id_maps['source']['cuda']:
             _hop = id_maps['source']['cuda'][cuda]
         if _hop not in id_maps['target']['hip']:
-            id_maps['source']['cuda'][cuda] = _hop
-            id_maps['target']['hip'][_hop] = hip
-            count += 1
-            if args.debug:
-                print('  New mapping: {} -> {} -> {}'.format(cuda, _hop, hip))
+            if not translate.is_default_cuda(_hop, cuda):
+                id_maps['source']['cuda'][cuda] = _hop
+                count += 1
+                if args.debug:
+                    print('  New mapping: {} -> {}'.format(cuda, _hop))
+            if not translate.is_default_hip(_hop, hip):
+                id_maps['target']['hip'][_hop] = hip
+                count += 1
+                if args.debug:
+                    print('  New mapping: {} -> {}'.format(_hop, hip))
         # hip -> cuda translation
         _hop = hop
         if hip in id_maps['source']['hip']:
             _hop = id_maps['source']['hip'][hip]
         if _hop not in id_maps['target']['cuda']:
-            id_maps['source']['hip'][hip] = _hop
-            id_maps['target']['cuda'][_hop] = cuda
-            count += 1
-            if args.debug:
-                print('  New mapping: {} -> {} -> {}'.format(hip, _hop, cuda))
+            if not translate.is_default_hip(_hop, hip):
+                id_maps['source']['hip'][hip] = _hop
+                count += 1
+                if args.debug:
+                    print('  New mapping: {} -> {}'.format(hip, _hop))
+            if not translate.is_default_cuda(_hop, cuda):
+                id_maps['target']['cuda'][_hop] = cuda
+                count += 1
+                if args.debug:
+                    print('  New mapping: {} -> {}'.format(_hop, cuda))
     return count
 
 
@@ -86,7 +82,7 @@ def scrape_hipify(args, path, known_ids):
         elif not args.include_unknown and \
                 (cuda not in known_ids or hip not in known_ids):
             continue
-        hop = translate(hip, 'gpu')
+        hop = translate.to_hop(hip)
         triplets.append((hop, hip, cuda))
     if args.verbose:
         print('  Substitutions found: {}'.format(len(triplets)))
@@ -159,7 +155,37 @@ def _included_ids(path, id_lists):
     return ids
 
 
-def scrape_header(args, path, tree, id_lists, known_ids, known_maps):
+def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
+    if name in known_ids:
+        _remove_id(name, id_lists[label])
+        if args.debug:
+            print('  Moved identifier: ', name)
+        count['move'] += 1
+    else:
+        known_ids.append(name)
+        if args.debug:
+            print('  New identifier: ', name)
+        count['new'] += 1
+    id_lists[label].setdefault(filename, [])
+    id_lists[label][filename].append(name)
+
+
+def _all_hop_ids(tree, id_lists, filename):
+    ids = id_lists['hop'].get(filename, [])
+    for name in tree['hop'].get(filename, []):
+        ids.extend(id_lists['hop'].get(name, []))
+    return ids
+
+
+def _add_hop(args, path, name, id_lists, known_ids, tree, count):
+    filename = translate.to_hop(_filename(path))
+    name = translate.to_hop(name)
+    if name not in _all_hop_ids(tree, id_lists, filename):
+        return _add_identifier(args, filename, name, 'hop', id_lists,
+                               known_ids, count)
+
+
+def scrape_header(args, path, tree, id_lists, known_ids, known_maps, count):
     """
     cpp -I. -DN
     ctags -x --c-kinds=defgtuvp --file-scope=no
@@ -167,8 +193,6 @@ def scrape_header(args, path, tree, id_lists, known_ids, known_maps):
     label = lang(path).lower()
     filename = _filename(path)
     regex_lang = _regex_lang(path)
-    count = 0
-    moved = 0
     if args.verbose:
         print('Scrape header: {}'.format(filename))
     included_ids = _included_ids(path, id_lists)
@@ -181,23 +205,13 @@ def scrape_header(args, path, tree, id_lists, known_ids, known_maps):
                 or not regex_lang.match(name)
                 or name in included_ids):
             continue
-        if name in known_ids:
-            _remove_id(name, id_lists[label])
-            if args.debug:
-                print('  Moved identifier: ', name)
-            moved += 1
-        else:
-            known_ids.append(name)
-            if args.debug:
-                print('  New identifier: ', name)
-            count += 1
-        id_lists[label].setdefault(filename, [])
-        id_lists[label][filename].append(name)
+        _add_identifier(args, filename, name, label, id_lists, known_ids, count)
+        _add_hop(args, filename, name, id_lists, known_ids, tree, count)
     if args.verbose:
-        print('  Moved identifiers: {}'.format(moved))
-        print('  New identifiers:   {}'.format(count))
+        print('  Moved identifiers: {}'.format(count['move']))
+        print('  New identifiers:   {}'.format(count['new']))
         print('')
-    return (count, moved)
+    return (count['new'], count['move'])
 
 
 def _all_identifiers(id_lists):
@@ -223,7 +237,7 @@ def _known_maps(id_maps, triplets):
 def _known_triplets(triplets, known_ids):
     known = []
     for hop, hip, cuda in triplets:
-        if hop in known_ids:
+        if hop in known_ids or hip in known_ids or cuda in known_ids:
             known.append((hop, hip, cuda))
     return known
 
@@ -247,22 +261,22 @@ def scrape(args):
     triplets = scrape_hipify(args, path, known_ids)
     known_maps = _known_maps(id_maps, triplets)
 
-    count_id = 0
-    moved_id = 0
+    count = {
+            'new': 0,
+            'move': 0,
+            }
     for path in args.files:
         basename = os.path.basename(path)
         if basename.endswith('.h'):
-            c, m = scrape_header(args, path, tree, id_lists, known_ids,
-                                 known_maps)
-            count_id += c
-            moved_id += m
+            scrape_header(args, path, tree, id_lists, known_ids, known_maps,
+                          count)
         else:
             print('Unable to scrape: {}'.format(path))
     triplets = _known_triplets(triplets, known_ids)
-    count_map = update_maps(args, id_maps, triplets)
-    print('Moved identifiers:  {}'.format(moved_id))
-    print('New identifiers:    {}'.format(count_id))
-    print('New mapping chains: {}'.format(count_map))
+    count['map'] = update_maps(args, id_maps, triplets)
+    print('Moved identifiers:  {}'.format(count['move']))
+    print('New identifiers:    {}'.format(count['new']))
+    print('New mapping chains: {}'.format(count['map']))
 
 
 if __name__ == '__main__':
