@@ -2,11 +2,13 @@
 
 import os
 import re
+import copy
 import tempfile
 import subprocess
 
 from common.headers import make_headers
-from common.io import lang, read_tree, read_map, read_list, write_header
+from common.io import (lang, read_tree, read_map, read_list,
+                       write_map, write_list)
 from common.parser import ArgumentParser
 from common.map import Map, translate
 
@@ -22,6 +24,8 @@ def _find_subst(txt, name):
 
 
 def update_maps(args, id_maps, triplets, known_ids):
+    if args.verbose:
+        print('Update translation maps:')
     count = 0
     for hop, hip, cuda in triplets:
         # cuda -> hip translation
@@ -54,6 +58,8 @@ def update_maps(args, id_maps, triplets, known_ids):
                 count += 1
                 if args.debug:
                     print('  New mapping: {} -> {}'.format(_hop, cuda))
+    if args.verbose:
+        print('  New mapping chains:', count)
     return count
 
 
@@ -255,6 +261,9 @@ def scrape(args):
             }
     known_ids = _all_identifiers(id_lists)
 
+    orig_maps = copy.deepcopy(id_maps)
+    orig_lists = copy.deepcopy(id_lists)
+
     path = os.path.join(args.hipify, 'bin/hipify-perl')
     if not os.path.exists(path):
         raise FileNotFoundError(path)
@@ -274,9 +283,41 @@ def scrape(args):
             print('Unable to scrape: {}'.format(path))
     triplets = _known_triplets(triplets, known_ids)
     count['map'] = update_maps(args, id_maps, triplets, known_ids)
+    print('')
     print('Moved identifiers:  {}'.format(count['move']))
     print('New identifiers:    {}'.format(count['new']))
     print('New mapping chains: {}'.format(count['map']))
+
+    todo = []
+    if not id_maps['source'] == orig_maps['source']:
+        todo.append('data/source.map')
+    if not id_maps['target'] == orig_maps['target']:
+        todo.append('data/target.map')
+    if not id_lists['hop'] == orig_lists['hop']:
+        todo.append('data/hop.list')
+    if not id_lists['hip'] == orig_lists['hip']:
+        todo.append('data/hip.list')
+    if not id_lists['cuda'] == orig_lists['cuda']:
+        todo.append('data/cuda.list')
+    if not todo:
+        return
+    print('')
+    print('Updated metadata:')
+    print('  ' + '\n  '.join(todo))
+    yn = input('Overwrite file(s)? [Y/n] ')
+    if yn.lower() in ['y', 'yes', '']:
+        for filename in todo:
+            base, ext = os.path.splitext(filename)
+            label = os.path.basename(base)
+            if ext == '.map':
+                source = True if label == 'source' else False
+                if not args.dry_run:
+                    write_map(filename, id_maps[label], source, force=True)
+            elif ext == '.list':
+                if not args.dry_run:
+                    write_list(filename, id_lists[label], force=True)
+            else:
+                raise ValueError('Unknown file type: {}'.format(filename))
 
 
 if __name__ == '__main__':
