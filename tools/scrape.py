@@ -3,6 +3,7 @@
 import os
 import re
 import copy
+import logging
 import tempfile
 import subprocess
 
@@ -35,13 +36,13 @@ def update_maps(args, id_maps, triplets, known_ids):
         elif cuda in known_ids and not translate.is_default_cuda(_hop, cuda):
             id_maps['source']['cuda'][cuda] = _hop
             count += 1
-            if args.debug:
+            if args.verbose:
                 print('  New mapping: {} -> {}'.format(cuda, _hop))
         if hip in known_ids and _hop not in id_maps['target']['hip']:
             if not translate.is_default_hip(_hop, hip):
                 id_maps['target']['hip'][_hop] = hip
                 count += 1
-                if args.debug:
+                if args.verbose:
                     print('  New mapping: {} -> {}'.format(_hop, hip))
         # hip -> cuda translation
         _hop = hop
@@ -50,13 +51,13 @@ def update_maps(args, id_maps, triplets, known_ids):
         elif hip in known_ids and not translate.is_default_hip(_hop, hip):
             id_maps['source']['hip'][hip] = _hop
             count += 1
-            if args.debug:
+            if args.verbose:
                 print('  New mapping: {} -> {}'.format(hip, _hop))
         if cuda in known_ids and _hop not in id_maps['target']['cuda']:
             if not translate.is_default_cuda(_hop, cuda):
                 id_maps['target']['cuda'][_hop] = cuda
                 count += 1
-                if args.debug:
+                if args.verbose:
                     print('  New mapping: {} -> {}'.format(_hop, cuda))
     if args.verbose:
         print('  New mapping chains:', count)
@@ -153,10 +154,21 @@ def _includes(path):
     return includes
 
 
-def _included_ids(path, id_lists):
+def _tree_includes(tree, label, parent):
+    if label != 'hop':
+        label = 'source/' + label
+    return tree[label].get(parent, [])
+
+
+def _included_ids(path, tree, id_lists):
     label = lang(path).lower()
+    filename = _filename(path)
     ids = id_lists[label].get(_filename(path), [])
     for include in _includes(path):
+        logging.debug('{} includes {}'.format(filename, include))
+        ids.extend(id_lists[label].get(include, []))
+    for include in _tree_includes(tree, label, filename):
+        logging.debug('{} tree includes {}'.format(filename, include))
         ids.extend(id_lists[label].get(include, []))
     return ids
 
@@ -164,12 +176,12 @@ def _included_ids(path, id_lists):
 def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
     if name in known_ids:
         _remove_id(name, id_lists[label])
-        if args.debug:
+        if args.verbose:
             print('  Moved identifier: ', name)
         count['move'] += 1
     else:
         known_ids.append(name)
-        if args.debug:
+        if args.verbose:
             print('  New identifier: ', name)
         count['new'] += 1
     id_lists[label].setdefault(filename, [])
@@ -201,8 +213,11 @@ def scrape_header(args, path, tree, id_lists, known_ids, known_maps, count):
     regex_lang = _regex_lang(path)
     if args.verbose:
         print('Scrape header: {}'.format(filename))
-    included_ids = _included_ids(path, id_lists)
+    included_ids = _included_ids(path, tree, id_lists)
+    logging.debug('included_ids={}'.format(included_ids))
     for line in _ctags(path):
+        if not line:
+            break
         name = line.split()[0]
         if name not in known_maps:
             continue
@@ -304,8 +319,7 @@ def scrape(args):
     print('')
     print('Updated metadata:')
     print('  ' + '\n  '.join(todo))
-    yn = input('Overwrite file(s)? [Y/n] ')
-    if yn.lower() in ['y', 'yes', '']:
+    if args.force or input('Overwrite file(s)? [Y/n] ') in ['y', 'yes', '']:
         for filename in todo:
             base, ext = os.path.splitext(filename)
             label = os.path.basename(base)
@@ -338,6 +352,8 @@ if __name__ == '__main__':
             help='(hipify) exclude identifiers with this prefix')
     parser.add_argument('-g', '--exclude-group', action='append', default=[],
             help='(hipify) exclude substitution group (library, ...)')
+    parser.add_argument('--force', action='store_true', default=False,
+            help='force overwriting of existing files')
     parser.add_argument('-d', '--dry-run', action='store_true', default=False,
             help='run without modifying any files')
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -346,5 +362,12 @@ if __name__ == '__main__':
             help='display additional information while running')
 
     args = parser.parse_args()
+
+    # configure logging
+    config = {'format': '[%(levelname)s] %(message)s'}
+    if args.debug:
+        config['level'] = logging.DEBUG
+    logging.basicConfig(**config)
+    logging.debug('args={}'.format(args))
 
     scrape(args)
