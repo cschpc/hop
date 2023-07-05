@@ -252,7 +252,7 @@ def write_map(filename, id_map, source=False, force=False):
             width = _max_width(output[label])
             for ids in sorted(output[label]):
                 line = _format_columns(ids, width)
-                print(line, file=fp)
+                print(line.rstrip(), file=fp)
 
 
 def write_all_maps(id_maps, force=False):
@@ -261,7 +261,8 @@ def write_all_maps(id_maps, force=False):
 
 
 def write_list(filename, id_list, force=False):
-    label, _ = os.path.splitext(filename)
+    base, _ = os.path.splitext(filename)
+    label = os.path.basename(base)
     path = file_path(filename)
     if not force and os.path.exists(path) and not _ok_to_overwrite(path):
         return
