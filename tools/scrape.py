@@ -223,16 +223,18 @@ def scrape_header(args, path, tree, id_lists, known_ids, known_maps, count):
             continue
         if (name.startswith('_')
                 or name.endswith('_H')
-                or not regex_lang.match(name)
-                or name in included_ids):
+                or not regex_lang.match(name)):
+            continue
+        if name in included_ids:
+            count['old'] += 1
             continue
         _add_identifier(args, filename, name, label, id_lists, known_ids, count)
         _add_hop(args, filename, name, id_lists, known_ids, tree, count)
     if args.verbose:
-        print('  Moved identifiers: {}'.format(count['move']))
+        print('  Old identifiers:   {}'.format(count['old']))
         print('  New identifiers:   {}'.format(count['new']))
+        print('  Moved identifiers: {}'.format(count['move']))
         print('')
-    return (count['new'], count['move'])
 
 
 def _all_identifiers(id_lists):
@@ -275,6 +277,9 @@ def scrape(args):
             'cuda': read_list('data/cuda.list'),
             }
     known_ids = _all_identifiers(id_lists)
+    logging.debug('tree={}'.format(tree))
+    logging.debug('id_maps={}'.format(id_maps))
+    logging.debug('id_lists={}'.format(id_lists))
 
     orig_maps = copy.deepcopy(id_maps)
     orig_lists = copy.deepcopy(id_lists)
@@ -286,6 +291,7 @@ def scrape(args):
     known_maps = _known_maps(id_maps, triplets)
 
     count = {
+            'old': 0,
             'new': 0,
             'move': 0,
             }
@@ -299,10 +305,13 @@ def scrape(args):
     triplets = _known_triplets(triplets, known_ids)
     count['map'] = update_maps(args, id_maps, triplets, known_ids)
     print('')
-    print('Moved identifiers:  {}'.format(count['move']))
+    print('Old identifiers:    {}'.format(count['old']))
     print('New identifiers:    {}'.format(count['new']))
+    print('Moved identifiers:  {}'.format(count['move']))
     print('New mapping chains: {}'.format(count['map']))
 
+    logging.debug('id_maps={}'.format(id_maps))
+    logging.debug('id_lists={}'.format(id_lists))
     todo = []
     if not id_maps['source'] == orig_maps['source']:
         todo.append('data/source.map')
