@@ -198,7 +198,7 @@ def _all_hop_ids(tree, id_lists, filename):
 
 
 def _add_hop(args, path, name, id_lists, known_ids, tree, count):
-    filename = translate.to_hop(_filename(path))
+    filename = translate.translate(os.path.basename(_filename(path)), 'hop')
     name = translate.to_hop(name)
     if name not in _all_hop_ids(tree, id_lists, filename):
         return _add_identifier(args, filename, name, 'hop', id_lists,
