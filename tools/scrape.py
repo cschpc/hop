@@ -163,7 +163,7 @@ def _tree_includes(tree, label, parent):
 def _included_ids(path, tree, id_lists):
     label = lang(path).lower()
     filename = _filename(path)
-    ids = id_lists[label].get(_filename(path), [])
+    ids = id_lists[label].get(filename, []).copy()
     for include in _includes(path):
         logging.debug('{} includes {}'.format(filename, include))
         ids.extend(id_lists[label].get(include, []))
@@ -174,6 +174,9 @@ def _included_ids(path, tree, id_lists):
 
 
 def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
+    id_lists[label].setdefault(filename, [])
+    if name in id_lists[label][filename]:
+        return
     if name in known_ids:
         _remove_id(name, id_lists[label])
         if args.verbose:
@@ -184,12 +187,11 @@ def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
         if args.verbose:
             print('  New identifier: ', name)
         count['new'] += 1
-    id_lists[label].setdefault(filename, [])
     id_lists[label][filename].append(name)
 
 
 def _all_hop_ids(tree, id_lists, filename):
-    ids = id_lists['hop'].get(filename, [])
+    ids = id_lists['hop'].get(filename, []).copy()
     for name in tree['hop'].get(filename, []):
         ids.extend(id_lists['hop'].get(name, []))
     return ids
