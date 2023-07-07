@@ -299,7 +299,7 @@ def scrape(args):
             }
     for path in args.files:
         basename = os.path.basename(path)
-        if basename.endswith('.h'):
+        if basename.endswith('.h') or basename.endswith('.hpp'):
             scrape_header(args, path, tree, id_lists, known_ids, known_maps,
                           count)
         else:
