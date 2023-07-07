@@ -154,10 +154,16 @@ def _includes(path):
     return includes
 
 
+def _tree_expand(tree, label, filename):
+    names = tree[label].get(filename, []).copy()
+    for name in names.copy():
+        names.extend(_tree_expand(tree, label, name))
+    return names
+
 def _tree_includes(tree, label, parent):
     if label != 'hop':
         label = 'source/' + label
-    return tree[label].get(parent, [])
+    return _tree_expand(tree, label, parent)
 
 
 def _included_ids(path, tree, id_lists):
