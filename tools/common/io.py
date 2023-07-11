@@ -268,10 +268,10 @@ def write_list(filename, id_list, force=False):
         return
     with open(path, 'w') as fp:
         print('# HOP identifier list for: {}'.format(label.upper()), file=fp)
-        for key in id_list:
+        for key in sorted(id_list):
             print('', file=fp)
             print('[{}]'.format(key), file=fp)
-            for identifier in sorted(id_list[key]):
+            for identifier in sorted(set(id_list[key])):
                 print(identifier, file=fp)
 
 
