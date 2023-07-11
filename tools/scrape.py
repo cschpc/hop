@@ -221,23 +221,31 @@ def _find_hop(triplets, name, label):
         index = 1
     else:
         index = 2
+    logging.debug('_find_hop: name={}  label={}  index={}'.format(
+                  name, label, index))
     for triplet in triplets:
         if triplet[index] == name:
+            logging.debug('triplet={}'.format(triplet))
             return triplet[0]
     return None
 
 
-def _add_hop(args, path, name, label, id_maps, id_lists, known_ids, tree,
-             count):
+def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
+             triplets, count):
     filename = translate.translate(os.path.basename(_filename(path)), 'hop')
-    hop = id_maps['source'][label].get(name,
-                                       _find_hop(triplets, name, label))
+    if name in id_maps['source'][label]:
+        hop = id_maps['source'][label][name]
+    else:
+        hop = _find_hop(triplets, name, label)
     if not hop:
         if label == 'hip':
             hop = translate.to_hop(name)
         else:
             return
-    if hop not in _all_hop_ids(tree, id_lists, filename):
+    logging.debug('_add_hop: hop={}'.format(hop))
+    if (hop not in known_ids
+            or (label == 'hip'
+                and hop not in _all_hop_ids(tree, id_lists, filename))):
         _add_identifier(args, filename, hop, 'hop', id_lists, known_ids,
                         count)
 
@@ -271,8 +279,8 @@ def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
             continue
         _add_identifier(args, filename, name, label, id_lists, known_ids,
                         count)
-        _add_hop(args, filename, name, label, id_lists, known_ids, tree,
-                        count)
+        _add_hop(args, filename, name, label, tree, id_maps, id_lists,
+                 known_ids, triplets, count)
     if args.verbose:
         print('  Old identifiers:   {}'.format(count['old']))
         print('  New identifiers:   {}'.format(count['new']))
