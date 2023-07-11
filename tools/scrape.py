@@ -179,6 +179,19 @@ def _included_ids(path, tree, id_lists):
     return ids
 
 
+def _known_maps(id_maps, triplets):
+    ids = []
+    for direction in id_maps.values():
+        for lang in direction.values():
+            ids.extend(lang.keys())
+            ids.extend(lang.values())
+    for hop, hip, cuda in triplets:
+        ids.append(hop)
+        ids.append(hip)
+        ids.append(cuda)
+    return ids
+
+
 def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
     id_lists[label].setdefault(filename, [])
     if name in id_lists[label][filename]:
@@ -203,15 +216,34 @@ def _all_hop_ids(tree, id_lists, filename):
     return ids
 
 
-def _add_hop(args, path, name, id_lists, known_ids, tree, count):
+def _find_hop(triplets, name, label):
+    if label == 'hip':
+        index = 1
+    else:
+        index = 2
+    for triplet in triplets:
+        if triplet[index] == name:
+            return triplet[0]
+    return None
+
+
+def _add_hop(args, path, name, label, id_maps, id_lists, known_ids, tree,
+             count):
     filename = translate.translate(os.path.basename(_filename(path)), 'hop')
-    name = translate.to_hop(name)
-    if name not in _all_hop_ids(tree, id_lists, filename):
-        return _add_identifier(args, filename, name, 'hop', id_lists,
-                               known_ids, count)
+    hop = id_maps['source'][label].get(name,
+                                       _find_hop(triplets, name, label))
+    if not hop:
+        if label == 'hip':
+            hop = translate.to_hop(name)
+        else:
+            return
+    if hop not in _all_hop_ids(tree, id_lists, filename):
+        _add_identifier(args, filename, hop, 'hop', id_lists, known_ids,
+                        count)
 
 
-def scrape_header(args, path, tree, id_lists, known_ids, known_maps, count):
+def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
+                  count):
     """
     cpp -I. -DN
     ctags -x --c-kinds=defgtuvp --file-scope=no
@@ -223,6 +255,7 @@ def scrape_header(args, path, tree, id_lists, known_ids, known_maps, count):
         print('Scrape header: {}'.format(filename))
     included_ids = _included_ids(path, tree, id_lists)
     logging.debug('included_ids={}'.format(included_ids))
+    known_maps = _known_maps(id_maps, triplets)
     for line in _ctags(path):
         if not line:
             break
@@ -236,8 +269,10 @@ def scrape_header(args, path, tree, id_lists, known_ids, known_maps, count):
         if name in included_ids:
             count['old'] += 1
             continue
-        _add_identifier(args, filename, name, label, id_lists, known_ids, count)
-        _add_hop(args, filename, name, id_lists, known_ids, tree, count)
+        _add_identifier(args, filename, name, label, id_lists, known_ids,
+                        count)
+        _add_hop(args, filename, name, label, id_lists, known_ids, tree,
+                        count)
     if args.verbose:
         print('  Old identifiers:   {}'.format(count['old']))
         print('  New identifiers:   {}'.format(count['new']))
@@ -252,18 +287,6 @@ def _all_identifiers(id_lists):
             ids.extend(id_lists[label][filename])
     return ids
 
-
-def _known_maps(id_maps, triplets):
-    ids = []
-    for direction in id_maps.values():
-        for lang in direction.values():
-            ids.extend(lang.keys())
-            ids.extend(lang.values())
-    for hop, hip, cuda in triplets:
-        ids.append(hop)
-        ids.append(hip)
-        ids.append(cuda)
-    return ids
 
 def _known_triplets(triplets, known_ids):
     known = []
@@ -296,7 +319,6 @@ def scrape(args):
     if not os.path.exists(path):
         raise FileNotFoundError(path)
     triplets = scrape_hipify(args, path, known_ids)
-    known_maps = _known_maps(id_maps, triplets)
 
     count = {
             'old': 0,
@@ -306,8 +328,8 @@ def scrape(args):
     for path in args.files:
         basename = os.path.basename(path)
         if basename.endswith('.h') or basename.endswith('.hpp'):
-            scrape_header(args, path, tree, id_lists, known_ids, known_maps,
-                          count)
+            scrape_header(args, path, tree, id_maps, id_lists, known_ids,
+                          triplets, count)
         else:
             print('Unable to scrape: {}'.format(path))
     triplets = _known_triplets(triplets, known_ids)
