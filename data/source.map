@@ -1,18 +1,13 @@
+# HOP identifier map
+
 [*]
-gpuGetLastError        hipGetLastError        cudaGetLastError
-gpuSetDevice           hipSetDevice           cudaSetDevice
-gpuFreeHost            hipFreeHost            cudaFreeHost
-gpuMemcpy              hipMemcpy              cudaMemcpy
-gpuStreamCreate        hipStreamCreate        cudaStreamCreate
-gpuError_t             hipError_t             cudaError_t
-gpuStream_t            hipStream_t            cudaStream_t
-gpuMemcpyKind          hipMemcpyKind          cudaMemcpyKind
-gpuMemcpyDeviceToHost  hipMemcpyDeviceToHost  cudaMemcpyDeviceToHost
 
 [hip]
-gpuHostMalloc          hipMallocHost
-gpuHostMalloc          hipHostMalloc
+make_gpuComplex        make_hipComplex
+make_gpuDoubleComplex  make_hipDoubleComplex
+make_gpuExtent         make_hipExtent
+make_gpuFloatComplex   make_hipFloatComplex
+make_gpuPitchedPtr     make_hipPitchedPtr
+make_gpuPos            make_hipPos
 
 [cuda]
-gpuProp                cuProp
-gpuHostMalloc          cudaHostMalloc

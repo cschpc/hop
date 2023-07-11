@@ -12,5 +12,28 @@ cuda_runtime_api.h
 
 [source/hip]
 
+hip/channel_descriptor.h
++ hip/driver_types.h
+
+hip/device_functions.h
++ hip/hip_runtime_api.h
+
+hip/driver_types.h
+
+hip/hip_complex.h
+
+hip/hip_runtime.h
++ hip/hip_runtime_api.h
+
 hip/hip_runtime_api.h
++ hip/channel_descriptor.h
++ hip/driver_types.h
++ hip/surface_types.h
++ hip/texture_types.h
+
+hip/surface_types.h
++ hip/driver_types.h
+
+hip/texture_types.h
++ hip/channel_descriptor.h
 + hip/driver_types.h
