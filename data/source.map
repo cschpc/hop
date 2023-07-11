@@ -1,6 +1,7 @@
 # HOP identifier map
 
 [*]
+gpuDeviceAttributeMaxBlocksPerMultiProcessor  hipDeviceAttributeMaxBlocksPerMultiProcessor  cudaDevAttrMaxBlocksPerMultiprocessor
 
 [hip]
 make_gpuComplex        make_hipComplex
