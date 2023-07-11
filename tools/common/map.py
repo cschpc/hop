@@ -11,7 +11,7 @@ class Map(collections.UserDict):
     def __init__(self, *args, **kwargs):
         self.label = kwargs.pop('label', '')
         self.source = kwargs.pop('source', False)
-        self._prep_regex()
+        self.translator = Translator()
         super().__init__(*args, **kwargs)
 
     def __getitem__(self, key):
@@ -19,24 +19,14 @@ class Map(collections.UserDict):
             return self._guess(key)
         return self.data[key]
 
-    def _prep_regex(self):
-        # match the correct identifier prefix
-        if self.label == 'cuda':
-            self._regex_src = re.compile('^(cuda|cu)')
-        else:
-            self._regex_src = re.compile('^hip')
-        self._regex_tgt = re.compile('^gpu')
-
     def _guess(self, key):
          # guess identifier, if key seems otherwise ok
+        if not self.translator.match(key):
+            self._error(key)
         if self.source:
-            if not self._regex_src.match(key):
-                self._error(key)
-            return self._regex_src.sub('gpu', key)
+            return self.translator.default(key, 'gpu')
         else:
-            if not self._regex_tgt.match(key):
-                self._error(key)
-            return self._regex_tgt.sub(self.label, key)
+            return self.translator.default(key, self.label)
 
     def _error(self, key):
         kind = 'source' if self.source else 'target'
@@ -90,6 +80,18 @@ class Translator:
 
     def is_default_cuda(self, hop, cuda):
         return cuda == self.default(hop, 'cuda')
+
+    def match(self, name, default=False):
+        if default:
+            _regex_lower = self.regex_default_lower
+            _regex_camel = self.regex_default_camel
+            _regex_upper = self.regex_default_upper
+        else:
+            _regex_lower = self.regex_lower
+            _regex_camel = self.regex_camel
+            _regex_upper = self.regex_upper
+        return (_regex_lower.match(name) or _regex_camel.match(name)
+                or _regex_upper.match(name))
 
 
 translate = Translator()
