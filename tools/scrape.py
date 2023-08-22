@@ -137,17 +137,25 @@ def _remove_id(name, id_list):
             id_list[filename].remove(name)
 
 
-def _ctags(path):
+def _ctags(args, path):
     with tempfile.NamedTemporaryFile(prefix='tmp-hop-scrape-',
                                      suffix='.h') as fp:
         define = ''
         if lang(path) == 'HIP':
-            define = '-D__HIP_PLATFORM_AMD__'
+            define += ' -D__HIP_PLATFORM_AMD__'
+            if args.cpp_macros:
+                define += ' -D__HIPCC__'
+        else:
+            if args.cpp_macros:
+                define += ' -D__CUDACC__'
         # preprocess to get also included files
-        cpp = 'cpp -I{} {} {} > {}'.format(_root(path), define, path, fp.name)
+        cpp = 'cpp '
+        if args.cpp_macros:
+            cpp = 'c++ -E '
+        cpp += '-I{} {} {} > {}'.format(_root(path), define, path, fp.name)
         # get only identifiers that are visible externally
         ctags = 'ctags -x --c-kinds=defgtuvp --file-scope=no {}'.format(fp.name)
-        cmd = cpp + ';' + ctags
+        cmd = cpp + ' ; ' + ctags
         logging.debug('_ctags command: ' + cmd)
         status, output = subprocess.getstatusoutput(cmd)
         if status:
@@ -262,10 +270,6 @@ def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
 
 def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
                   count):
-    """
-    cpp -I. -DN
-    ctags -x --c-kinds=defgtuvp --file-scope=no
-    """
     label = lang(path).lower()
     filename = _filename(path)
     regex_lang = _regex_lang(path)
@@ -274,7 +278,7 @@ def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
     included_ids = _included_ids(path, tree, id_lists)
     logging.debug('included_ids={}'.format(included_ids))
     known_maps = _known_maps(id_maps, triplets)
-    for line in _ctags(path):
+    for line in _ctags(args, path):
         if not line:
             break
         name = line.split()[0]
@@ -401,6 +405,9 @@ if __name__ == '__main__':
             help='path to HIPIFY git repository / installation')
     parser.add_argument('files', nargs='+',
             help='header files to scrape')
+    parser.add_argument('-p', '--cpp-macros',
+            action='store_true', default=False,
+            help='preprocess for C++ with CUDA/HIP macros')
     parser.add_argument('-e', '--include-experimental',
             action='store_true', default=False,
             help='(hipify) include experimental substitutions')
