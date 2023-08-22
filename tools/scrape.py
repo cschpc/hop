@@ -64,6 +64,11 @@ def update_maps(args, id_maps, triplets, known_ids):
     return count
 
 
+# mistaken IDs in hipify
+_errata_hipify = {
+        'hipDeviceAttributeMaxBlocksPerMultiprocessor': 'hipDeviceAttributeMaxBlocksPerMultiProcessor',
+        }
+
 def scrape_hipify(args, path, known_ids):
     if args.verbose:
         print('Scrape hipify: {}'.format(path))
@@ -82,6 +87,10 @@ def scrape_hipify(args, path, known_ids):
 
     triplets = []
     for cuda, hip, group in subs:
+        # correct for any mistaken IDs in hipify
+        hip = _errata_hipify.get(hip, hip)
+        cuda = _errata_hipify.get(cuda, cuda)
+        # skip excluded IDs
         if group in args.exclude_group:
             continue
         elif exclude(cuda) or exclude(hip):
@@ -139,6 +148,7 @@ def _ctags(path):
         # get only identifiers that are visible externally
         ctags = 'ctags -x --c-kinds=defgtuvp --file-scope=no {}'.format(fp.name)
         cmd = cpp + ';' + ctags
+        logging.debug('_ctags command: ' + cmd)
         status, output = subprocess.getstatusoutput(cmd)
         if status:
             raise OSError('Subprocess failed. Abort.')
@@ -268,6 +278,7 @@ def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
         if not line:
             break
         name = line.split()[0]
+        logging.debug('scrape_header: name={}'.format(name))
         if name not in known_maps:
             continue
         if (name.startswith('_')
@@ -327,6 +338,7 @@ def scrape(args):
     if not os.path.exists(path):
         raise FileNotFoundError(path)
     triplets = scrape_hipify(args, path, known_ids)
+    logging.debug('triplets={}'.format(triplets))
 
     count = {
             'old': 0,
