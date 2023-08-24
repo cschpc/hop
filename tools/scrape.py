@@ -154,7 +154,7 @@ def _ctags(args, path):
             cpp = 'c++ -E '
         cpp += '-I{} {} {} > {}'.format(_root(path), define, path, fp.name)
         # get only identifiers that are visible externally
-        ctags = 'ctags -x --c-kinds=defgtuvp --file-scope=no {}'.format(fp.name)
+        ctags = 'ctags -x --c-kinds=defgtuvp --extras=-F {}'.format(fp.name)
         cmd = cpp + ' ; ' + ctags
         logging.debug('_ctags command: ' + cmd)
         status, output = subprocess.getstatusoutput(cmd)
