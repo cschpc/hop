@@ -8,8 +8,8 @@ import tempfile
 import subprocess
 
 from common.headers import make_headers
-from common.io import (lang, read_tree, read_map, read_list,
-                       write_map, write_list)
+from common.io import (header_name, header_root, lang, read_tree, read_map,
+                       read_list, write_map, write_list)
 from common.parser import ArgumentParser
 from common.map import Map, translate
 
@@ -120,21 +120,6 @@ def _regex_lang(path):
     return re.compile('^(.*?)({})'.format('|'.join(prefix)))
 
 
-def _filename(path):
-    dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP':
-        subname = os.path.basename(dirname)
-        filename = os.path.join(subname, filename)
-    return filename
-
-
-def _root(path):
-    dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP':
-        dirname = os.path.dirname(dirname)
-    return dirname
-
-
 def _remove_id(name, id_list):
     for filename in id_list:
         if name in id_list[filename]:
@@ -156,7 +141,8 @@ def _ctags(args, path):
         cpp = 'cpp '
         if args.cpp_macros:
             cpp = 'c++ -E '
-        cpp += '-I{} {} {} > {}'.format(_root(path), define, path, fp.name)
+        cpp += '-I{} {} {} > {}'.format(header_root(path), define, path,
+                                        fp.name)
         # get only identifiers that are visible externally
         ctags = 'ctags -x --c-kinds=defgtuvp --extras=-F {}'.format(fp.name)
         cmd = cpp + ' ; ' + ctags
@@ -182,6 +168,7 @@ def _tree_expand(tree, label, filename):
         names.extend(_tree_expand(tree, label, name))
     return names
 
+
 def _tree_includes(tree, label, parent):
     if label != 'hop':
         label = 'source/' + label
@@ -190,7 +177,7 @@ def _tree_includes(tree, label, parent):
 
 def _included_ids(path, tree, id_lists):
     label = lang(path).lower()
-    filename = _filename(path)
+    filename = header_filename(path)
     ids = id_lists[label].get(filename, []).copy()
     for include in _includes(path):
         logging.debug('{} includes {}'.format(filename, include))
@@ -254,7 +241,8 @@ def _find_hop(triplets, name, label):
 
 def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
              triplets, count):
-    filename = translate.translate(os.path.basename(_filename(path)), 'hop')
+    filename = translate.translate(
+            os.path.basename(header_filename(path)), 'hop')
     if name in id_maps['source'][label]:
         hop = id_maps['source'][label][name]
     else:
@@ -275,7 +263,7 @@ def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
 def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
                   count):
     label = lang(path).lower()
-    filename = _filename(path)
+    filename = header_filename(path)
     regex_lang = _regex_lang(path)
     if args.verbose:
         print('Scrape header: {}'.format(filename))

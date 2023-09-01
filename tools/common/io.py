@@ -21,6 +21,21 @@ def file_path(filename):
     return os.path.join(_root_path(), filename)
 
 
+def header_name(path):
+    dirname, filename = os.path.split(path)
+    if lang(path) == 'HIP':
+        subname = os.path.basename(dirname)
+        filename = os.path.join(subname, filename)
+    return filename
+
+
+def header_root(path):
+    dirname, filename = os.path.split(path)
+    if lang(path) == 'HIP':
+        dirname = os.path.dirname(dirname)
+    return dirname
+
+
 def corename(filename):
     core = re.sub('^(hop_|hop|hip_|hip|cuda_|cuda|cu)', '',
                   os.path.basename(filename))

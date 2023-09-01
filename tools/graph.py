@@ -5,7 +5,7 @@ import re
 import logging
 
 from common.parser import ArgumentParser
-from common.io import lang
+from common.io import header_name, header_root, lang
 
 
 def _includes(path):
@@ -17,24 +17,8 @@ def _includes(path):
     return includes
 
 
-def _filename(path):
-    dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP':
-        subname = os.path.basename(dirname)
-        filename = os.path.join(subname, filename)
-    return filename
-
-
 def _all_filenames(files):
-    return [_filename(x) for x in files]
-
-
-def _root(path):
-    dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP':
-        dirname = os.path.dirname(dirname)
-    return dirname
-
+    return [header_filename(x) for x in files]
 
 
 def _collect(root, filename, included, all_filenames):
@@ -65,8 +49,8 @@ def graph(args):
     all_filenames = _all_filenames(args.files)
     for path in args.files:
         print('')
-        filename = _filename(path)
-        root = _root(path)
+        filename = header_filename(path)
+        root = header_root(path)
         if args.flatten:
             included = [filename]
             _collect(root, filename, included, all_filenames)
