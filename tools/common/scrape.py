@@ -25,7 +25,7 @@ _errata_hipify = {
         'hipDeviceAttributeMaxBlocksPerMultiprocessor': 'hipDeviceAttributeMaxBlocksPerMultiProcessor',
         }
 
-def scrape_hipify(args, path, known_ids):
+def scrape_hipify(args, path):
     if args.verbose:
         print('Scrape hipify: {}'.format(path))
     txt = open(path).read()
@@ -54,10 +54,6 @@ def scrape_hipify(args, path, known_ids):
             continue
         elif exclude(cuda) or exclude(hip):
             logging.debug('  ignore (exclude)')
-            continue
-        elif not args.include_unknown and \
-                (cuda not in known_ids or hip not in known_ids):
-            logging.debug('  ignore (unknown)')
             continue
         triplets.append((hop, hip, cuda))
     if args.verbose:

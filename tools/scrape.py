@@ -88,7 +88,7 @@ def scrape(args):
     path = os.path.join(args.hipify, 'bin/hipify-perl')
     if not os.path.exists(path):
         raise FileNotFoundError(path)
-    triplets = scrape_hipify(args, path, known_ids)
+    triplets = scrape_hipify(args, path)
     logging.debug('triplets={}'.format(triplets))
 
     count = {
@@ -158,9 +158,6 @@ if __name__ == '__main__':
     parser.add_argument('-e', '--include-experimental',
             action='store_true', default=False,
             help='(hipify) include experimental substitutions')
-    parser.add_argument('-u', '--include-unknown',
-            action='store_true', default=False,
-            help='(hipify) include unknown identifiers')
     parser.add_argument('-x', '--exclude', action='append', default=[],
             help='(hipify) exclude identifiers with this prefix')
     parser.add_argument('-g', '--exclude-group', action='append', default=[],
