@@ -17,25 +17,6 @@ def _includes(path):
     return includes
 
 
-def _tree_includes(tree, label, parent):
-    if label != 'hop':
-        label = 'source/' + label
-    return tree[label].get(parent, [])
-
-
-def _included_ids(path, tree, id_lists):
-    label = lang(path).lower()
-    filename = _filename(path)
-    ids = id_lists[label].get(_filename(path), [])
-    for include in _includes(path):
-        logging.debug('{} includes {}'.format(filename, include))
-        ids.extend(id_lists[label].get(include, []))
-    for include in _tree_includes(tree, label, filename):
-        logging.debug('{} tree includes {}'.format(filename, include))
-        ids.extend(id_lists[label].get(include, []))
-    return ids
-
-
 def _filename(path):
     dirname, filename = os.path.split(path)
     if lang(path) == 'HIP':
