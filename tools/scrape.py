@@ -90,15 +90,19 @@ def scrape_hipify(args, path, known_ids):
         # correct for any mistaken IDs in hipify
         hip = _errata_hipify.get(hip, hip)
         cuda = _errata_hipify.get(cuda, cuda)
+        hop = translate.to_hop(hip)
+        logging.debug('scrape_hipify: ({}, {}, {})'.format(hop, hip, cuda))
         # skip excluded IDs
         if group in args.exclude_group:
+            logging.debug('  ignore (group)')
             continue
         elif exclude(cuda) or exclude(hip):
+            logging.debug('  ignore (exclude)')
             continue
         elif not args.include_unknown and \
                 (cuda not in known_ids or hip not in known_ids):
+            logging.debug('  ignore (unknown)')
             continue
-        hop = translate.to_hop(hip)
         triplets.append((hop, hip, cuda))
     if args.verbose:
         print('  Substitutions found: {}'.format(len(triplets)))
@@ -284,10 +288,12 @@ def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
         name = line.split()[0]
         logging.debug('scrape_header: name={}'.format(name))
         if name not in known_maps:
+            logging.debug('  ignore (known_maps)')
             continue
         if (name.startswith('_')
                 or name.endswith('_H')
                 or not regex_lang.match(name)):
+            logging.debug('  ignore (_ | regex)')
             continue
         if name in included_ids:
             count['old'] += 1
