@@ -5,6 +5,7 @@ import pathlib
 
 from common.io import read_tree, read_map, read_list, file_path
 from common.parser import ArgumentParser
+from common.reference import reference_map
 
 
 def _check_regular_file(path, warn):
@@ -41,9 +42,27 @@ def check_tree(tree):
     return warnings
 
 
-def check_maps(tree, id_maps):
+def check_maps(tree, id_maps, hipify=None):
     warnings = []
     warn = lambda x: warnings.append(x)
+    if not hipify:
+        warn('Unable to scrape for reference mappings (cf. --hipify option)')
+        return warnings
+    reference = reference_map(hipify)
+    for cuda, hop in id_maps['source']['cuda'].items():
+        hip = id_maps['target']['hip'][hop]
+        if cuda not in reference['cuda']:
+            warn('No reference mapping for {}'.format(cuda))
+            continue
+        if hip != reference['cuda'][cuda]:
+            warn('Incorrect mapping: {} -> {} -> {}'.format(cuda, hop, hip))
+    for hip, hop in id_maps['source']['hip'].items():
+        cuda = id_maps['target']['cuda'][hop]
+        if hip not in reference['hip']:
+            warn('No reference mapping for {}'.format(hip))
+            continue
+        if cuda not in reference['hip'][hip]:
+            warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
     return warnings
 
 
@@ -88,9 +107,16 @@ def check(args):
             'cuda': read_list('data/cuda.list'),
             }
 
+    hipify = None
+    if args.hipify:
+        hipify = os.path.join(args.hipify, 'bin/hipify-perl')
+        if not os.path.exists(hipify):
+            raise FileNotFoundError(hipify)
+
     warnings = []
     warnings.extend(check_tree(tree))
     warnings.extend(check_lists(tree, id_lists))
+    warnings.extend(check_maps(tree, id_maps, hipify))
     print('Warnings: {}'.format(len(warnings)))
     for msg in warnings:
         print(' ', msg)
@@ -100,6 +126,8 @@ if __name__ == '__main__':
     usage = '%(prog)s [options]'
     desc = 'Check consistency of metadata (in ../data/).'
     parser = ArgumentParser(usage=usage, description=desc)
+    parser.add_argument('-i', '--hipify', default=None,
+            help='path to HIPIFY git repository / installation')
     parser.add_argument('-d', '--dry-run', action='store_true', default=False,
             help='run without modifying any files')
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
