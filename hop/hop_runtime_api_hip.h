@@ -73,6 +73,17 @@ SOFTWARE.
 #define gpuEventBlockingSync      hipEventBlockingSync
 #define gpuEventDisableTiming     hipEventDisableTiming
 
+#define gpuInit                   hipInit
+#define gpuDeviceGet              hipDeviceGet
+#define gpuDeviceGetName          hipDeviceGetName
+#define gpuDeviceGetCount         hipDeviceGetCount
+#define gpuDeviceTotalMem         hipDeviceTotalMem
+#define gpuDevice_t               hipDevice_t
+#define gpuCtx_t                  hipCtx_t
+#define gpuCtxCreate              hipCtxCreate
+#define gpuCtxSetCurrent          hipCtxSetCurrent
+#define gpuMemGetInfo             hipMemGetInfo
+
 /* driver_types */
 #define gpuMemcpyKind             hipMemcpyKind
 #define gpuMemcpyDeviceToHost     hipMemcpyDeviceToHost

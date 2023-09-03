@@ -79,4 +79,16 @@ SOFTWARE.
 #define gpuMemcpyHostToDevice     cudaMemcpyHostToDevice
 #define gpuMemcpyDeviceToDevice   cudaMemcpyDeviceToDevice
 
+/* cuda */
+#define gpuInit                   cuInit
+#define gpuDeviceGet              cuDeviceGet
+#define gpuDeviceGetName          cuDeviceGetName
+#define gpuDeviceGetCount         cuDeviceGetCount
+#define gpuDeviceTotalMem         cuDeviceTotalMem
+#define gpuDevice_t               CUdevice
+#define gpuCtx_t                  CUcontext
+#define gpuCtxCreate              cuCtxCreate
+#define gpuCtxSetCurrent          cuCtxSetCurrent
+#define gpuMemGetInfo             cuMemGetInfo
+
 #endif
