@@ -42,13 +42,11 @@ def check_tree(tree):
     return warnings
 
 
-def check_maps(tree, id_maps, hipify=None):
+def check_maps(tree, id_maps, reference):
     warnings = []
     warn = lambda x: warnings.append(x)
-    if not hipify:
-        warn('Unable to scrape for reference mappings (cf. --hipify option)')
+    if not reference:
         return warnings
-    reference = reference_map(hipify)
     for cuda, hop in id_maps['source']['cuda'].items():
         hip = id_maps['target']['hip'][hop]
         if cuda not in reference['cuda']:
@@ -78,10 +76,50 @@ def _all_files_in_tree(tree):
     return files
 
 
-def check_lists(tree, id_lists):
+def _check_id_list(id_list, label, id_maps, reference, warn, wishlist):
+    for name in id_list:
+        if label == 'hip':
+            hip = name
+            hop = id_maps['source']['hip'][hip]
+            cuda = id_maps['target']['cuda'][hop]
+            if cuda not in reference['hip'][hip]:
+                warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
+            wishlist['cuda'].append(cuda)
+        elif label == 'cuda':
+            cuda = name
+            hop = id_maps['source']['cuda'][cuda]
+            hip = id_maps['target']['hip'][hop]
+            if hip != reference['cuda'][cuda]:
+                warn('Incorrect mapping: {} -> {} -> {}'.format(cuda, hop, hip))
+            wishlist['hip'].append(hip)
+        else:
+            hop = name
+            hip = id_maps['target']['hip'][hop]
+            cuda = id_maps['target']['cuda'][hop]
+            wishlist['hip'].append(hip)
+            wishlist['cuda'].append(cuda)
+
+
+def _known_identifiers(id_lists):
+    known_ids = {
+            'hip': [],
+            'cuda': [],
+            }
+    for label in known_ids:
+        for filename in id_lists[label]:
+            known_ids[label].extend(id_lists[label][filename])
+    return known_ids
+
+
+def check_lists(tree, id_lists, id_maps, reference):
     warnings = []
     warn = lambda x: warnings.append(x)
     files = _all_files_in_tree(tree)
+    known_ids = _known_identifiers(id_lists)
+    wishlist = {
+            'hip': [],
+            'cuda': [],
+            }
     for label in id_lists:
         if label == 'hop':
             root = label
@@ -92,6 +130,14 @@ def check_lists(tree, id_lists):
             _check_regular_file(path, warn)
             if not filename in files[label]:
                 warn('File {} not in file tree.'.format(filename))
+            if not reference:
+                continue
+            _check_id_list(id_lists[label][filename], label, id_maps,
+                           reference, warn, wishlist)
+    for label in wishlist:
+        for tgt in sorted(set(wishlist[label])):
+            if tgt not in known_ids[label]:
+                warn('Unknown target ID: {}'.format(tgt))
     return warnings
 
 
@@ -107,16 +153,19 @@ def check(args):
             'cuda': read_list('data/cuda.list'),
             }
 
-    hipify = None
     if args.hipify:
         hipify = os.path.join(args.hipify, 'bin/hipify-perl')
         if not os.path.exists(hipify):
             raise FileNotFoundError(hipify)
+        reference = reference_map(hipify)
+    else:
+        print('Unable to scrape for reference mappings (cf. --hipify option)')
+        reference = None
 
     warnings = []
     warnings.extend(check_tree(tree))
-    warnings.extend(check_lists(tree, id_lists))
-    warnings.extend(check_maps(tree, id_maps, hipify))
+    warnings.extend(check_lists(tree, id_lists, id_maps, reference))
+    warnings.extend(check_maps(tree, id_maps, reference))
     print('Warnings: {}'.format(len(warnings)))
     for msg in warnings:
         print(' ', msg)
