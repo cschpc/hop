@@ -32,7 +32,7 @@ SOFTWARE.
 #define gpublasOperation_t        cublasOperation_t
 
 #define gpublasCreate             cublasCreate
-#define gpublasDestroy            hipblasDestroy
+#define gpublasDestroy            cublasDestroy
 #define gpublasSetStream          cublasSetStream
 #define gpuublasSetVector         cublasSetVector
 #define gpublasGetMatrixAsync     cublasGetMatrixAsync
