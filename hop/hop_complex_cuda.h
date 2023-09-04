@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <cuComplex.h>
 
+#define gpuFloatComplex           cuFloatComplex
 #define gpuDoubleComplex          cuDoubleComplex
 #define make_gpuDoubleComplex     make_cuDoubleComplex
 #define gpuCreal                  cuCreal

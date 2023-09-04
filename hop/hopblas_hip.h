@@ -34,8 +34,11 @@ SOFTWARE.
 #define gpublasCreate             hipblasCreate
 #define gpublasDestroy            hipblasDestroy
 #define gpublasSetStream          hipblasSetStream
+#define gpuublasSetVector         hipblasSetVector
 #define gpublasGetMatrixAsync     hipblasGetMatrixAsync
 #define gpublasSetMatrixAsync     hipblasSetMatrixAsync
+#define gpublasGetPointerMode     hipblasGetPointerMode
+#define gpublasSetPointerMode     hipblasSetPointerMode
 #define gpublasDsyrk              hipblasDsyrk
 #define gpublasDsyr2k             hipblasDsyr2k
 #define gpublasDscal              hipblasDscal
@@ -56,6 +59,8 @@ SOFTWARE.
 #define GPUBLAS_OP_T                     HIPBLAS_OP_T
 #define GPUBLAS_OP_C                     HIPBLAS_OP_C
 #define GPUBLAS_FILL_MODE_UPPER          HIPBLAS_FILL_MODE_UPPER
+#define GPUBLAS_SIDE_LEFT                HIPBLAS_SIDE_LEFT
+#define GPUBLAS_SIDE_RIGHT               HIPBLAS_SIDE_RIGHT
 #define GPUBLAS_STATUS_SUCCESS           HIPBLAS_STATUS_SUCCESS
 #define GPUBLAS_STATUS_NOT_INITIALIZED   HIPBLAS_STATUS_NOT_INITIALIZED
 #define GPUBLAS_STATUS_ALLOC_FAILED      HIPBLAS_STATUS_ALLOC_FAILED

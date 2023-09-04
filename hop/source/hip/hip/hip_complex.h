@@ -27,6 +27,7 @@ SOFTWARE.
 
 #define HOP_SOURCE_HIP
 
+#define hipFloatComplex           gpuFloatComplex
 #define hipDoubleComplex          gpuDoubleComplex
 #define make_hipDoubleComplex     make_gpuDoubleComplex
 #define hipCreal                  gpuCreal

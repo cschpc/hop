@@ -27,6 +27,7 @@ SOFTWARE.
 
 #define HOP_SOURCE_CUDA
 
+#define cuFloatComplex            gpuFloatComplex
 #define cuDoubleComplex           gpuDoubleComplex
 #define make_cuDoubleComplex      make_gpuDoubleComplex
 #define cuCreal                   gpuCreal

@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <hip/hip_complex.h>
 
+#define gpuFloatComplex           hipFloatComplex
 #define gpuDoubleComplex          hipDoubleComplex
 #define make_gpuDoubleComplex     make_hipDoubleComplex
 #define gpuCreal                  hipCreal
