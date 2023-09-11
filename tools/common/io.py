@@ -82,7 +82,7 @@ def read_tree(filename):
                 node.link = line[1:].strip()
                 node = None
             else:
-                node = Node(line)
+                node = Node(name=line)
                 tree[root][node.name] = node
     return tree
 
