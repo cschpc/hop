@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import logging
 
 from common.scrape import scrape_hipify
