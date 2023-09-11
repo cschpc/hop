@@ -4,7 +4,7 @@ import logging
 import tempfile
 import subprocess
 
-from common.io import header_root, lang
+from common.io import header_name, header_root, lang
 from common.map import translate
 
 
@@ -128,7 +128,7 @@ def _tree_includes(tree, label, parent):
 
 def _included_ids(path, tree, id_lists):
     label = lang(path).lower()
-    filename = header_filename(path)
+    filename = header_name(path)
     ids = id_lists[label].get(filename, []).copy()
     for include in _includes(path):
         logging.debug('{} includes {}'.format(filename, include))
@@ -193,7 +193,7 @@ def _find_hop(triplets, name, label):
 def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
              triplets, count):
     filename = translate.translate(
-            os.path.basename(header_filename(path)), 'hop')
+            os.path.basename(header_name(path)), 'hop')
     if name in id_maps['source'][label]:
         hop = id_maps['source'][label][name]
     else:
@@ -214,7 +214,7 @@ def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
 def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
                   count):
     label = lang(path).lower()
-    filename = header_filename(path)
+    filename = header_name(path)
     regex_lang = _regex_lang(path)
     if args.verbose:
         print('Scrape header: {}'.format(filename))
