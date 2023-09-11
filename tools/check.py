@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import logging
 
 from common.io import read_tree, read_map, read_list, file_path
 from common.parser import ArgumentParser
@@ -74,6 +75,7 @@ def _all_files_in_tree(tree):
         for node in tree[root].values():
             files[label].append(node.name)
             files[label].extend(node)
+    logging.debug('_all_files_in_tree > {}'.format(files))
     return files
 
 
@@ -179,7 +181,16 @@ if __name__ == '__main__':
             help='run without modifying any files')
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
             help='display additional information while running')
+    parser.add_argument('--debug', action='store_true', default=False,
+            help='display additional information while running')
 
     args = parser.parse_args()
+
+    # configure logging
+    config = {'format': '[%(levelname)s] %(message)s'}
+    if args.debug:
+        config['level'] = logging.DEBUG
+    logging.basicConfig(**config)
+    logging.debug('args={}'.format(args))
 
     check(args)
