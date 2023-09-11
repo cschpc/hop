@@ -4,6 +4,7 @@ import string
 import inspect
 
 from common.map import Map
+from common.tree import Node
 
 # match '[file path] ...' grouped as '[\1] \2'
 regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
@@ -66,18 +67,23 @@ def read_tree(filename):
         content = block.group(2).strip()
 
         tree[root] = {}
-        parent = None
+        node = None
         for line in content.split('\n'):
             line = line.strip()
             if not line or line.startswith('#'):
                 continue
             elif line.startswith('+'):
-                if parent is None:
+                if node is None:
                     raise SyntaxError('Orphaned file: ', line)
-                tree[root][parent].append(line[1:].strip())
+                node.append(line[1:].strip())
+            elif line.startswith('='):
+                if node is None:
+                    raise SyntaxError('Orphaned link: ', line)
+                node.link = line[1:].strip()
+                node = None
             else:
-                parent = line
-                tree[root][parent] = []
+                node = Node(line)
+                tree[root][node.name] = node
     return tree
 
 
@@ -180,9 +186,13 @@ def write_tree(filename, tree, force=False):
         for root in tree:
             print('', file=fp)
             print('[{}]'.format(root), file=fp)
-            for parent in tree[root]:
-                print(parent, file=fp)
-                for name in tree[root][parent]:
+            for node in tree[root].values():
+                print('', file=fp)
+                print(node.name, file=fp)
+                if node.link:
+                    print('= {}'.format(node.link), file=fp)
+                    continue
+                for name in node:
                     print('+ {}'.format(name), file=fp)
 
 

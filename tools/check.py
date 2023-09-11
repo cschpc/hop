@@ -33,12 +33,16 @@ def check_tree(tree):
     warnings = []
     warn = lambda x: warnings.append(x)
     for root in tree:
-        for parent in tree[root]:
-            path = file_path(os.path.join(root, parent))
+        for node in tree[root].values():
+            path = file_path(os.path.join(root, node.name))
             _check_regular_file(path, warn)
-            for name in tree[root][parent]:
-                link = file_path(os.path.join(root, name))
-                _check_symbolic_link(link, path, warn)
+            if node.link:
+                target = file_path(os.path.join(root, node.link))
+                _check_symbolic_link(path, target, warn)
+                continue
+            for name in node:
+                path = file_path(os.path.join(root, name))
+                _check_regular_file(path, warn)
     return warnings
 
 
@@ -69,10 +73,9 @@ def _all_files_in_tree(tree):
     for root in tree:
         label = root.replace('source/', '', 1)
         files.setdefault(label, [])
-        for parent in tree[root]:
-            files[label].append(parent)
-            for name in tree[root][parent]:
-                files[label].append(name)
+        for node in tree[root].values():
+            files[label].append(node.name)
+            files[label].extend(node)
     return files
 
 
