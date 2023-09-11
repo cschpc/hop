@@ -128,7 +128,8 @@ def check_lists(tree, id_lists, id_maps, reference):
             path = file_path(os.path.join(root, filename))
             _check_regular_file(path, warn)
             if not filename in files[label]:
-                warn('File {} not in file tree.'.format(filename))
+                warn('File [{}] {} missing from the file tree.'.format(
+                    root, filename))
             if not reference:
                 continue
             _check_id_list(id_lists[label][filename], label, id_maps,
