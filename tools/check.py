@@ -157,7 +157,8 @@ def check(args):
             }
 
     if args.hipify:
-        hipify = os.path.join(args.hipify, 'bin/hipify-perl')
+        hipify = os.path.join(os.path.expanduser(args.hipify),
+                              'bin/hipify-perl')
         if not os.path.exists(hipify):
             raise FileNotFoundError(hipify)
         reference = reference_map(hipify)

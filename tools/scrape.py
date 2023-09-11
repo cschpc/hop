@@ -85,7 +85,8 @@ def scrape(args):
     orig_maps = copy.deepcopy(id_maps)
     orig_lists = copy.deepcopy(id_lists)
 
-    path = os.path.join(args.hipify, 'bin/hipify-perl')
+    path = os.path.join(os.path.expanduser(args.hipify),
+                        'bin/hipify-perl')
     if not os.path.exists(path):
         raise FileNotFoundError(path)
     triplets = scrape_hipify(path, args.verbose, args.include_experimental,
@@ -100,8 +101,8 @@ def scrape(args):
     for path in args.files:
         basename = os.path.basename(path)
         if basename.endswith('.h') or basename.endswith('.hpp'):
-            scrape_header(args, path, tree, id_maps, id_lists, known_ids,
-                          triplets, count)
+            scrape_header(args, os.path.expanduser(path), tree, id_maps,
+                          id_lists, known_ids, triplets, count)
         else:
             print('Unable to scrape: {}'.format(path))
     triplets = _known_triplets(triplets, known_ids)
