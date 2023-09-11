@@ -5,12 +5,13 @@ import pathlib
 import logging
 
 from common.io import read_tree, read_map, read_list, file_path
+from common.abc import UniqueList
 from common.parser import ArgumentParser
 from common.reference import reference_map
 
 
-warnings = []
-warn = lambda x: x not in warnings and warnings.append(x)
+warnings = UniqueList()
+warn = lambda x: warnings.append(x)
 
 
 def _check_regular_file(path, warn):
@@ -71,10 +72,11 @@ def _all_files_in_tree(tree):
     files = {}
     for root in tree:
         label = root.replace('source/', '', 1)
-        files.setdefault(label, [])
+        files.setdefault(label, UniqueList())
         for node in tree[root].values():
             files[label].append(node.name)
             files[label].extend(node)
+            logging.debug('node={}'.format(repr(node)))
     logging.debug('_all_files_in_tree > {}'.format(files))
     return files
 
