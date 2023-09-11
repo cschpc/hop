@@ -8,6 +8,10 @@ from common.parser import ArgumentParser
 from common.reference import reference_map
 
 
+warnings = []
+warn = lambda x: x not in warnings and warnings.append(x)
+
+
 def _check_regular_file(path, warn):
     if not os.path.exists(path):
         warn('File {} does not exist.'.format(path))
@@ -30,8 +34,6 @@ def _check_symbolic_link(link, target, warn):
 
 
 def check_tree(tree):
-    warnings = []
-    warn = lambda x: warnings.append(x)
     for root in tree:
         for node in tree[root].values():
             path = file_path(os.path.join(root, node.name))
@@ -43,12 +45,9 @@ def check_tree(tree):
             for name in node:
                 path = file_path(os.path.join(root, name))
                 _check_regular_file(path, warn)
-    return warnings
 
 
 def check_maps(tree, id_maps, reference):
-    warnings = []
-    warn = lambda x: warnings.append(x)
     if not reference:
         return warnings
     for cuda, hop in id_maps['source']['cuda'].items():
@@ -65,7 +64,6 @@ def check_maps(tree, id_maps, reference):
             continue
         if cuda not in reference['hip'][hip]:
             warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
-    return warnings
 
 
 def _all_files_in_tree(tree):
@@ -115,8 +113,6 @@ def _known_identifiers(id_lists):
 
 
 def check_lists(tree, id_lists, id_maps, reference):
-    warnings = []
-    warn = lambda x: warnings.append(x)
     files = _all_files_in_tree(tree)
     known_ids = _known_identifiers(id_lists)
     wishlist = {
@@ -141,7 +137,6 @@ def check_lists(tree, id_lists, id_maps, reference):
         for tgt in sorted(set(wishlist[label])):
             if tgt not in known_ids[label]:
                 warn('Unknown target ID: {}'.format(tgt))
-    return warnings
 
 
 def check(args):
@@ -165,12 +160,11 @@ def check(args):
         print('Unable to scrape for reference mappings (cf. --hipify option)')
         reference = None
 
-    warnings = []
-    warnings.extend(check_tree(tree))
-    warnings.extend(check_lists(tree, id_lists, id_maps, reference))
-    warnings.extend(check_maps(tree, id_maps, reference))
+    check_tree(tree)
+    check_lists(tree, id_lists, id_maps, reference)
+    check_maps(tree, id_maps, reference)
     print('Warnings: {}'.format(len(warnings)))
-    for msg in warnings:
+    for msg in sorted(warnings):
         print(' ', msg)
 
 
