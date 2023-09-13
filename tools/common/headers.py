@@ -33,8 +33,8 @@ def target_header(filename, include, content):
     args = {
             'license': _license,
             'sentinel': sentinel,
-            'include': include,
             'content': content,
+            'include': include,
             }
     return _fill_template('template.target', args)
 
@@ -58,7 +58,7 @@ def _format_define(src, tgt):
         return '#define {:32} {}'.format(src, tgt)
 
 
-def defines(id_list, id_map):
+def _defines(id_list, id_map):
     defs = []
     for src in id_list:
         tgt = id_map[src]
@@ -66,12 +66,14 @@ def defines(id_list, id_map):
     return defs
 
 
-def content(filename, branch, id_map, id_lists):
-    lines = defines(id_lists[filename], id_map)
-    for sub in branch[filename]:
-        lines.append('')
-        lines.append('/* {} */'.format(sub))
-        lines.extend(defines(id_lists[sub], id_map))
+def _includes(node):
+    return ['#include <{}>'.format(x) for x in node]
+
+
+def content(node, id_map, id_lists):
+    lines = _includes(node)
+    lines.append('')
+    lines.extend(_defines(id_lists.get(node.name, []), id_map))
     return '\n'.join(lines)
 
 
@@ -88,44 +90,42 @@ def make_headers(tree, id_maps, id_lists):
     coretree = _coretree(tree)
     headers = {}
     branch = tree['hop']
-    for filename in branch:
-        corename = io.corename(filename)
+    for node in branch.values():
+        corename = io.corename(node.name)
+        coresubs = [io.corename(x) for x in node]
 
         # main hop header
-        path = os.path.join('hop', filename)
+        path = os.path.join('hop', node.name)
         source_hip = coretree['source/hip'][corename]
         source_cuda = coretree['source/cuda'][corename]
-        headers[path] = hop_header(filename, source_hip, source_cuda)
+        headers[path] = hop_header(node.name, source_hip, source_cuda)
 
         # target header for hip
         path_hip = path.replace('.h', '_hip.h')
-        target_hip = filename.replace('.h', '_hip.h')
-        content_hip = content(filename, branch, id_maps['target']['hip'],
-                              id_lists['hop'])
+        target_hip = node.name.replace('.h', '_hip.h')
+        content_hip = content(node, id_maps['target']['hip'], id_lists['hop'])
         headers[path_hip] = target_header(target_hip, source_hip, content_hip)
 
         # target header for cuda
         path_cuda = path.replace('.h', '_cuda.h')
-        target_cuda = filename.replace('.h', '_cuda.h')
-        content_cuda = content(filename, branch, id_maps['target']['cuda'],
-                               id_lists['hop'])
+        target_cuda = node.name.replace('.h', '_cuda.h')
+        content_cuda = content(node, id_maps['target']['cuda'], id_lists['hop'])
         headers[path_cuda] = target_header(target_cuda, source_cuda,
                                            content_cuda)
 
     # source header for HIP
     branch = tree['source/hip']
-    for filename in branch:
-        path = os.path.join('source/hip', filename)
-        content_hip = content(filename, branch, id_maps['source']['hip'],
-                              id_lists['hip'])
-        headers[path] = source_header(filename, content_hip)
+    for node in branch.values():
+        path = os.path.join('source/hip', node.name)
+        content_hip = content(node, id_maps['source']['hip'], id_lists['hip'])
+        headers[path] = source_header(node.name, content_hip)
 
     # source header for CUDA
     branch = tree['source/cuda']
-    for filename in branch:
-        path = os.path.join('source/cuda', filename)
-        content_cuda = content(filename, branch, id_maps['source']['cuda'],
+    for node in branch.values():
+        path = os.path.join('source/cuda', node.name)
+        content_cuda = content(node, id_maps['source']['cuda'],
                                id_lists['cuda'])
-        headers[path] = source_header(filename, content_cuda)
+        headers[path] = source_header(node.name, content_cuda)
 
     return headers
