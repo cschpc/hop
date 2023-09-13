@@ -9,6 +9,16 @@ from common import io
 _license = io.read_license()
 
 
+def _custom_template(filename, default):
+    name = filename.replace('/', '.')
+    if name.startswith('hop.'):
+        name = name.replace('hop.', 'target.')
+    template = os.path.join('data/templates', 'template.' + name)
+    if os.path.exists(template):
+        return template
+    return os.path.join('data/templates', default)
+
+
 def _fill_template(template, args):
     template = io.read_template('data/templates/' + template)
     args['template'] = template.safe_substitute(args)
@@ -25,7 +35,7 @@ def source_header(filename, content):
             'include': 'hop_{}.h'.format(io.corename(filename)),
             'lang': io.lang(filename),
             }
-    return _fill_template('template.source', args)
+    return _fill_template(_custom_template(filename, 'template.source'), args)
 
 
 def target_header(filename, include, content):
@@ -36,7 +46,7 @@ def target_header(filename, include, content):
             'content': content,
             'include': include,
             }
-    return _fill_template('template.target', args)
+    return _fill_template(_custom_template(filename, 'template.target'), args)
 
 
 def hop_header(filename, hipname, cudaname):
@@ -48,7 +58,7 @@ def hop_header(filename, hipname, cudaname):
             'cudaname': cudaname,
             'hipname': hipname,
             }
-    return _fill_template('template.hop', args)
+    return _fill_template(_custom_template(filename, 'template.hop'), args)
 
 
 def _format_define(src, tgt):
