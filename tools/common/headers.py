@@ -98,27 +98,24 @@ def make_headers(tree, id_maps, id_lists):
         path = os.path.join('hop', node.name)
         source_hip = coretree['source/hip'][corename]
         source_cuda = coretree['source/cuda'][corename]
-        headers[path] = hop_header(node.name, source_hip, source_cuda)
+        headers[path] = hop_header(path, source_hip, source_cuda)
 
         # target header for hip
         path_hip = path.replace('.h', '_hip.h')
-        target_hip = node.name.replace('.h', '_hip.h')
         content_hip = content(node, id_maps['target']['hip'], id_lists['hop'])
-        headers[path_hip] = target_header(target_hip, source_hip, content_hip)
+        headers[path_hip] = target_header(path_hip, source_hip, content_hip)
 
         # target header for cuda
         path_cuda = path.replace('.h', '_cuda.h')
-        target_cuda = node.name.replace('.h', '_cuda.h')
         content_cuda = content(node, id_maps['target']['cuda'], id_lists['hop'])
-        headers[path_cuda] = target_header(target_cuda, source_cuda,
-                                           content_cuda)
+        headers[path_cuda] = target_header(path_cuda, source_cuda, content_cuda)
 
     # source header for HIP
     branch = tree['source/hip']
     for node in branch.values():
         path = os.path.join('source/hip', node.name)
         content_hip = content(node, id_maps['source']['hip'], id_lists['hip'])
-        headers[path] = source_header(node.name, content_hip)
+        headers[path] = source_header(path, content_hip)
 
     # source header for CUDA
     branch = tree['source/cuda']
@@ -126,6 +123,6 @@ def make_headers(tree, id_maps, id_lists):
         path = os.path.join('source/cuda', node.name)
         content_cuda = content(node, id_maps['source']['cuda'],
                                id_lists['cuda'])
-        headers[path] = source_header(node.name, content_cuda)
+        headers[path] = source_header(path, content_cuda)
 
     return headers
