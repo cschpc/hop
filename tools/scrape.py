@@ -5,8 +5,8 @@ import copy
 import logging
 
 from common.io import read_tree, read_map, read_list, write_map, write_list
+from common.metadata import translate
 from common.parser import ArgumentParser
-from common.map import translate
 from common.scrape import scrape_hipify, scrape_header
 
 

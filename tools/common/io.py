@@ -3,8 +3,7 @@ import os
 import string
 import inspect
 
-from common.map import Map
-from common.tree import Node
+from common.metadata import Map, Node
 
 # match '[file path] ...' grouped as '[\1] \2'
 regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
