@@ -21,9 +21,9 @@ def source_header(filename, content):
     args = {
             'license': _license,
             'sentinel': 'HOP_SOURCE_{}'.format(sentinel),
-            'lang': io.lang(filename),
             'content': content,
             'include': 'hop_{}.h'.format(io.corename(filename)),
+            'lang': io.lang(filename),
             }
     return _fill_template('template.source', args)
 
@@ -39,14 +39,14 @@ def target_header(filename, include, content):
     return _fill_template('template.target', args)
 
 
-def hop_header(filename, source_hip, source_cuda):
+def hop_header(filename, hipname, cudaname):
     sentinel = os.path.basename(filename).replace('.', '_').upper()
     args = {
             'license': _license,
             'sentinel': sentinel,
-            'source_hip': source_hip,
-            'source_cuda': source_cuda,
             'corename': io.corename(filename),
+            'cudaname': cudaname,
+            'hipname': hipname,
             }
     return _fill_template('template.hop', args)
 
@@ -96,19 +96,19 @@ def make_headers(tree, id_maps, id_lists):
 
         # main hop header
         path = os.path.join('hop', node.name)
-        source_hip = coretree['source/hip'][corename]
-        source_cuda = coretree['source/cuda'][corename]
-        headers[path] = hop_header(path, source_hip, source_cuda)
+        hipname = coretree['source/hip'][corename]
+        cudaname = coretree['source/cuda'][corename]
+        headers[path] = hop_header(path, hipname, cudaname)
 
         # target header for hip
         path_hip = path.replace('.h', '_hip.h')
         content_hip = content(node, id_maps['target']['hip'], id_lists['hop'])
-        headers[path_hip] = target_header(path_hip, source_hip, content_hip)
+        headers[path_hip] = target_header(path_hip, hipname, content_hip)
 
         # target header for cuda
         path_cuda = path.replace('.h', '_cuda.h')
         content_cuda = content(node, id_maps['target']['cuda'], id_lists['hop'])
-        headers[path_cuda] = target_header(path_cuda, source_cuda, content_cuda)
+        headers[path_cuda] = target_header(path_cuda, cudaname, content_cuda)
 
     # source header for HIP
     branch = tree['source/hip']
