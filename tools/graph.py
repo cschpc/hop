@@ -18,7 +18,7 @@ def _includes(path):
 
 
 def _all_filenames(files):
-    return [header_filename(x) for x in files]
+    return [header_name(x) for x in files]
 
 
 def _collect(root, filename, included, all_filenames):
@@ -49,7 +49,7 @@ def graph(args):
     all_filenames = _all_filenames(args.files)
     for path in args.files:
         print('')
-        filename = header_filename(path)
+        filename = header_name(path)
         root = header_root(path)
         if args.flatten:
             included = [filename]
