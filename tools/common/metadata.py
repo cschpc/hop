@@ -111,3 +111,17 @@ class Node(list):
         return "Node({}, name={}, link={})".format(list(self),
                                                    repr(self.name),
                                                    repr(self.link))
+
+
+class Include(str):
+    """Filename of a header file to be included"""
+
+    def __repr__(self):
+        return "Include('{}')".format(self)
+
+
+class Embed(str):
+    """Filename of a header file to be embedded"""
+
+    def __repr__(self):
+        return "Embed('{}')".format(self)

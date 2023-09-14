@@ -4,6 +4,7 @@ import string
 import inspect
 
 from common import io
+from common.metadata import Include, Embed
 
 
 _license = io.read_license()
@@ -77,13 +78,23 @@ def _defines(id_list, id_map):
 
 
 def _includes(node):
-    return ['#include <{}>'.format(x) for x in node]
+    return ['#include <{}>'.format(x) for x in node if type(x) is Include]
+
+
+def _embed(node):
+    return [x for x in node if type(x) is Embed]
 
 
 def content(node, id_map, id_list):
     lines = _includes(node)
     lines.append('')
     lines.extend(_defines(id_list.get(node.name, []), id_map))
+    for name in _embed(node):
+        if name not in id_list:
+            continue
+        lines.append('')
+        lines.append('/* {} */'.format(name))
+        lines.extend(_defines(id_list[name], id_map))
     return '\n'.join(lines)
 
 

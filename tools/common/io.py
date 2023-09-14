@@ -4,7 +4,7 @@ import string
 import inspect
 import logging
 
-from common.metadata import Map, Node
+from common.metadata import Map, Node, Include, Embed
 
 # match '[file path] ...' grouped as '[\1] \2'
 regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
@@ -75,7 +75,11 @@ def read_tree(filename):
             elif line.startswith('+'):
                 if node is None:
                     raise SyntaxError('Orphaned file: ', line)
-                node.append(line[1:].strip())
+                node.append(Include(line[1:].strip()))
+            elif line.startswith('-'):
+                if node is None:
+                    raise SyntaxError('Orphaned link: ', line)
+                node.append(Embed(line[1:].strip()))
             elif line.startswith('='):
                 if node is None:
                     raise SyntaxError('Orphaned link: ', line)
