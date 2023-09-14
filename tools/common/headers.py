@@ -118,7 +118,7 @@ def make_headers(metadata):
         coresubs = [io.corename(x) for x in node]
 
         # main hop header
-        path = os.path.join('hop', node.name)
+        path = node.name
         hipname = coretree['source/hip'][corename]
         cudaname = coretree['source/cuda'][corename]
         headers[path] = hop_header(path, hipname, cudaname)
