@@ -40,7 +40,7 @@ def header_root(path):
 def corename(filename):
     core = re.sub('^(hop_|hop|hip_|hip|cuda_|cuda|cu)', '',
                   os.path.basename(filename))
-    return re.sub('.h$', '', core)
+    return re.sub('.h$', '', core).lower()
 
 
 def lang(filename):
