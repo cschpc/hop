@@ -21,7 +21,7 @@ def _custom_template(filename, default):
 
 
 def _fill_template(template, args):
-    template = io.read_template('data/templates/' + template)
+    template = io.read_template(template)
     args['template'] = template.safe_substitute(args)
     header = io.read_template('data/templates/template.h')
     return header.safe_substitute(args)
