@@ -80,10 +80,10 @@ def _includes(node):
     return ['#include <{}>'.format(x) for x in node]
 
 
-def content(node, id_map, id_lists):
+def content(node, id_map, id_list):
     lines = _includes(node)
     lines.append('')
-    lines.extend(_defines(id_lists.get(node.name, []), id_map))
+    lines.extend(_defines(id_list.get(node.name, []), id_map))
     return '\n'.join(lines)
 
 
@@ -96,10 +96,10 @@ def _coretree(tree):
     return cores
 
 
-def make_headers(tree, id_maps, id_lists):
-    coretree = _coretree(tree)
+def make_headers(metadata):
+    coretree = _coretree(metadata['tree'])
     headers = {}
-    branch = tree['hop']
+    branch = metadata['tree']['hop']
     for node in branch.values():
         corename = io.corename(node.name)
         coresubs = [io.corename(x) for x in node]
@@ -112,27 +112,30 @@ def make_headers(tree, id_maps, id_lists):
 
         # target header for hip
         path_hip = path.replace('.h', '_hip.h')
-        content_hip = content(node, id_maps['target']['hip'], id_lists['hop'])
+        content_hip = content(node, metadata['map']['target']['hip'],
+                              metadata['list']['hop'])
         headers[path_hip] = target_header(path_hip, hipname, content_hip)
 
         # target header for cuda
         path_cuda = path.replace('.h', '_cuda.h')
-        content_cuda = content(node, id_maps['target']['cuda'], id_lists['hop'])
+        content_cuda = content(node, metadata['map']['target']['cuda'],
+                               metadata['list']['hop'])
         headers[path_cuda] = target_header(path_cuda, cudaname, content_cuda)
 
     # source header for HIP
-    branch = tree['source/hip']
+    branch = metadata['tree']['source/hip']
     for node in branch.values():
         path = os.path.join('source/hip', node.name)
-        content_hip = content(node, id_maps['source']['hip'], id_lists['hip'])
+        content_hip = content(node, metadata['map']['source']['hip'],
+                              metadata['list']['hip'])
         headers[path] = source_header(path, content_hip)
 
     # source header for CUDA
-    branch = tree['source/cuda']
+    branch = metadata['tree']['source/cuda']
     for node in branch.values():
         path = os.path.join('source/cuda', node.name)
-        content_cuda = content(node, id_maps['source']['cuda'],
-                               id_lists['cuda'])
+        content_cuda = content(node, metadata['map']['source']['cuda'],
+                               metadata['list']['cuda'])
         headers[path] = source_header(path, content_cuda)
 
     return headers

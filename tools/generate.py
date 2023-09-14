@@ -3,26 +3,14 @@
 import logging
 
 from common.headers import make_headers
-from common.io import read_tree, read_map, read_list, write_header
+from common.io import read_metadata, write_header
 from common.parser import ArgumentParser
 
 
 def generate(args):
-    tree = read_tree('data/file.tree')
-    id_maps = {
-            'source': read_map('data/source.map', source=True),
-            'target': read_map('data/target.map'),
-            }
-    id_lists = {
-            'hop': read_list('data/hop.list'),
-            'hip': read_list('data/hip.list'),
-            'cuda': read_list('data/cuda.list'),
-            }
-    logging.debug('tree={}'.format(tree))
-    logging.debug('id_maps={}'.format(id_maps))
-    logging.debug('id_lists={}'.format(id_lists))
+    metadata = read_metadata()
 
-    headers = make_headers(tree, id_maps, id_lists)
+    headers = make_headers(metadata)
     for path, content in headers.items():
         if args.verbose:
             print('Writing header: {}'.format(path))

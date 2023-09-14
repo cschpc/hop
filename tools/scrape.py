@@ -4,47 +4,48 @@ import os
 import copy
 import logging
 
-from common.io import read_tree, read_map, read_list, write_map, write_list
+from common.io import read_metadata, write_map, write_list
 from common.metadata import translate
 from common.parser import ArgumentParser
 from common.scrape import scrape_hipify, scrape_header
 
 
-def update_maps(args, id_maps, triplets, known_ids):
+def update_maps(args, metadata, triplets, known_ids):
     if args.verbose:
         print('Update translation maps:')
     count = 0
     for hop, hip, cuda in triplets:
         # cuda -> hip translation
         _hop = hop
-        if cuda in id_maps['source']['cuda']:
-            _hop = id_maps['source']['cuda'][cuda]
+        if cuda in metadata['map']['source']['cuda']:
+            _hop = metadata['map']['source']['cuda'][cuda]
         elif cuda in known_ids and not translate.is_default_cuda(_hop, cuda):
-            id_maps['source']['cuda'][cuda] = _hop
+            metadata['map']['source']['cuda'][cuda] = _hop
             count += 1
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(cuda, _hop))
-        if hip in known_ids and _hop not in id_maps['target']['hip']:
+        if hip in known_ids and _hop not in metadata['map']['target']['hip']:
             if not translate.is_default_hip(_hop, hip):
-                id_maps['target']['hip'][_hop] = hip
+                metadata['map']['target']['hip'][_hop] = hip
                 count += 1
                 if args.verbose:
                     print('  New mapping: {} -> {}'.format(_hop, hip))
         # hip -> cuda translation
         _hop = hop
-        if hip in id_maps['source']['hip']:
-            _hop = id_maps['source']['hip'][hip]
+        if hip in metadata['map']['source']['hip']:
+            _hop = metadata['map']['source']['hip'][hip]
         elif hip in known_ids and not translate.is_default_hip(_hop, hip):
-            id_maps['source']['hip'][hip] = _hop
+            metadata['map']['source']['hip'][hip] = _hop
             count += 1
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(hip, _hop))
-        if cuda in known_ids and _hop not in id_maps['target']['cuda']:
+        if cuda in known_ids and _hop not in metadata['map']['target']['cuda']:
             if not translate.is_default_cuda(_hop, cuda):
-                id_maps['target']['cuda'][_hop] = cuda
+                metadata['map']['target']['cuda'][_hop] = cuda
                 count += 1
                 if args.verbose:
                     print('  New mapping: {} -> {}'.format(_hop, cuda))
+    logging.debug('updated metadata={}'.format(metadata))
     if args.verbose:
         print('  New mapping chains:', count)
     return count
@@ -67,23 +68,10 @@ def _known_triplets(triplets, known_ids):
 
 
 def scrape(args):
-    tree = read_tree('data/file.tree')
-    id_maps = {
-            'source': read_map('data/source.map', source=True),
-            'target': read_map('data/target.map'),
-            }
-    id_lists = {
-            'hop': read_list('data/hop.list'),
-            'hip': read_list('data/hip.list'),
-            'cuda': read_list('data/cuda.list'),
-            }
-    known_ids = _all_identifiers(id_lists)
-    logging.debug('tree={}'.format(tree))
-    logging.debug('id_maps={}'.format(id_maps))
-    logging.debug('id_lists={}'.format(id_lists))
+    metadata = read_metadata()
+    known_ids = _all_identifiers(metadata['list'])
 
-    orig_maps = copy.deepcopy(id_maps)
-    orig_lists = copy.deepcopy(id_lists)
+    orig_metadata = copy.deepcopy(metadata)
 
     path = os.path.join(os.path.expanduser(args.hipify),
                         'bin/hipify-perl')
@@ -101,30 +89,28 @@ def scrape(args):
     for path in args.files:
         basename = os.path.basename(path)
         if basename.endswith('.h') or basename.endswith('.hpp'):
-            scrape_header(args, os.path.expanduser(path), tree, id_maps,
-                          id_lists, known_ids, triplets, count)
+            scrape_header(args, os.path.expanduser(path), metadata, known_ids,
+                          triplets, count)
         else:
             print('Unable to scrape: {}'.format(path))
     triplets = _known_triplets(triplets, known_ids)
-    count['map'] = update_maps(args, id_maps, triplets, known_ids)
+    count['map'] = update_maps(args, metadata, triplets, known_ids)
     print('')
     print('Old identifiers:    {}'.format(count['old']))
     print('New identifiers:    {}'.format(count['new']))
     print('Moved identifiers:  {}'.format(count['move']))
     print('New mapping chains: {}'.format(count['map']))
 
-    logging.debug('id_maps={}'.format(id_maps))
-    logging.debug('id_lists={}'.format(id_lists))
     todo = []
-    if not id_maps['source'] == orig_maps['source']:
+    if not metadata['map']['source'] == orig_metadata['map']['source']:
         todo.append('data/source.map')
-    if not id_maps['target'] == orig_maps['target']:
+    if not metadata['map']['target'] == orig_metadata['map']['target']:
         todo.append('data/target.map')
-    if not id_lists['hop'] == orig_lists['hop']:
+    if not metadata['list']['hop'] == orig_metadata['list']['hop']:
         todo.append('data/hop.list')
-    if not id_lists['hip'] == orig_lists['hip']:
+    if not metadata['list']['hip'] == orig_metadata['list']['hip']:
         todo.append('data/hip.list')
-    if not id_lists['cuda'] == orig_lists['cuda']:
+    if not metadata['list']['cuda'] == orig_metadata['list']['cuda']:
         todo.append('data/cuda.list')
     if not todo:
         return
@@ -138,10 +124,10 @@ def scrape(args):
             if ext == '.map':
                 source = True if label == 'source' else False
                 if not args.dry_run:
-                    write_map(filename, id_maps[label], source, force=True)
+                    write_map(filename, metadata['map'][label], source, force=True)
             elif ext == '.list':
                 if not args.dry_run:
-                    write_list(filename, id_lists[label], force=True)
+                    write_list(filename, metadata['list'][label], force=True)
             else:
                 raise ValueError('Unknown file type: {}'.format(filename))
 

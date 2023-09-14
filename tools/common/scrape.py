@@ -5,7 +5,7 @@ import tempfile
 import subprocess
 
 from common.io import header_name, header_root, lang
-from common.map import translate
+from common.metadata import translate
 
 
 regex_perl_sub = re.compile('\nsub (\w+)\s+{([^}]*)}')
@@ -126,22 +126,22 @@ def _tree_includes(tree, label, parent):
     return _tree_expand(tree, label, parent)
 
 
-def _included_ids(path, tree, id_lists):
+def _included_ids(path, metadata):
     label = lang(path).lower()
     filename = header_name(path)
-    ids = id_lists[label].get(filename, []).copy()
+    ids = metadata['list'][label].get(filename, []).copy()
     for include in _includes(path):
         logging.debug('{} includes {}'.format(filename, include))
-        ids.extend(id_lists[label].get(include, []))
-    for include in _tree_includes(tree, label, filename):
+        ids.extend(metadata['list'][label].get(include, []))
+    for include in _tree_includes(metadata['tree'], label, filename):
         logging.debug('{} tree includes {}'.format(filename, include))
-        ids.extend(id_lists[label].get(include, []))
+        ids.extend(metadata['list'][label].get(include, []))
     return ids
 
 
-def _known_maps(id_maps, triplets):
+def _known_maps(metadata, triplets):
     ids = []
-    for direction in id_maps.values():
+    for direction in metadata['map'].values():
         for lang in direction.values():
             ids.extend(lang.keys())
             ids.extend(lang.values())
@@ -152,13 +152,13 @@ def _known_maps(id_maps, triplets):
     return ids
 
 
-def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
-    id_lists[label].setdefault(filename, [])
-    if name in id_lists[label][filename]:
+def _add_identifier(args, filename, name, label, metadata, known_ids, count):
+    metadata['list'][label].setdefault(filename, [])
+    if name in metadata['list'][label][filename]:
         return
     if name in known_ids:
         if not args.ignore_moved:
-            _remove_id(name, id_lists[label])
+            _remove_id(name, metadata['list'][label])
             if args.verbose:
                 print('  Moved identifier: ', name)
             count['move'] += 1
@@ -167,13 +167,13 @@ def _add_identifier(args, filename, name, label, id_lists, known_ids, count):
         if args.verbose:
             print('  New identifier: ', name)
         count['new'] += 1
-    id_lists[label][filename].append(name)
+    metadata['list'][label][filename].append(name)
 
 
-def _all_hop_ids(tree, id_lists, filename):
-    ids = id_lists['hop'].get(filename, []).copy()
-    for name in tree['hop'].get(filename, []):
-        ids.extend(id_lists['hop'].get(name, []))
+def _all_hop_ids(metadata, filename):
+    ids = metadata['list']['hop'].get(filename, []).copy()
+    for name in metadata['tree']['hop'].get(filename, []):
+        ids.extend(metadata['list']['hop'].get(name, []))
     return ids
 
 
@@ -191,12 +191,11 @@ def _find_hop(triplets, name, label):
     return None
 
 
-def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
-             triplets, count):
+def _add_hop(args, path, name, label, metadata, known_ids, triplets, count):
     filename = translate.translate(
             os.path.basename(header_name(path)), 'hop')
-    if name in id_maps['source'][label]:
-        hop = id_maps['source'][label][name]
+    if name in metadata['map']['source'][label]:
+        hop = metadata['map']['source'][label][name]
     else:
         hop = _find_hop(triplets, name, label)
     if not hop:
@@ -207,21 +206,19 @@ def _add_hop(args, path, name, label, tree, id_maps, id_lists, known_ids,
     logging.debug('_add_hop: hop={}'.format(hop))
     if (hop not in known_ids
             or (label == 'hip'
-                and hop not in _all_hop_ids(tree, id_lists, filename))):
-        _add_identifier(args, filename, hop, 'hop', id_lists, known_ids,
-                        count)
+                and hop not in _all_hop_ids(metadata, filename))):
+        _add_identifier(args, filename, hop, 'hop', metadata, known_ids, count)
 
 
-def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
-                  count):
+def scrape_header(args, path, metadata, known_ids, triplets, count):
     label = lang(path).lower()
     filename = header_name(path)
     regex_lang = _regex_lang(path)
     if args.verbose:
         print('Scrape header: {}'.format(filename))
-    included_ids = _included_ids(path, tree, id_lists)
+    included_ids = _included_ids(path, metadata)
     logging.debug('included_ids={}'.format(included_ids))
-    known_maps = _known_maps(id_maps, triplets)
+    known_maps = _known_maps(metadata, triplets)
     for line in _ctags(args, path):
         if not line:
             break
@@ -238,10 +235,9 @@ def scrape_header(args, path, tree, id_maps, id_lists, known_ids, triplets,
         if name in included_ids:
             count['old'] += 1
             continue
-        _add_identifier(args, filename, name, label, id_lists, known_ids,
-                        count)
-        _add_hop(args, filename, name, label, tree, id_maps, id_lists,
-                 known_ids, triplets, count)
+        _add_identifier(args, filename, name, label, metadata, known_ids, count)
+        _add_hop(args, filename, name, label, metadata, known_ids, triplets,
+                 count)
     if args.verbose:
         print('  Old identifiers:   {}'.format(count['old']))
         print('  New identifiers:   {}'.format(count['new']))

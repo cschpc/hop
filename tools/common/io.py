@@ -2,6 +2,7 @@ import re
 import os
 import string
 import inspect
+import logging
 
 from common.metadata import Map, Node
 
@@ -159,6 +160,22 @@ def read_license():
     with open(file_path('LICENSE')) as fp:
         txt = fp.read()
     return re.sub('^MIT License\s*', '', txt)
+
+
+def read_metadata():
+    metadata = {}
+    metadata['tree'] = read_tree('data/file.tree')
+    metadata['map'] = {
+            'source': read_map('data/source.map', source=True),
+            'target': read_map('data/target.map'),
+            }
+    metadata['list'] = {
+            'hop': read_list('data/hop.list'),
+            'hip': read_list('data/hip.list'),
+            'cuda': read_list('data/cuda.list'),
+            }
+    logging.debug('read metadata={}'.format(metadata))
+    return metadata
 
 
 def _ok_to_overwrite(path):
