@@ -112,6 +112,8 @@ def make_headers(metadata):
     headers = {}
     branch = metadata['tree']['hop']
     for node in branch.values():
+        if node.link:
+            continue
         corename = io.corename(node.name)
         coresubs = [io.corename(x) for x in node]
 
@@ -136,6 +138,8 @@ def make_headers(metadata):
     # source header for HIP
     branch = metadata['tree']['source/hip']
     for node in branch.values():
+        if node.link:
+            continue
         path = os.path.join('source/hip', node.name)
         content_hip = content(node, metadata['map']['source']['hip'],
                               metadata['list']['hip'])
@@ -144,6 +148,8 @@ def make_headers(metadata):
     # source header for CUDA
     branch = metadata['tree']['source/cuda']
     for node in branch.values():
+        if node.link:
+            continue
         path = os.path.join('source/cuda', node.name)
         content_cuda = content(node, metadata['map']['source']['cuda'],
                                metadata['list']['cuda'])
