@@ -1,7 +1,5 @@
 #define HOP_SOURCE_${lang}
-
 ${content}
-
 #if defined HOP_OVERRIDE_RUNTIME
 #include <hop/hopblas.h>
 #endif

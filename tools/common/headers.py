@@ -87,14 +87,20 @@ def _embed(node):
 
 def content(node, id_map, id_list):
     lines = _includes(node)
-    lines.append('')
+    if len(lines):
+        lines.append('')
     lines.extend(_defines(id_list.get(node.name, []), id_map))
     for name in _embed(node):
         if name not in id_list:
             continue
-        lines.append('')
+        if len(lines):
+            lines.append('')
         lines.append('/* {} */'.format(name))
         lines.extend(_defines(id_list[name], id_map))
+    if len(lines):
+        lines.insert(0, '')
+        if lines[-1]:
+            lines.append('')
     return '\n'.join(lines)
 
 

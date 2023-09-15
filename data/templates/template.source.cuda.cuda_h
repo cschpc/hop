@@ -1,6 +1,4 @@
 #define HOP_SOURCE_${lang}
-
 ${content}
-
 #define HOP_INCLUDE_CUDA_H
 #include <hop/hop_runtime_api.h>

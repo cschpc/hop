@@ -8,5 +8,4 @@
 #if defined(HOP_INCLUDE_CUDA_PROFILER_API_H)
 #include <cuda_profiler_api.h>
 #endif
-
 ${content}
