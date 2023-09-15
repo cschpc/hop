@@ -11,7 +11,7 @@ _license = io.read_license()
 
 
 def _custom_template(filename, default):
-    name = filename.replace('/', '.')
+    name = filename.replace('.', '_').replace('/', '.')
     if name.startswith('hop.'):
         name = name.replace('hop.', 'target.')
     template = os.path.join('data/templates', 'template.' + name)
