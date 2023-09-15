@@ -2,5 +2,11 @@
 #if defined(HOP_INCLUDE_CUDA_H)
 #include <cuda.h>
 #endif
+#if defined(HOP_INCLUDE_DRIVER_FUNCTIONS_H)
+#include <driver_functions.h>
+#endif
+#if defined(HOP_INCLUDE_CUDA_PROFILER_API_H)
+#include <cuda_profiler_api.h>
+#endif
 
 ${content}
