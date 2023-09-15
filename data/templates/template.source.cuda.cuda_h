@@ -3,4 +3,4 @@
 ${content}
 
 #define HOP_INCLUDE_CUDA_H
-#include <hop/hop_runtime.h>
+#include <hop/hop_runtime_api.h>

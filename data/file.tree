@@ -31,9 +31,9 @@ hop/hopblas.h
 cuComplex.h
 
 driver_functions.h
-+ driver_types.h
-+ surface_types.h
-+ texture_types.h
+~ driver_types.h
+~ surface_types.h
+~ texture_types.h
 
 driver_types.h
 = cuda_runtime_api.h
@@ -42,7 +42,10 @@ library_types.h
 = cublas.h
 
 cuda_profiler_api.h
-+ driver_types.h
+~ driver_types.h
+
+cuda.h
+~ driver_types.h
 
 cuda_runtime.h
 + cuda_runtime_api.h
