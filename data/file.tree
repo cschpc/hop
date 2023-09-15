@@ -48,7 +48,7 @@ cuda_runtime.h
 + cuda_runtime_api.h
 + driver_functions.h
 + driver_types.h
-+ library_types.h
+~ library_types.h
 + surface_types.h
 + texture_types.h
 

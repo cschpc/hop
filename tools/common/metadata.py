@@ -125,3 +125,15 @@ class Embed(str):
 
     def __repr__(self):
         return "Embed('{}')".format(self)
+
+
+class Special(str):
+    """Filename of a header file to be handled only by a custom template
+
+    No IDs will be embedded nor include statements added to the content.
+    Enables one to implement special treatment in a custom template, but
+    any IDs contained will still be considered included.
+    """
+
+    def __repr__(self):
+        return "Special('{}')".format(self)
