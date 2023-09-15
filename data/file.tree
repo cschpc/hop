@@ -6,22 +6,22 @@ hop/channel_descriptor.h
 hop/hop_complex.h
 
 hop/driver_types.h
+= hop/hop_runtime_api.h
 
 hop/hop_runtime.h
 + hop/hop_runtime_api.h
 
 hop/hop_runtime_api.h
 - hop/channel_descriptor.h
-+ hop/driver_types.h
-+ hop/surface_types.h
-+ hop/texture_types.h
+- hop/driver_types.h
+- hop/surface_types.h
+- hop/texture_types.h
 
 hop/surface_types.h
-+ hop/driver_types.h
+= hop/hop_runtime_api.h
 
 hop/texture_types.h
-+ hop/channel_descriptor.h
-+ hop/driver_types.h
+= hop/hop_runtime_api.h
 
 hop/hopblas.h
 
@@ -36,8 +36,10 @@ driver_functions.h
 + texture_types.h
 
 driver_types.h
+= cuda_runtime_api.h
 
 library_types.h
+= cublas.h
 
 cuda_profiler_api.h
 + driver_types.h
@@ -51,17 +53,18 @@ cuda_runtime.h
 + texture_types.h
 
 cuda_runtime_api.h
-+ driver_types.h
-+ surface_types.h
-+ texture_types.h
+- driver_types.h
+- surface_types.h
+- texture_types.h
 
 surface_types.h
-+ driver_types.h
+= cuda_runtime_api.h
 
 texture_types.h
-+ driver_types.h
+= cuda_runtime_api.h
 
 cublas.h
+- library_types.h
 
 
 [source/hip]
@@ -72,21 +75,21 @@ hip/channel_descriptor.h
 hip/hip_complex.h
 
 hip/driver_types.h
+= hip/hip_runtime_api.h
 
 hip/hip_runtime.h
 + hip/hip_runtime_api.h
 
 hip/hip_runtime_api.h
 - hip/channel_descriptor.h
-+ hip/driver_types.h
-+ hip/surface_types.h
-+ hip/texture_types.h
+- hip/driver_types.h
+- hip/surface_types.h
+- hip/texture_types.h
 
 hip/surface_types.h
-+ hip/driver_types.h
+= hip/hip_runtime_api.h
 
 hip/texture_types.h
-+ hip/channel_descriptor.h
-+ hip/driver_types.h
+= hip/hip_runtime_api.h
 
 hipblas/hipblas.h
