@@ -2,10 +2,10 @@
 
 /* Source translation */
 #if defined(HOP_SOURCE_HIP)
-#include "source/hip/${source_hip}"
+#include "source/hip/${hipname}"
 
 #elif defined(HOP_SOURCE_CUDA)
-#include "source/cuda/${source_cuda}"
+#include "source/cuda/${cudaname}"
 #endif
 
 /* Target translation */
