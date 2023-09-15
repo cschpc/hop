@@ -1,0 +1,6 @@
+#include <${include}>
+#if defined(HOP_INCLUDE_CUDA_H)
+#include <cuda.h>
+#endif
+
+${content}
