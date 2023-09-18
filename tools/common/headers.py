@@ -33,7 +33,7 @@ def source_header(filename, content):
             'license': _license,
             'sentinel': 'HOP_SOURCE_{}'.format(sentinel),
             'content': content,
-            'include': 'hop_{}.h'.format(io.corename(filename)),
+            'include': 'hop/hop_{}.h'.format(io.corename(filename)),
             'lang': io.lang(filename),
             }
     return _fill_template(_custom_template(filename, 'template.source'), args)
