@@ -64,7 +64,7 @@ def graph(args):
 
 
 if __name__ == '__main__':
-    usage = '%(prog)s [options] hipify file.h {file2.h ...}'
+    usage = '%(prog)s [options] file.h {file2.h ...}'
     desc = 'Show a graph of included header files.'
     parser = ArgumentParser(usage=usage, description=desc)
     parser.add_argument('files', nargs='+',
