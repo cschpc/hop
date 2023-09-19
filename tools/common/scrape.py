@@ -192,8 +192,7 @@ def _find_hop(triplets, name, label):
 
 
 def _add_hop(args, path, name, label, metadata, known_ids, triplets, count):
-    filename = translate.translate(
-            os.path.basename(header_name(path)), 'hop')
+    filename = translate.translate(os.path.basename(path), 'hop')
     if name in metadata['map']['source'][label]:
         hop = metadata['map']['source'][label][name]
     else:
