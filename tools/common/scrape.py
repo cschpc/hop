@@ -131,10 +131,11 @@ def _included_ids(path, metadata):
         root = label
     else:
         root = 'source/' + label
-    node = metadata['tree'][root][filename].link or filename
-    for include in _tree_expand(metadata['tree'], root, node):
-        logging.debug('{} tree includes {}'.format(filename, include))
-        ids.extend(metadata['list'][label].get(include, []))
+    if filename in metadata['tree'][root]:
+        node = metadata['tree'][root][filename].link or filename
+        for include in _tree_expand(metadata['tree'], root, node):
+            logging.debug('{} tree includes {}'.format(filename, include))
+            ids.extend(metadata['list'][label].get(include, []))
     return ids
 
 
