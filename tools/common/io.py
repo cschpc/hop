@@ -27,18 +27,33 @@ def _in_hip_root(path):
     return os.path.exists(hip) and os.path.isdir(hip)
 
 
+def _split_at_hip_root(path):
+    subs = []
+    while not _in_hip_root(path):
+        path, tail = os.path.split(path)
+        subs.append(tail)
+    if subs:
+        sub = os.path.join(*reversed(subs))
+    else:
+        sub = None
+    return (path, sub)
+
+
 def header_name(path):
     dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP' and not _in_hip_root(dirname):
-        subname = os.path.basename(dirname)
-        filename = os.path.join(subname, filename)
+    if lang(path) == 'HIP':
+        dirname, subname = _split_at_hip_root(dirname)
+        if subname:
+            filename = os.path.join(subname, filename)
+    logging.debug('header_name < {} > {}'.format(path, filename))
     return filename
 
 
 def header_root(path):
     dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP' and not _in_hip_root(dirname):
-        dirname = os.path.dirname(dirname)
+    if lang(path) == 'HIP':
+        dirname, subname = _split_at_hip_root(dirname)
+    logging.debug('header_root < {} > {}'.format(path, dirname))
     return dirname
 
 
