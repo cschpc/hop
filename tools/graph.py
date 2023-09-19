@@ -59,8 +59,8 @@ def _single(root, filename, expanded, indent=0):
         if not args.all and include in expanded:
             print(' ' * (indent + 2) + '* ' + include)
         else:
-            _single(root, include, expanded, indent + 2)
             expanded.append(include)
+            _single(root, include, expanded, indent + 2)
 
 
 def graph(args):
