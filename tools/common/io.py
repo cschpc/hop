@@ -22,9 +22,14 @@ def file_path(filename):
     return os.path.join(_root_path(), filename)
 
 
+def _in_hip_root(path):
+    hip = os.path.join(path, 'hip')
+    return os.path.exists(hip) and os.path.isdir(hip)
+
+
 def header_name(path):
     dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP':
+    if lang(path) == 'HIP' and not _in_hip_root(dirname):
         subname = os.path.basename(dirname)
         filename = os.path.join(subname, filename)
     return filename
@@ -32,7 +37,7 @@ def header_name(path):
 
 def header_root(path):
     dirname, filename = os.path.split(path)
-    if lang(path) == 'HIP':
+    if lang(path) == 'HIP' and not _in_hip_root(dirname):
         dirname = os.path.dirname(dirname)
     return dirname
 
@@ -74,20 +79,20 @@ def read_tree(filename):
                 continue
             elif line.startswith('+'):
                 if node is None:
-                    raise SyntaxError('Orphaned file: ', line)
+                    raise SyntaxError('Orphaned file: ' + line)
                 node.append(Include(line[1:].strip()))
             elif line.startswith('-'):
                 if node is None:
-                    raise SyntaxError('Orphaned link: ', line)
+                    raise SyntaxError('Orphaned link: ' + line)
                 node.append(Embed(line[1:].strip()))
             elif line.startswith('='):
                 if node is None:
-                    raise SyntaxError('Orphaned link: ', line)
+                    raise SyntaxError('Orphaned link: ' + line)
                 node.link = line[1:].strip()
                 node = None
             elif line.startswith('~'):
                 if node is None:
-                    raise SyntaxError('Orphaned file: ', line)
+                    raise SyntaxError('Orphaned file: ' + line)
                 node.append(Special(line[1:].strip()))
             else:
                 node = Node(name=line)
