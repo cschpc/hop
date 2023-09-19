@@ -1,7 +1,6 @@
 /* HOP: Header Only Porting
 
-${license}
-*/
+${license}*/
 
 #ifndef __HOP_${sentinel}__
 #define __HOP_${sentinel}__
