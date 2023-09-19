@@ -14,6 +14,7 @@ def _includes(path):
     for line in open(path):
         if regex_include.match(line):
             includes.append(regex_include.match(line).group(1))
+    logging.debug('_includes < {} > {}'.format(path, includes))
     return includes
 
 
@@ -22,31 +23,50 @@ def _all_filenames(files):
 
 
 def _collect(root, filename, included, all_filenames):
+    logging.debug('_collect < root={} filename={} included={}'.format(
+        root, filename, included))
+    dirname = os.path.dirname(filename)
     for include in _includes(os.path.join(root, filename)):
-        if include not in included \
-                and os.path.exists(os.path.join(root, include)):
-            included.append(include)
-            if include not in all_filenames:
-                _collect(root, include, included, all_filenames)
+        logging.debug('_collect: include={}'.format(include))
+        if os.path.exists(os.path.join(root, dirname, include)):
+            include = os.path.join(dirname, include)
+        elif not os.path.exists(os.path.join(root, include)):
+            continue
+        logging.debug('_collect: include={}'.format(include))
+        if include in included:
+            continue
+        included.append(include)
+        if include not in all_filenames:
+            _collect(root, include, included, all_filenames)
 
 
 def _single(root, filename, expanded, indent=0):
+    logging.debug('_single < root={} filename={} expanded={}'.format(
+        root, filename, expanded))
     prefix = ' ' * indent
     if indent:
         prefix += '+ '
     print(prefix + filename)
+    dirname = os.path.dirname(filename)
+    logging.debug('_single: dirname={}'.format(dirname))
     for include in sorted(_includes(os.path.join(root, filename))):
-        if os.path.exists(os.path.join(root, include)):
-            if not args.all and include in expanded:
-                print(' ' * (indent + 2) + '* ' + include)
-            else:
-                _single(root, include, expanded, indent + 2)
-                expanded.append(include)
+        logging.debug('_single: include={}'.format(include))
+        if os.path.exists(os.path.join(root, dirname, include)):
+            include = os.path.join(dirname, include)
+        elif not os.path.exists(os.path.join(root, include)):
+            continue
+        logging.debug('_single: include={}'.format(include))
+        if not args.all and include in expanded:
+            print(' ' * (indent + 2) + '* ' + include)
+        else:
+            _single(root, include, expanded, indent + 2)
+            expanded.append(include)
 
 
 def graph(args):
     expanded = []
     all_filenames = _all_filenames(args.files)
+    logging.debug('all_filenames={}'.format(all_filenames))
     for path in args.files:
         print('')
         filename = header_name(path)
