@@ -200,6 +200,9 @@ make_gpuComplex
 make_gpuDoubleComplex
 make_gpuFloatComplex
 
+[hop_runtime.h]
+gpuOccupancyMaxPotentialBlockSizeWithFlags
+
 [hop_runtime_api.h]
 gpuAccessPolicyWindow
 gpuAccessProperty
@@ -227,6 +230,7 @@ gpuComputeModeExclusive
 gpuComputeModeExclusiveProcess
 gpuComputeModeProhibited
 gpuConfigureCall
+gpuCreateSurfaceObject
 gpuCreateTextureObject
 gpuCtxCreate
 gpuCtxDestroy
@@ -247,6 +251,7 @@ gpuCtxSynchronize
 gpuCtx_t
 gpuDestroyExternalMemory
 gpuDestroyExternalSemaphore
+gpuDestroySurfaceObject
 gpuDestroyTextureObject
 gpuDevP2PAttrAccessSupported
 gpuDevP2PAttrHipArrayAccessSupported
@@ -849,6 +854,8 @@ gpuModule_t
 gpuOccupancyMaxActiveBlocksPerMultiprocessor
 gpuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 gpuOccupancyMaxPotentialBlockSize
+gpuOccupancyMaxPotentialBlockSizeVariableSMem
+gpuOccupancyMaxPotentialBlockSizeVariableSMemWithFlags
 gpuPeekAtLastError
 gpuPointerAttribute_t
 gpuPointerGetAttribute
@@ -940,6 +947,25 @@ gpuUserObjectRetainFlags
 gpuUserObject_t
 gpuWaitExternalSemaphoresAsync
 
+[library_types.h]
+GPUBLAS_C_16B
+GPUBLAS_C_16F
+GPUBLAS_C_32F
+GPUBLAS_C_32I
+GPUBLAS_C_32U
+GPUBLAS_C_64F
+GPUBLAS_C_8I
+GPUBLAS_C_8U
+GPUBLAS_R_16B
+GPUBLAS_R_16F
+GPUBLAS_R_32F
+GPUBLAS_R_32I
+GPUBLAS_R_32U
+GPUBLAS_R_64F
+GPUBLAS_R_8I
+GPUBLAS_R_8U
+gpublasDatatype_t
+
 [surface_types.h]
 gpuBoundaryModeClamp
 gpuBoundaryModeTrap
@@ -956,6 +982,7 @@ gpuFilterModeLinear
 gpuFilterModePoint
 gpuReadModeElementType
 gpuReadModeNormalizedFloat
+gpuTexRef
 gpuTextureAddressMode
 gpuTextureDesc
 gpuTextureFilterMode

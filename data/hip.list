@@ -227,6 +227,7 @@ hipComputeModeExclusive
 hipComputeModeExclusiveProcess
 hipComputeModeProhibited
 hipConfigureCall
+hipCreateSurfaceObject
 hipCreateTextureObject
 hipCtxCreate
 hipCtxDestroy
@@ -247,6 +248,7 @@ hipCtxSynchronize
 hipCtx_t
 hipDestroyExternalMemory
 hipDestroyExternalSemaphore
+hipDestroySurfaceObject
 hipDestroyTextureObject
 hipDevP2PAttrAccessSupported
 hipDevP2PAttrHipArrayAccessSupported
@@ -849,6 +851,8 @@ hipModule_t
 hipOccupancyMaxActiveBlocksPerMultiprocessor
 hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 hipOccupancyMaxPotentialBlockSize
+hipOccupancyMaxPotentialBlockSizeVariableSMem
+hipOccupancyMaxPotentialBlockSizeVariableSMemWithFlags
 hipPeekAtLastError
 hipPointerAttribute_t
 hipPointerGetAttribute
@@ -956,6 +960,7 @@ hipFilterModeLinear
 hipFilterModePoint
 hipReadModeElementType
 hipReadModeNormalizedFloat
+hipTexRef
 hipTextureAddressMode
 hipTextureDesc
 hipTextureFilterMode

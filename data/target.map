@@ -2,16 +2,53 @@
 
 [*]
 gpuDeviceAttributeMaxBlocksPerMultiProcessor  hipDeviceAttributeMaxBlocksPerMultiProcessor  cudaDevAttrMaxBlocksPerMultiprocessor
+make_gpuComplex                               make_hipComplex                               make_cuComplex
+make_gpuDoubleComplex                         make_hipDoubleComplex                         make_cuDoubleComplex
+make_gpuExtent                                make_hipExtent                                make_cudaExtent
+make_gpuFloatComplex                          make_hipFloatComplex                          make_cuFloatComplex
+make_gpuPitchedPtr                            make_hipPitchedPtr                            make_cudaPitchedPtr
+make_gpuPos                                   make_hipPos                                   make_cudaPos
 
 [hip]
-make_gpuComplex        make_hipComplex
-make_gpuDoubleComplex  make_hipDoubleComplex
-make_gpuExtent         make_hipExtent
-make_gpuFloatComplex   make_hipFloatComplex
-make_gpuPitchedPtr     make_hipPitchedPtr
-make_gpuPos            make_hipPos
 
 [cuda]
+GPUBLAS_C_16B                                             CUDA_C_16BF
+GPUBLAS_C_16F                                             CUDA_C_16F
+GPUBLAS_C_32F                                             CUDA_C_32F
+GPUBLAS_C_32I                                             CUDA_C_32I
+GPUBLAS_C_32U                                             CUDA_C_32U
+GPUBLAS_C_64F                                             CUDA_C_64F
+GPUBLAS_C_8I                                              CUDA_C_8I
+GPUBLAS_C_8U                                              CUDA_C_8U
+GPUBLAS_R_16B                                             CUDA_R_16BF
+GPUBLAS_R_16F                                             CUDA_R_16F
+GPUBLAS_R_32F                                             CUDA_R_32F
+GPUBLAS_R_32I                                             CUDA_R_32I
+GPUBLAS_R_32U                                             CUDA_R_32U
+GPUBLAS_R_64F                                             CUDA_R_64F
+GPUBLAS_R_8I                                              CUDA_R_8I
+GPUBLAS_R_8U                                              CUDA_R_8U
+gpuCabs                                                   cuCabs
+gpuCabsf                                                  cuCabsf
+gpuCadd                                                   cuCadd
+gpuCaddf                                                  cuCaddf
+gpuCdiv                                                   cuCdiv
+gpuCdivf                                                  cuCdivf
+gpuCfma                                                   cuCfma
+gpuCfmaf                                                  cuCfmaf
+gpuCimag                                                  cuCimag
+gpuCimagf                                                 cuCimagf
+gpuCmul                                                   cuCmul
+gpuCmulf                                                  cuCmulf
+gpuComplex                                                cuComplex
+gpuComplexDoubleToFloat                                   cuComplexDoubleToFloat
+gpuComplexFloatToDouble                                   cuComplexFloatToDouble
+gpuConj                                                   cuConj
+gpuConjf                                                  cuConjf
+gpuCreal                                                  cuCreal
+gpuCrealf                                                 cuCrealf
+gpuCsub                                                   cuCsub
+gpuCsubf                                                  cuCsubf
 gpuDevP2PAttrHipArrayAccessSupported                      cudaDevP2PAttrCudaArrayAccessSupported
 gpuDeviceAttributeAsyncEngineCount                        cudaDevAttrAsyncEngineCount
 gpuDeviceAttributeCanMapHostMemory                        cudaDevAttrCanMapHostMemory
@@ -93,6 +130,11 @@ gpuDeviceAttributeTotalConstantMemory                     cudaDevAttrTotalConsta
 gpuDeviceAttributeUnifiedAddressing                       cudaDevAttrUnifiedAddressing
 gpuDeviceAttributeWarpSize                                cudaDevAttrWarpSize
 gpuDeviceAttribute_t                                      cudaDeviceAttr
+gpuDeviceGetCacheConfig                                   cudaThreadGetCacheConfig
+gpuDeviceReset                                            cudaThreadExit
+gpuDeviceSetCacheConfig                                   cudaThreadSetCacheConfig
+gpuDeviceSynchronize                                      cudaThreadSynchronize
+gpuDoubleComplex                                          cuDoubleComplex
 gpuErrorContextAlreadyInUse                               cudaErrorDeviceAlreadyInUse
 gpuErrorDeinitialized                                     cudaErrorCudartUnloading
 gpuErrorECCNotCorrectable                                 cudaErrorECCUncorrectable
@@ -108,6 +150,10 @@ gpuErrorNotInitialized                                    cudaErrorInitializatio
 gpuErrorOutOfMemory                                       cudaErrorMemoryAllocation
 gpuErrorUnmapFailed                                       cudaErrorUnmapBufferObjectFailed
 gpuError_t                                                cudaError
+gpuFloatComplex                                           cuFloatComplex
 gpuFuncCache_t                                            cudaFuncCache
+gpuHostFree                                               cudaFreeHost
+gpuHostMalloc                                             cudaMallocHost
 gpuLimit_t                                                cudaLimit
 gpuUUID                                                   CUuuid
+gpublasDatatype_t                                         cudaDataType
