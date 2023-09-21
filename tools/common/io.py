@@ -29,13 +29,15 @@ def _in_hip_root(path):
 
 def _split_at_hip_root(path):
     subs = []
-    while not _in_hip_root(path):
+    while path and not _in_hip_root(path):
         path, tail = os.path.split(path)
+        logging.debug('_split_at_hip_root: path={} tail={}'.format(path, tail))
         subs.append(tail)
     if subs:
         sub = os.path.join(*reversed(subs))
     else:
         sub = None
+    logging.debug('_split_at_hip_root > ({}, {})'.format(path, sub))
     return (path, sub)
 
 
