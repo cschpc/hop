@@ -122,15 +122,20 @@ def _tree_expand(tree, label, filename):
 
 def _included_ids(path, metadata):
     label = lang(path).lower()
-    filename = header_name(path)
-    ids = metadata['list'][label].get(filename, []).copy()
-    for include in _includes(path):
-        logging.debug('{} includes {}'.format(filename, include))
-        ids.extend(metadata['list'][label].get(include, []))
     if label == 'hop':
         root = label
     else:
         root = 'source/' + label
+    filename = header_name(path)
+    ids = metadata['list'][label].get(filename, []).copy()
+    for include in _includes(path):
+        logging.debug('{} includes {}'.format(filename, include))
+        if include in metadata['tree'][root]:
+            node = metadata['tree'][root][include].link or include
+        else:
+            node = include
+        logging.debug('_included_ids: node={}'.format(node))
+        ids.extend(metadata['list'][label].get(node, []))
     if filename in metadata['tree'][root]:
         node = metadata['tree'][root][filename].link or filename
         for include in _tree_expand(metadata['tree'], root, node):
