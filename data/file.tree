@@ -25,6 +25,12 @@ hop/texture_types.h
 
 hop/hopblas.h
 
+hop/hopfft.h
+
+hop/hoprand.h
+
+hop/hopsparse.h
+
 
 [source/cuda]
 
@@ -69,6 +75,19 @@ texture_types.h
 cublas.h
 - library_types.h
 
+cublas_v2.h
++ cuComplex.h
++ cublas_api.h
++ driver_types.h
++ library_types.h
++ vector_types.h
+
+cublas_api.h
++ cuComplex.h
++ driver_types.h
++ library_types.h
++ vector_types.h
+
 
 [source/hip]
 
@@ -96,3 +115,22 @@ hip/texture_types.h
 = hip/hip_runtime_api.h
 
 hipblas/hipblas.h
++ hip/hip_complex.h
++ hip/hip_runtime_api.h
+
+hipfft/hipfft.h
++ hip/hip_complex.h
++ hip/hip_runtime_api.h
+
+hiprand/hiprand.h
++ hip/hip_runtime.h
++ hip/hip_runtime_api.h
+- hiprand/hiprand_hcc.h
+
+hiprand/hiprand_hcc.h
+= hiprand/hiprand.h
+
+hipsparse/hipsparse.h
++ hip/hip_complex.h
++ hip/hip_runtime.h
++ hip/hip_runtime_api.h
