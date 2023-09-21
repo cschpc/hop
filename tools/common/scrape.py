@@ -92,6 +92,7 @@ def _ctags(args, path):
         cpp = 'cpp '
         if args.cpp_macros:
             cpp = 'c++ -E '
+        cpp += '-fdirectives-only '
         cpp += '-I{} {} {} > {}'.format(header_root(path), define, path,
                                         fp.name)
         # get only identifiers that are visible externally
