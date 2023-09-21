@@ -1,5 +1,24 @@
 import re
+import logging
+import functools
 import collections
+
+
+def log(f):
+    def _format(f, args, kwargs):
+        if f.__name__ != f.__qualname__:
+            args = args[1:]
+        _args = [repr(x) for x in args] + \
+                ['{}={}'.format(x, repr(y)) for x,y in kwargs.items()]
+        return ', '.join(_args)
+    @functools.wraps(f)
+    def logger(*args, **kwargs):
+        logging.debug('{} < {}'.format(f.__qualname__,
+                                       _format(f, args, kwargs)))
+        out = f(*args, **kwargs)
+        logging.debug('{} > {}'.format(f.__qualname__, repr(out)))
+        return out
+    return logger
 
 
 class Map(collections.UserDict):
@@ -19,8 +38,9 @@ class Map(collections.UserDict):
             return self._guess(key)
         return self.data[key]
 
+    @log
     def _guess(self, key):
-         # guess identifier, if key seems otherwise ok
+        # guess identifier, if key seems otherwise ok
         if not self.translator.match(key):
             self._error(key)
         if self.source:
@@ -42,6 +62,8 @@ class Translator:
     regex_default_lower = re.compile('^()(gpu|hip|cuda)')
     regex_default_camel = re.compile('^()(Gpu|Hip|Cuda)')
     regex_default_upper = re.compile('^()(GPU|HIP|CUDA)')
+    regex_lib_lower = re.compile('^()(gpu|hip|cuda|cu)(blas|fft|rand|sparse)')
+    regex_lib_upper = re.compile('^()(GPU|HIP|cuda|cu)(BLAS|FFT|RAND|SPARSE)')
 
     def _translate(self, name, target, default=False):
         if default:
@@ -60,26 +82,32 @@ class Translator:
             return _regex_upper.sub(r'\1' + target.upper(), name)
         return name
 
-    def translate(self, name, target):
-        return self._translate(name, target)
+    def translate(self, name, target, default=False):
+        if target == 'cuda' and self.is_lib(name):
+            return self._translate(name, 'cu')
+        return self._translate(name, target, default=default)
 
     def to_hop(self, name, default=False):
-        return self.translate(name, 'gpu')
+        return self.translate(name, 'gpu', default=default)
 
     def to_hip(self, name, default=False):
-        return self.translate(name, 'hip')
+        return self.translate(name, 'hip', default=default)
 
     def to_cuda(self, name, default=False):
-        return self.translate(name, 'cuda')
+        return self.translate(name, 'cuda', default=default)
 
     def default(self, name, target):
-        return self._translate(name, target, True)
+        return self.translate(name, target, True)
 
     def is_default_hip(self, hop, hip):
         return hip == self.default(hop, 'hip')
 
     def is_default_cuda(self, hop, cuda):
         return cuda == self.default(hop, 'cuda')
+
+    def is_lib(self, name):
+        return (self.regex_lib_lower.match(name)
+                or self.regex_lib_upper.match(name))
 
     def match(self, name, default=False):
         if default:
