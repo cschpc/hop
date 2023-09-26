@@ -136,7 +136,10 @@ def _included_ids(path, metadata):
             node = metadata['tree'][root][include].link or include
         else:
             node = include
-        logging.debug('_included_ids: node={}'.format(node))
+        logging.debug('include node {}'.format(node))
+        n = len(ids)
+        ids.extend(metadata['list'][label].get(node, []))
+        logging.debug('{} IDs added'.format(len(ids) - n))
         for include in _tree_expand(metadata['tree'], root, node):
             logging.debug('{} expands to include {}'.format(node, include))
             n = len(ids)
@@ -145,6 +148,10 @@ def _included_ids(path, metadata):
     # expand dependencies in the file tree
     if filename in metadata['tree'][root]:
         node = metadata['tree'][root][filename].link or filename
+        logging.debug('include node {}'.format(node))
+        n = len(ids)
+        ids.extend(metadata['list'][label].get(node, []))
+        logging.debug('{} IDs added'.format(len(ids) - n))
         for include in _tree_expand(metadata['tree'], root, node):
             logging.debug('{} tree includes {}'.format(filename, include))
             n = len(ids)
