@@ -44,7 +44,7 @@ class Map(collections.UserDict):
         if not self.translator.match(key):
             self._error(key)
         if self.source:
-            return self.translator.default(key, 'gpu')
+            return self.translator.to_hop(key)
         else:
             return self.translator.default(key, self.label)
 
@@ -84,7 +84,7 @@ class Translator:
 
     def translate(self, name, target, default=False):
         if target == 'cuda' and self.is_lib(name):
-            return self._translate(name, 'cu')
+            return self._translate(name, 'cu', default=default)
         return self._translate(name, target, default=default)
 
     def to_hop(self, name, default=False):
