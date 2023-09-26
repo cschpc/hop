@@ -129,6 +129,7 @@ def _included_ids(path, metadata):
         root = 'source/' + label
     filename = header_name(path)
     ids = metadata['list'][label].get(filename, []).copy()
+    # grep header for includes
     for include in _includes(path):
         logging.debug('{} includes {}'.format(filename, include))
         if include in metadata['tree'][root]:
@@ -136,12 +137,19 @@ def _included_ids(path, metadata):
         else:
             node = include
         logging.debug('_included_ids: node={}'.format(node))
-        ids.extend(metadata['list'][label].get(node, []))
+        for include in _tree_expand(metadata['tree'], root, node):
+            logging.debug('{} expands to include {}'.format(node, include))
+            n = len(ids)
+            ids.extend(metadata['list'][label].get(include, []))
+            logging.debug('{} IDs added'.format(len(ids) - n))
+    # expand dependencies in the file tree
     if filename in metadata['tree'][root]:
         node = metadata['tree'][root][filename].link or filename
         for include in _tree_expand(metadata['tree'], root, node):
             logging.debug('{} tree includes {}'.format(filename, include))
+            n = len(ids)
             ids.extend(metadata['list'][label].get(include, []))
+            logging.debug('{} IDs added'.format(len(ids) - n))
     return ids
 
 
@@ -239,6 +247,7 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
             continue
         if name in included_ids:
             count['old'] += 1
+            logging.debug('  ignore (included_ids)')
             continue
         _add_identifier(args, filename, name, label, metadata, known_ids, count)
         _add_hop(args, filename, name, label, metadata, known_ids, triplets,
