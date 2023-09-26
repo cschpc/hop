@@ -31,6 +31,9 @@ GPUBLAS_R_64F                                             CUDA_R_64F
 GPUBLAS_R_8I                                              CUDA_R_8I
 GPUBLAS_R_8U                                              CUDA_R_8U
 GPUBLAS_STATUS_UNKNOWN                                    CUBLAS_STATUS_LICENSE_ERROR
+GPUFFT_BACKWARD                                           CUFFT_INVERSE
+GPUSPARSE_SPGEMM_CSR_ALG_DETERMINISTIC                    CUSPARSE_SPGEMM_CSR_ALG_DETERMINITIC
+GPUSPARSE_SPGEMM_CSR_ALG_NONDETERMINISTIC                 CUSPARSE_SPGEMM_CSR_ALG_NONDETERMINITIC
 gpuCabs                                                   cuCabs
 gpuCabsf                                                  cuCabsf
 gpuCadd                                                   cuCadd
@@ -344,3 +347,5 @@ gpublasZtrmm                                              cublasZtrmm_v2
 gpublasZtrmv                                              cublasZtrmv_v2
 gpublasZtrsm                                              cublasZtrsm_v2
 gpublasZtrsv                                              cublasZtrsv_v2
+gpurandRngType_t                                          curandRngType
+gpurandStatus_t                                           curandStatus

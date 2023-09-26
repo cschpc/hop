@@ -83,6 +83,22 @@ cublas_api.h
 + cuComplex.h
 + driver_types.h
 - library_types.h
+
+cufft.h
++ cuComplex.h
++ driver_types.h
++ library_types.h
+
+curand.h
++ cuda_runtime.h
++ cuda_runtime_api.h
++ driver_functions.h
++ library_types.h
+
+cusparse.h
++ cuComplex.h
++ driver_types.h
++ library_types.h
 + vector_types.h
 
 
