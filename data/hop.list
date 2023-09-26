@@ -115,9 +115,7 @@ gpuChannelFormatKindSigned
 gpuChannelFormatKindUnsigned
 gpuDeviceptr_t
 gpuExtent
-gpuExternalMemoryDedicated
 gpuFunction_attribute
-gpuHostRegisterReadOnly
 gpuMemcpy3DParms
 gpuMemcpyDefault
 gpuMemcpyDeviceToDevice
@@ -128,7 +126,6 @@ gpuMemcpyKind
 gpuMipmappedArray
 gpuMipmappedArray_const_t
 gpuMipmappedArray_t
-gpuOccupancyDisableCachingOverride
 gpuPitchedPtr
 gpuPointer_attribute
 gpuPos
@@ -491,6 +488,7 @@ gpuEventRecord
 gpuEventSynchronize
 gpuEvent_t
 gpuExternalMemoryBufferDesc
+gpuExternalMemoryDedicated
 gpuExternalMemoryGetMappedBuffer
 gpuExternalMemoryHandleDesc
 gpuExternalMemoryHandleType
@@ -702,6 +700,7 @@ gpuHostRegisterDefault
 gpuHostRegisterIoMemory
 gpuHostRegisterMapped
 gpuHostRegisterPortable
+gpuHostRegisterReadOnly
 gpuHostUnregister
 gpuImportExternalMemory
 gpuImportExternalSemaphore
@@ -895,6 +894,7 @@ gpuModuleOccupancyMaxPotentialBlockSizeWithFlags
 gpuModuleUnload
 gpuModule_t
 gpuOccupancyDefault
+gpuOccupancyDisableCachingOverride
 gpuOccupancyMaxActiveBlocksPerMultiprocessor
 gpuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 gpuOccupancyMaxPotentialBlockSize
@@ -1399,6 +1399,32 @@ gpurandSetPseudoRandomGeneratorSeed
 gpurandSetQuasiRandomGeneratorDimensions
 gpurandSetStream
 gpurandStatus_t
+
+[hoprand.hpp]
+gpurand
+gpurandDirectionVectors32_t
+gpurand_discrete
+gpurand_discrete4
+gpurand_init
+gpurand_log_normal
+gpurand_log_normal2
+gpurand_log_normal2_double
+gpurand_log_normal4
+gpurand_log_normal4_double
+gpurand_log_normal_double
+gpurand_normal
+gpurand_normal2
+gpurand_normal2_double
+gpurand_normal4
+gpurand_normal4_double
+gpurand_normal_double
+gpurand_poisson
+gpurand_poisson4
+gpurand_uniform
+gpurand_uniform2_double
+gpurand_uniform4
+gpurand_uniform4_double
+gpurand_uniform_double
 
 [hopsparse.h]
 GPUSPARSE_ACTION_NUMERIC

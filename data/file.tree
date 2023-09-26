@@ -122,7 +122,11 @@ hipfft/hipfft.h
 hiprand/hiprand.h
 + hip/hip_runtime.h
 + hip/hip_runtime_api.h
+- hiprand/hiprand.hpp
 - hiprand/hiprand_hcc.h
+
+hiprand/hiprand.hpp
+= hiprand/hiprand.h
 
 hiprand/hiprand_hcc.h
 = hiprand/hiprand.h

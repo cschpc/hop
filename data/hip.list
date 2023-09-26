@@ -485,6 +485,7 @@ hipEventRecord
 hipEventSynchronize
 hipEvent_t
 hipExternalMemoryBufferDesc
+hipExternalMemoryDedicated
 hipExternalMemoryGetMappedBuffer
 hipExternalMemoryHandleDesc
 hipExternalMemoryHandleType
@@ -696,6 +697,7 @@ hipHostRegisterDefault
 hipHostRegisterIoMemory
 hipHostRegisterMapped
 hipHostRegisterPortable
+hipHostRegisterReadOnly
 hipHostUnregister
 hipImportExternalMemory
 hipImportExternalSemaphore
@@ -889,6 +891,7 @@ hipModuleOccupancyMaxPotentialBlockSizeWithFlags
 hipModuleUnload
 hipModule_t
 hipOccupancyDefault
+hipOccupancyDisableCachingOverride
 hipOccupancyMaxActiveBlocksPerMultiprocessor
 hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 hipOccupancyMaxPotentialBlockSize
@@ -1417,6 +1420,32 @@ hiprandSetPseudoRandomGeneratorSeed
 hiprandSetQuasiRandomGeneratorDimensions
 hiprandSetStream
 hiprandStatus_t
+
+[hiprand/hiprand.hpp]
+hiprand
+hiprandDirectionVectors32_t
+hiprand_discrete
+hiprand_discrete4
+hiprand_init
+hiprand_log_normal
+hiprand_log_normal2
+hiprand_log_normal2_double
+hiprand_log_normal4
+hiprand_log_normal4_double
+hiprand_log_normal_double
+hiprand_normal
+hiprand_normal2
+hiprand_normal2_double
+hiprand_normal4
+hiprand_normal4_double
+hiprand_normal_double
+hiprand_poisson
+hiprand_poisson4
+hiprand_uniform
+hiprand_uniform2_double
+hiprand_uniform4
+hiprand_uniform4_double
+hiprand_uniform_double
 
 [hiprand/hiprand_hcc.h]
 hiprandDiscreteDistribution_st
