@@ -521,6 +521,7 @@ cudaPointerGetAttributes
 cudaRuntimeGetVersion
 cudaSetDevice
 cudaSetDeviceFlags
+cudaSignalExternalSemaphoresAsync
 cudaStreamAddCallback
 cudaStreamAttachMemAsync
 cudaStreamBeginCapture
@@ -546,6 +547,7 @@ cudaUnbindTexture
 cudaUserObjectCreate
 cudaUserObjectRelease
 cudaUserObjectRetain
+cudaWaitExternalSemaphoresAsync
 
 [driver_functions.h]
 make_cudaExtent
@@ -553,11 +555,17 @@ make_cudaPitchedPtr
 make_cudaPos
 
 [driver_types.h]
+CUDA_IPC_HANDLE_SIZE
 CUuuid
 cudaAccessProperty
 cudaAccessPropertyNormal
 cudaAccessPropertyPersisting
 cudaAccessPropertyStreaming
+cudaArrayCubemap
+cudaArrayDefault
+cudaArrayLayered
+cudaArraySurfaceLoadStore
+cudaArrayTextureGather
 cudaArray_const_t
 cudaArray_t
 cudaChannelFormatKind
@@ -570,6 +578,9 @@ cudaComputeModeDefault
 cudaComputeModeExclusive
 cudaComputeModeExclusiveProcess
 cudaComputeModeProhibited
+cudaCooperativeLaunchMultiDeviceNoPostSync
+cudaCooperativeLaunchMultiDeviceNoPreSync
+cudaCpuDeviceId
 cudaDevAttrAsyncEngineCount
 cudaDevAttrCanMapHostMemory
 cudaDevAttrCanUseHostPointerForRegisteredMem
@@ -667,7 +678,15 @@ cudaDevP2PAttrCudaArrayAccessSupported
 cudaDevP2PAttrNativeAtomicSupported
 cudaDevP2PAttrPerformanceRank
 cudaDeviceAttr
+cudaDeviceBlockingSync
+cudaDeviceLmemResizeToMax
+cudaDeviceMapHost
 cudaDeviceP2PAttr
+cudaDeviceScheduleAuto
+cudaDeviceScheduleBlockingSync
+cudaDeviceScheduleMask
+cudaDeviceScheduleSpin
+cudaDeviceScheduleYield
 cudaError
 cudaErrorAlreadyAcquired
 cudaErrorAlreadyMapped
@@ -739,7 +758,12 @@ cudaErrorUnknown
 cudaErrorUnmapBufferObjectFailed
 cudaErrorUnsupportedLimit
 cudaError_t
+cudaEventBlockingSync
+cudaEventDefault
+cudaEventDisableTiming
+cudaEventInterprocess
 cudaEvent_t
+cudaExternalMemoryDedicated
 cudaExternalMemoryHandleType
 cudaExternalMemoryHandleTypeD3D11Resource
 cudaExternalMemoryHandleTypeD3D11ResourceKmt
@@ -818,9 +842,20 @@ cudaGraphicsRegisterFlagsSurfaceLoadStore
 cudaGraphicsRegisterFlagsTextureGather
 cudaGraphicsRegisterFlagsWriteDiscard
 cudaGraphicsResource_t
+cudaHostAllocDefault
+cudaHostAllocMapped
+cudaHostAllocPortable
+cudaHostAllocWriteCombined
 cudaHostFn_t
+cudaHostRegisterDefault
+cudaHostRegisterIoMemory
+cudaHostRegisterMapped
+cudaHostRegisterPortable
+cudaHostRegisterReadOnly
+cudaInvalidDeviceId
 cudaIpcEventHandle_t
 cudaIpcMemHandle_t
+cudaIpcMemLazyEnablePeerAccess
 cudaKernelNodeAttrID
 cudaKernelNodeAttrValue
 cudaKernelNodeAttributeAccessPolicyWindow
@@ -844,6 +879,9 @@ cudaMemAllocationType
 cudaMemAllocationTypeInvalid
 cudaMemAllocationTypeMax
 cudaMemAllocationTypePinned
+cudaMemAttachGlobal
+cudaMemAttachHost
+cudaMemAttachSingle
 cudaMemHandleTypeNone
 cudaMemHandleTypePosixFileDescriptor
 cudaMemHandleTypeWin32
@@ -879,6 +917,8 @@ cudaMemoryTypeHost
 cudaMemoryTypeManaged
 cudaMipmappedArray_const_t
 cudaMipmappedArray_t
+cudaOccupancyDefault
+cudaOccupancyDisableCachingOverride
 cudaResViewFormatFloat1
 cudaResViewFormatFloat2
 cudaResViewFormatFloat4
@@ -933,6 +973,9 @@ cudaStreamCaptureStatus
 cudaStreamCaptureStatusActive
 cudaStreamCaptureStatusInvalidated
 cudaStreamCaptureStatusNone
+cudaStreamDefault
+cudaStreamNonBlocking
+cudaStreamPerThread
 cudaStreamSetCaptureDependencies
 cudaStreamUpdateCaptureDependenciesFlags
 cudaStream_t
@@ -983,3 +1026,10 @@ cudaTextureAddressMode
 cudaTextureFilterMode
 cudaTextureObject_t
 cudaTextureReadMode
+cudaTextureType1D
+cudaTextureType1DLayered
+cudaTextureType2D
+cudaTextureType2DLayered
+cudaTextureType3D
+cudaTextureTypeCubemap
+cudaTextureTypeCubemapLayered

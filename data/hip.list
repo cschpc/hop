@@ -85,6 +85,10 @@ HIP_RES_VIEW_FORMAT_UNSIGNED_BC5
 HIP_RES_VIEW_FORMAT_UNSIGNED_BC6H
 HIP_RES_VIEW_FORMAT_UNSIGNED_BC7
 HIP_TEXTURE_DESC
+HIP_TRSA_OVERRIDE_FORMAT
+HIP_TRSF_NORMALIZED_COORDINATES
+HIP_TRSF_READ_AS_INTEGER
+HIP_TRSF_SRGB
 HIP_TR_ADDRESS_MODE_BORDER
 HIP_TR_ADDRESS_MODE_CLAMP
 HIP_TR_ADDRESS_MODE_MIRROR
@@ -201,6 +205,10 @@ make_hipDoubleComplex
 make_hipFloatComplex
 
 [hip/hip_runtime_api.h]
+HIP_IPC_HANDLE_SIZE
+HIP_LAUNCH_PARAM_BUFFER_POINTER
+HIP_LAUNCH_PARAM_BUFFER_SIZE
+HIP_LAUNCH_PARAM_END
 hipAccessPolicyWindow
 hipAccessProperty
 hipAccessPropertyNormal
@@ -209,13 +217,18 @@ hipAccessPropertyStreaming
 hipArray3DCreate
 hipArray3DGetDescriptor
 hipArrayCreate
+hipArrayCubemap
+hipArrayDefault
 hipArrayDestroy
 hipArrayGetDescriptor
 hipArrayGetInfo
+hipArrayLayered
 hipArrayMapInfo
 hipArraySparseSubresourceType
 hipArraySparseSubresourceTypeMiptail
 hipArraySparseSubresourceTypeSparseLevel
+hipArraySurfaceLoadStore
+hipArrayTextureGather
 hipBindTexture
 hipBindTexture2D
 hipBindTextureToArray
@@ -227,6 +240,9 @@ hipComputeModeExclusive
 hipComputeModeExclusiveProcess
 hipComputeModeProhibited
 hipConfigureCall
+hipCooperativeLaunchMultiDeviceNoPostSync
+hipCooperativeLaunchMultiDeviceNoPreSync
+hipCpuDeviceId
 hipCreateSurfaceObject
 hipCreateTextureObject
 hipCtxCreate
@@ -355,6 +371,8 @@ hipDeviceGetSharedMemConfig
 hipDeviceGetStreamPriorityRange
 hipDeviceGetUuid
 hipDeviceGraphMemTrim
+hipDeviceLmemResizeToMax
+hipDeviceMapHost
 hipDeviceP2PAttr
 hipDevicePrimaryCtxGetState
 hipDevicePrimaryCtxRelease
@@ -363,6 +381,11 @@ hipDevicePrimaryCtxRetain
 hipDevicePrimaryCtxSetFlags
 hipDeviceProp_t
 hipDeviceReset
+hipDeviceScheduleAuto
+hipDeviceScheduleBlockingSync
+hipDeviceScheduleMask
+hipDeviceScheduleSpin
+hipDeviceScheduleYield
 hipDeviceSetCacheConfig
 hipDeviceSetGraphMemAttribute
 hipDeviceSetLimit
@@ -449,10 +472,14 @@ hipErrorUnknown
 hipErrorUnmapFailed
 hipErrorUnsupportedLimit
 hipError_t
+hipEventBlockingSync
 hipEventCreate
 hipEventCreateWithFlags
+hipEventDefault
 hipEventDestroy
+hipEventDisableTiming
 hipEventElapsedTime
+hipEventInterprocess
 hipEventQuery
 hipEventRecord
 hipEventSynchronize
@@ -659,17 +686,27 @@ hipHostFree
 hipHostGetDevicePointer
 hipHostGetFlags
 hipHostMalloc
+hipHostMallocDefault
+hipHostMallocMapped
+hipHostMallocPortable
+hipHostMallocWriteCombined
 hipHostNodeParams
 hipHostRegister
+hipHostRegisterDefault
+hipHostRegisterIoMemory
+hipHostRegisterMapped
+hipHostRegisterPortable
 hipHostUnregister
 hipImportExternalMemory
 hipImportExternalSemaphore
 hipInit
+hipInvalidDeviceId
 hipIpcCloseMemHandle
 hipIpcEventHandle_t
 hipIpcGetEventHandle
 hipIpcGetMemHandle
 hipIpcMemHandle_t
+hipIpcMemLazyEnablePeerAccess
 hipIpcOpenEventHandle
 hipIpcOpenMemHandle
 hipJitOption
@@ -723,6 +760,9 @@ hipMemAllocationType
 hipMemAllocationTypeInvalid
 hipMemAllocationTypeMax
 hipMemAllocationTypePinned
+hipMemAttachGlobal
+hipMemAttachHost
+hipMemAttachSingle
 hipMemCreate
 hipMemExportToShareableHandle
 hipMemGenericAllocationHandle_t
@@ -848,6 +888,7 @@ hipModuleOccupancyMaxPotentialBlockSize
 hipModuleOccupancyMaxPotentialBlockSizeWithFlags
 hipModuleUnload
 hipModule_t
+hipOccupancyDefault
 hipOccupancyMaxActiveBlocksPerMultiprocessor
 hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 hipOccupancyMaxPotentialBlockSize
@@ -885,6 +926,7 @@ hipStreamCaptureStatusNone
 hipStreamCreate
 hipStreamCreateWithFlags
 hipStreamCreateWithPriority
+hipStreamDefault
 hipStreamDestroy
 hipStreamEndCapture
 hipStreamGetCaptureInfo
@@ -892,6 +934,8 @@ hipStreamGetCaptureInfo_v2
 hipStreamGetFlags
 hipStreamGetPriority
 hipStreamIsCapturing
+hipStreamNonBlocking
+hipStreamPerThread
 hipStreamQuery
 hipStreamSetCaptureDependencies
 hipStreamSynchronize
@@ -900,6 +944,10 @@ hipStreamUpdateCaptureDependenciesFlags
 hipStreamWaitEvent
 hipStreamWaitValue32
 hipStreamWaitValue64
+hipStreamWaitValueAnd
+hipStreamWaitValueEq
+hipStreamWaitValueGte
+hipStreamWaitValueNor
 hipStreamWriteValue32
 hipStreamWriteValue64
 hipStream_t
@@ -966,6 +1014,13 @@ hipTextureDesc
 hipTextureFilterMode
 hipTextureObject_t
 hipTextureReadMode
+hipTextureType1D
+hipTextureType1DLayered
+hipTextureType2D
+hipTextureType2DLayered
+hipTextureType3D
+hipTextureTypeCubemap
+hipTextureTypeCubemapLayered
 
 [hipblas/hipblas.h]
 HIPBLAS_ATOMICS_ALLOWED
@@ -1248,10 +1303,12 @@ hipblasZtrsv
 
 [hipfft/hipfft.h]
 HIPFFT_ALLOC_FAILED
+HIPFFT_BACKWARD
 HIPFFT_C2C
 HIPFFT_C2R
 HIPFFT_D2Z
 HIPFFT_EXEC_FAILED
+HIPFFT_FORWARD
 HIPFFT_INCOMPLETE_PARAMETER_LIST
 HIPFFT_INTERNAL_ERROR
 HIPFFT_INVALID_DEVICE

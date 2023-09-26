@@ -147,6 +147,7 @@ gpuDeviceAttributeWarpSize                                cudaDevAttrWarpSize
 gpuDeviceAttribute_t                                      cudaDeviceAttr
 gpuDeviceGetCacheConfig                                   cudaThreadGetCacheConfig
 gpuDeviceReset                                            cudaThreadExit
+gpuDeviceScheduleBlockingSync                             cudaDeviceBlockingSync
 gpuDeviceSetCacheConfig                                   cudaThreadSetCacheConfig
 gpuDeviceSynchronize                                      cudaThreadSynchronize
 gpuDoubleComplex                                          cuDoubleComplex
@@ -169,6 +170,10 @@ gpuFloatComplex                                           cuFloatComplex
 gpuFuncCache_t                                            cudaFuncCache
 gpuHostFree                                               cudaFreeHost
 gpuHostMalloc                                             cudaMallocHost
+gpuHostMallocDefault                                      cudaHostAllocDefault
+gpuHostMallocMapped                                       cudaHostAllocMapped
+gpuHostMallocPortable                                     cudaHostAllocPortable
+gpuHostMallocWriteCombined                                cudaHostAllocWriteCombined
 gpuLimit_t                                                cudaLimit
 gpuUUID                                                   CUuuid
 gpuUUID                                                   cudaUUID_t
