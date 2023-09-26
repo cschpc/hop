@@ -73,19 +73,16 @@ texture_types.h
 = cuda_runtime_api.h
 
 cublas.h
-- library_types.h
+= cublas_v2.h
 
 cublas_v2.h
-+ cuComplex.h
 + cublas_api.h
-+ driver_types.h
-+ library_types.h
-+ vector_types.h
+- cublas.h
 
 cublas_api.h
 + cuComplex.h
 + driver_types.h
-+ library_types.h
+- library_types.h
 + vector_types.h
 
 

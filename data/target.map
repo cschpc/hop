@@ -280,6 +280,7 @@ gpublasSsyr                                               cublasSsyr_v2
 gpublasSsyr2                                              cublasSsyr2_v2
 gpublasSsyr2k                                             cublasSsyr2k_v2
 gpublasSsyrk                                              cublasSsyrk_v2
+gpublasStatus_t                                           cublasStatus_t
 gpublasStbmv                                              cublasStbmv_v2
 gpublasStbsv                                              cublasStbsv_v2
 gpublasStpmv                                              cublasStpmv_v2
