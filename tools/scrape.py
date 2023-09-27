@@ -143,6 +143,9 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--cpp-macros',
             action='store_true', default=False,
             help='preprocess for C++ with CUDA/HIP macros')
+    parser.add_argument('-a', '--expand-macros',
+            action='store_true', default=False,
+            help='expand macros when preprocessing')
     parser.add_argument('-e', '--include-experimental',
             action='store_true', default=False,
             help='(hipify) include experimental substitutions')
