@@ -44,11 +44,13 @@ GPU_POINTER_ATTRIBUTE_RANGE_SIZE
 GPU_POINTER_ATTRIBUTE_RANGE_START_ADDR
 GPU_POINTER_ATTRIBUTE_SYNC_MEMOPS
 GPU_RESOURCE_DESC
+GPU_RESOURCE_DESC_st
 GPU_RESOURCE_TYPE_ARRAY
 GPU_RESOURCE_TYPE_LINEAR
 GPU_RESOURCE_TYPE_MIPMAPPED_ARRAY
 GPU_RESOURCE_TYPE_PITCH2D
 GPU_RESOURCE_VIEW_DESC
+GPU_RESOURCE_VIEW_DESC_st
 GPU_RES_VIEW_FORMAT_FLOAT_1X16
 GPU_RES_VIEW_FORMAT_FLOAT_1X32
 GPU_RES_VIEW_FORMAT_FLOAT_2X16
@@ -85,6 +87,7 @@ GPU_RES_VIEW_FORMAT_UNSIGNED_BC5
 GPU_RES_VIEW_FORMAT_UNSIGNED_BC6H
 GPU_RES_VIEW_FORMAT_UNSIGNED_BC7
 GPU_TEXTURE_DESC
+GPU_TEXTURE_DESC_st
 GPU_TRSA_OVERRIDE_FORMAT
 GPU_TRSF_NORMALIZED_COORDINATES
 GPU_TRSF_READ_AS_INTEGER
@@ -170,6 +173,7 @@ gpuResourceTypeArray
 gpuResourceTypeLinear
 gpuResourceTypeMipmappedArray
 gpuResourceTypePitch2D
+gpuResourceViewDesc
 gpuResourceViewFormat
 gpu_Memcpy2D
 make_gpuExtent
@@ -488,9 +492,11 @@ gpuEventRecord
 gpuEventSynchronize
 gpuEvent_t
 gpuExternalMemoryBufferDesc
+gpuExternalMemoryBufferDesc_st
 gpuExternalMemoryDedicated
 gpuExternalMemoryGetMappedBuffer
 gpuExternalMemoryHandleDesc
+gpuExternalMemoryHandleDesc_st
 gpuExternalMemoryHandleType
 gpuExternalMemoryHandleTypeD3D11Resource
 gpuExternalMemoryHandleTypeD3D11ResourceKmt
@@ -502,6 +508,7 @@ gpuExternalMemoryHandleTypeOpaqueWin32Kmt
 gpuExternalMemoryHandleType_enum
 gpuExternalMemory_t
 gpuExternalSemaphoreHandleDesc
+gpuExternalSemaphoreHandleDesc_st
 gpuExternalSemaphoreHandleType
 gpuExternalSemaphoreHandleTypeD3D12Fence
 gpuExternalSemaphoreHandleTypeOpaqueFd
@@ -509,7 +516,9 @@ gpuExternalSemaphoreHandleTypeOpaqueWin32
 gpuExternalSemaphoreHandleTypeOpaqueWin32Kmt
 gpuExternalSemaphoreHandleType_enum
 gpuExternalSemaphoreSignalParams
+gpuExternalSemaphoreSignalParams_st
 gpuExternalSemaphoreWaitParams
+gpuExternalSemaphoreWaitParams_st
 gpuExternalSemaphore_t
 gpuFree
 gpuFreeArray
@@ -531,6 +540,7 @@ gpuFuncSetAttribute
 gpuFuncSetCacheConfig
 gpuFuncSetSharedMemConfig
 gpuFunctionLaunchParams
+gpuFunctionLaunchParams_t
 gpuFunction_t
 gpuGLDeviceList
 gpuGLDeviceListAll
@@ -707,9 +717,11 @@ gpuImportExternalSemaphore
 gpuInit
 gpuInvalidDeviceId
 gpuIpcCloseMemHandle
+gpuIpcEventHandle_st
 gpuIpcEventHandle_t
 gpuIpcGetEventHandle
 gpuIpcGetMemHandle
+gpuIpcMemHandle_st
 gpuIpcMemHandle_t
 gpuIpcMemLazyEnablePeerAccess
 gpuIpcOpenEventHandle
@@ -988,6 +1000,7 @@ gpuTexRefSetMipmapLevelClamp
 gpuTexRefSetMipmappedArray
 gpuThreadExchangeStreamCaptureMode
 gpuUUID
+gpuUUID_t
 gpuUnbindTexture
 gpuUserObjectCreate
 gpuUserObjectFlags
@@ -1400,9 +1413,21 @@ gpurandSetQuasiRandomGeneratorDimensions
 gpurandSetStream
 gpurandStatus_t
 
-[hoprand.hpp]
+[hoprand_kernel.h]
 gpurand
 gpurandDirectionVectors32_t
+gpurandState
+gpurandStateMRG32k3a
+gpurandStateMRG32k3a_t
+gpurandStateMtgp32
+gpurandStateMtgp32_t
+gpurandStatePhilox4_32_10
+gpurandStatePhilox4_32_10_t
+gpurandStateSobol32
+gpurandStateSobol32_t
+gpurandStateXORWOW
+gpurandStateXORWOW_t
+gpurandState_t
 gpurand_discrete
 gpurand_discrete4
 gpurand_init
@@ -1425,6 +1450,10 @@ gpurand_uniform2_double
 gpurand_uniform4
 gpurand_uniform4_double
 gpurand_uniform_double
+
+[hoprand_mtgp32_host.h]
+gpurandMakeMTGP32Constants
+gpurandMakeMTGP32KernelState
 
 [hopsparse.h]
 GPUSPARSE_ACTION_NUMERIC

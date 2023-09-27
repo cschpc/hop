@@ -149,6 +149,7 @@ gpuDeviceAttributeUnifiedAddressing                       cudaDevAttrUnifiedAddr
 gpuDeviceAttributeWarpSize                                cudaDevAttrWarpSize
 gpuDeviceAttribute_t                                      cudaDeviceAttr
 gpuDeviceGetCacheConfig                                   cudaThreadGetCacheConfig
+gpuDeviceProp_t                                           cudaDeviceProp
 gpuDeviceReset                                            cudaThreadExit
 gpuDeviceScheduleBlockingSync                             cudaDeviceBlockingSync
 gpuDeviceSetCacheConfig                                   cudaThreadSetCacheConfig
@@ -169,6 +170,8 @@ gpuErrorNotInitialized                                    cudaErrorInitializatio
 gpuErrorOutOfMemory                                       cudaErrorMemoryAllocation
 gpuErrorUnmapFailed                                       cudaErrorUnmapBufferObjectFailed
 gpuError_t                                                cudaError
+gpuExternalSemaphoreSignalParams                          cudaExternalSemaphoreSignalParams_v1
+gpuExternalSemaphoreWaitParams                            cudaExternalSemaphoreWaitParams_v1
 gpuFloatComplex                                           cuFloatComplex
 gpuFuncCache_t                                            cudaFuncCache
 gpuHostFree                                               cudaFreeHost
@@ -178,8 +181,10 @@ gpuHostMallocMapped                                       cudaHostAllocMapped
 gpuHostMallocPortable                                     cudaHostAllocPortable
 gpuHostMallocWriteCombined                                cudaHostAllocWriteCombined
 gpuLimit_t                                                cudaLimit
+gpuPointerAttribute_t                                     cudaPointerAttributes
 gpuUUID                                                   CUuuid
 gpuUUID                                                   cudaUUID_t
+gpuUUID_t                                                 CUuuid_st
 gpublasCaxpy                                              cublasCaxpy_v2
 gpublasCcopy                                              cublasCcopy_v2
 gpublasCdotc                                              cublasCdotc_v2

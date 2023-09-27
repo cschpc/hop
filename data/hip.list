@@ -44,11 +44,13 @@ HIP_POINTER_ATTRIBUTE_RANGE_SIZE
 HIP_POINTER_ATTRIBUTE_RANGE_START_ADDR
 HIP_POINTER_ATTRIBUTE_SYNC_MEMOPS
 HIP_RESOURCE_DESC
+HIP_RESOURCE_DESC_st
 HIP_RESOURCE_TYPE_ARRAY
 HIP_RESOURCE_TYPE_LINEAR
 HIP_RESOURCE_TYPE_MIPMAPPED_ARRAY
 HIP_RESOURCE_TYPE_PITCH2D
 HIP_RESOURCE_VIEW_DESC
+HIP_RESOURCE_VIEW_DESC_st
 HIP_RES_VIEW_FORMAT_FLOAT_1X16
 HIP_RES_VIEW_FORMAT_FLOAT_1X32
 HIP_RES_VIEW_FORMAT_FLOAT_2X16
@@ -85,6 +87,7 @@ HIP_RES_VIEW_FORMAT_UNSIGNED_BC5
 HIP_RES_VIEW_FORMAT_UNSIGNED_BC6H
 HIP_RES_VIEW_FORMAT_UNSIGNED_BC7
 HIP_TEXTURE_DESC
+HIP_TEXTURE_DESC_st
 HIP_TRSA_OVERRIDE_FORMAT
 HIP_TRSF_NORMALIZED_COORDINATES
 HIP_TRSF_READ_AS_INTEGER
@@ -170,6 +173,7 @@ hipResourceTypeArray
 hipResourceTypeLinear
 hipResourceTypeMipmappedArray
 hipResourceTypePitch2D
+hipResourceViewDesc
 hipResourceViewFormat
 hip_Memcpy2D
 make_hipExtent
@@ -485,9 +489,11 @@ hipEventRecord
 hipEventSynchronize
 hipEvent_t
 hipExternalMemoryBufferDesc
+hipExternalMemoryBufferDesc_st
 hipExternalMemoryDedicated
 hipExternalMemoryGetMappedBuffer
 hipExternalMemoryHandleDesc
+hipExternalMemoryHandleDesc_st
 hipExternalMemoryHandleType
 hipExternalMemoryHandleTypeD3D11Resource
 hipExternalMemoryHandleTypeD3D11ResourceKmt
@@ -499,6 +505,7 @@ hipExternalMemoryHandleTypeOpaqueWin32Kmt
 hipExternalMemoryHandleType_enum
 hipExternalMemory_t
 hipExternalSemaphoreHandleDesc
+hipExternalSemaphoreHandleDesc_st
 hipExternalSemaphoreHandleType
 hipExternalSemaphoreHandleTypeD3D12Fence
 hipExternalSemaphoreHandleTypeOpaqueFd
@@ -506,7 +513,9 @@ hipExternalSemaphoreHandleTypeOpaqueWin32
 hipExternalSemaphoreHandleTypeOpaqueWin32Kmt
 hipExternalSemaphoreHandleType_enum
 hipExternalSemaphoreSignalParams
+hipExternalSemaphoreSignalParams_st
 hipExternalSemaphoreWaitParams
+hipExternalSemaphoreWaitParams_st
 hipExternalSemaphore_t
 hipFree
 hipFreeArray
@@ -528,6 +537,7 @@ hipFuncSetAttribute
 hipFuncSetCacheConfig
 hipFuncSetSharedMemConfig
 hipFunctionLaunchParams
+hipFunctionLaunchParams_t
 hipFunction_t
 hipGLDeviceList
 hipGLDeviceListAll
@@ -704,9 +714,11 @@ hipImportExternalSemaphore
 hipInit
 hipInvalidDeviceId
 hipIpcCloseMemHandle
+hipIpcEventHandle_st
 hipIpcEventHandle_t
 hipIpcGetEventHandle
 hipIpcGetMemHandle
+hipIpcMemHandle_st
 hipIpcMemHandle_t
 hipIpcMemLazyEnablePeerAccess
 hipIpcOpenEventHandle
@@ -985,6 +997,7 @@ hipTexRefSetMipmapLevelClamp
 hipTexRefSetMipmappedArray
 hipThreadExchangeStreamCaptureMode
 hipUUID
+hipUUID_t
 hipUnbindTexture
 hipUserObjectCreate
 hipUserObjectFlags
@@ -1402,6 +1415,7 @@ hiprandCreateGeneratorHost
 hiprandCreatePoissonDistribution
 hiprandDestroyDistribution
 hiprandDestroyGenerator
+hiprandDiscreteDistribution_st
 hiprandDiscreteDistribution_t
 hiprandGenerate
 hiprandGenerateLogNormal
@@ -1412,6 +1426,7 @@ hiprandGeneratePoisson
 hiprandGenerateSeeds
 hiprandGenerateUniform
 hiprandGenerateUniformDouble
+hiprandGenerator_st
 hiprandGenerator_t
 hiprandGetVersion
 hiprandRngType_t
@@ -1421,9 +1436,21 @@ hiprandSetQuasiRandomGeneratorDimensions
 hiprandSetStream
 hiprandStatus_t
 
-[hiprand/hiprand.hpp]
+[hiprand/hiprand_kernel.h]
 hiprand
 hiprandDirectionVectors32_t
+hiprandState
+hiprandStateMRG32k3a
+hiprandStateMRG32k3a_t
+hiprandStateMtgp32
+hiprandStateMtgp32_t
+hiprandStatePhilox4_32_10
+hiprandStatePhilox4_32_10_t
+hiprandStateSobol32
+hiprandStateSobol32_t
+hiprandStateXORWOW
+hiprandStateXORWOW_t
+hiprandState_t
 hiprand_discrete
 hiprand_discrete4
 hiprand_init
@@ -1447,9 +1474,9 @@ hiprand_uniform4
 hiprand_uniform4_double
 hiprand_uniform_double
 
-[hiprand/hiprand_hcc.h]
-hiprandDiscreteDistribution_st
-hiprandGenerator_st
+[hiprand/hiprand_mtgp32_host.h]
+hiprandMakeMTGP32Constants
+hiprandMakeMTGP32KernelState
 
 [hipsparse/hipsparse.h]
 HIPSPARSE_ACTION_NUMERIC

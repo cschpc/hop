@@ -28,6 +28,10 @@ hop/hopblas.h
 hop/hopfft.h
 
 hop/hoprand.h
+- hop/hoprand_hcc.h
+
+hop/hoprand_hcc.h
+= hop/hoprand.h
 
 hop/hopsparse.h
 
@@ -139,12 +143,16 @@ hiprand/hiprand.h
 + hip/hip_runtime.h
 + hip/hip_runtime_api.h
 - hiprand/hiprand.hpp
-- hiprand/hiprand_hcc.h
+- hiprand/hiprand_kernel.h
+- hiprand/hiprand_mtgp32_host.h
 
 hiprand/hiprand.hpp
 = hiprand/hiprand.h
 
-hiprand/hiprand_hcc.h
+hiprand/hiprand_kernel.h
+= hiprand/hiprand.h
+
+hiprand/hiprand_mtgp32_host.h
 = hiprand/hiprand.h
 
 hipsparse/hipsparse.h
