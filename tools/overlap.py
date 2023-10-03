@@ -25,7 +25,8 @@ def _connections(metadata, source, target):
             tgt = metadata['map']['target'][target][hop]
             pair = _find_header(metadata['list'][target], tgt)
             if not pair:
-                continue
+                logging.info('pair missing for {}'.format(name))
+                pair = '???'
             connect[header].setdefault(pair, [])
             connect[header][pair].append((name, tgt))
     logging.debug('_connections > {}'.format(connect))
@@ -94,6 +95,8 @@ if __name__ == '__main__':
 
     # configure logging
     config = {'format': '[%(levelname)s] %(message)s'}
+    if args.verbose:
+        config['level'] = logging.INFO
     if args.debug:
         config['level'] = logging.DEBUG
     logging.basicConfig(**config)
