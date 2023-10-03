@@ -87,14 +87,14 @@ def _check_id_list(filename, label, metadata, reference, warn, wishlist):
             hip = name
             hop = metadata['map']['source']['hip'][hip]
             cuda = metadata['map']['target']['cuda'][hop]
-            if cuda not in reference['hip'][hip]:
+            if cuda not in reference['hip'].get(hip, []):
                 warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
             wishlist['cuda'].append(cuda)
         elif label == 'cuda':
             cuda = name
             hop = metadata['map']['source']['cuda'][cuda]
             hip = metadata['map']['target']['hip'][hop]
-            if hip != reference['cuda'][cuda]:
+            if hip != reference['cuda'].get(cuda):
                 warn('Incorrect mapping: {} -> {} -> {}'.format(cuda, hop, hip))
             wishlist['hip'].append(hip)
         else:
