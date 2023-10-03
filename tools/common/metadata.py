@@ -46,7 +46,7 @@ class Map(collections.UserDict):
         if self.source:
             return self.translator.to_hop(key)
         else:
-            return self.translator.default(key, self.label)
+            return self.translator.translate(key, self.label)
 
     def _error(self, key):
         kind = 'source' if self.source else 'target'
