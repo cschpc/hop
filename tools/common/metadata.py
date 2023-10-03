@@ -22,12 +22,21 @@ def log(f):
 
 
 def known_list_ids(metadata):
-    known_ids = {}
+    ids = {}
     for label in metadata['list']:
-        known_ids.setdefault(label, [])
+        ids.setdefault(label, [])
         for filename in metadata['list'][label]:
-            known_ids[label].extend(metadata['list'][label][filename])
-    return known_ids
+            ids[label].extend(metadata['list'][label][filename])
+    return ids
+
+
+def known_map_ids(metadata):
+    ids = []
+    for direction in metadata['map']:
+        for label in metadata['map'][direction]:
+            ids.extend(metadata['map'][direction][label].keys())
+            ids.extend(metadata['map'][direction][label].values())
+    return ids
 
 
 class Map(collections.UserDict):

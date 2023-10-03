@@ -5,7 +5,7 @@ import tempfile
 import subprocess
 
 from common.io import header_name, header_root, lang
-from common.metadata import translate
+from common.metadata import known_map_ids, translate
 
 
 regex_perl_sub = re.compile('\nsub (\w+)\s+{([^}]*)}')
@@ -170,12 +170,8 @@ def _included_ids(path, metadata):
     return ids
 
 
-def _known_maps(metadata, triplets):
+def _known_triplet_ids(triplets):
     ids = []
-    for direction in metadata['map'].values():
-        for lang in direction.values():
-            ids.extend(lang.keys())
-            ids.extend(lang.values())
     for hop, hip, cuda in triplets:
         ids.append(hop)
         ids.append(hip)
@@ -247,7 +243,7 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
         print('Scrape header: {}'.format(filename))
     included_ids = _included_ids(path, metadata)
     logging.debug('included_ids={}'.format(included_ids))
-    known_maps = _known_maps(metadata, triplets)
+    known_maps = known_map_ids(metadata) + known_triplet_ids(triplets)
     for line in _ctags(args, path):
         if not line:
             break
