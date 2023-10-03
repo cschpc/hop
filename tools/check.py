@@ -4,7 +4,7 @@ import os
 import pathlib
 import logging
 
-from common.io import read_tree, read_map, read_list, file_path
+from common.io import read_metadata, file_path
 from common.abc import UniqueList
 from common.parser import ArgumentParser
 from common.reference import reference_map
@@ -35,9 +35,9 @@ def _check_symbolic_link(link, target, warn):
         warn('Link {} does not point to {}.'.format(link, target))
 
 
-def check_tree(tree):
-    for root in tree:
-        for node in tree[root].values():
+def check_tree(metadata):
+    for root in metadata['tree']:
+        for node in metadata['tree'][root].values():
             path = file_path(os.path.join(root, node.name))
             _check_regular_file(path, warn)
             if node.link:
@@ -49,18 +49,18 @@ def check_tree(tree):
                 _check_regular_file(path, warn)
 
 
-def check_maps(tree, id_maps, reference):
+def check_maps(metadata, reference):
     if not reference:
         return warnings
-    for cuda, hop in id_maps['source']['cuda'].items():
-        hip = id_maps['target']['hip'][hop]
+    for cuda, hop in metadata['map']['source']['cuda'].items():
+        hip = metadata['map']['target']['hip'][hop]
         if cuda not in reference['cuda']:
             warn('No reference mapping for {}'.format(cuda))
             continue
         if hip != reference['cuda'][cuda]:
             warn('Incorrect mapping: {} -> {} -> {}'.format(cuda, hop, hip))
-    for hip, hop in id_maps['source']['hip'].items():
-        cuda = id_maps['target']['cuda'][hop]
+    for hip, hop in metadata['map']['source']['hip'].items():
+        cuda = metadata['map']['target']['cuda'][hop]
         if hip not in reference['hip']:
             warn('No reference mapping for {}'.format(hip))
             continue
@@ -68,12 +68,12 @@ def check_maps(tree, id_maps, reference):
             warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
 
 
-def _all_files_in_tree(tree):
+def _all_files_in_tree(metadata):
     files = {}
-    for root in tree:
+    for root in metadata['tree']:
         label = root.replace('source/', '', 1)
         files.setdefault(label, UniqueList())
-        for node in tree[root].values():
+        for node in metadata['tree'][root].values():
             files[label].append(node.name)
             files[label].extend(node)
             logging.debug('node={}'.format(repr(node)))
@@ -81,54 +81,54 @@ def _all_files_in_tree(tree):
     return files
 
 
-def _check_id_list(id_list, label, id_maps, reference, warn, wishlist):
-    for name in id_list:
+def _check_id_list(filename, label, metadata, reference, warn, wishlist):
+    for name in metadata['list'][label][filename]:
         if label == 'hip':
             hip = name
-            hop = id_maps['source']['hip'][hip]
-            cuda = id_maps['target']['cuda'][hop]
+            hop = metadata['map']['source']['hip'][hip]
+            cuda = metadata['map']['target']['cuda'][hop]
             if cuda not in reference['hip'][hip]:
                 warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
             wishlist['cuda'].append(cuda)
         elif label == 'cuda':
             cuda = name
-            hop = id_maps['source']['cuda'][cuda]
-            hip = id_maps['target']['hip'][hop]
+            hop = metadata['map']['source']['cuda'][cuda]
+            hip = metadata['map']['target']['hip'][hop]
             if hip != reference['cuda'][cuda]:
                 warn('Incorrect mapping: {} -> {} -> {}'.format(cuda, hop, hip))
             wishlist['hip'].append(hip)
         else:
             hop = name
-            hip = id_maps['target']['hip'][hop]
-            cuda = id_maps['target']['cuda'][hop]
+            hip = metadata['map']['target']['hip'][hop]
+            cuda = metadata['map']['target']['cuda'][hop]
             wishlist['hip'].append(hip)
             wishlist['cuda'].append(cuda)
 
 
-def _known_identifiers(id_lists):
+def _known_identifiers(metadata):
     known_ids = {
             'hip': [],
             'cuda': [],
             }
     for label in known_ids:
-        for filename in id_lists[label]:
-            known_ids[label].extend(id_lists[label][filename])
+        for filename in metadata['list'][label]:
+            known_ids[label].extend(metadata['list'][label][filename])
     return known_ids
 
 
-def check_lists(tree, id_lists, id_maps, reference):
-    files = _all_files_in_tree(tree)
-    known_ids = _known_identifiers(id_lists)
+def check_lists(metadata, reference):
+    files = _all_files_in_tree(metadata)
+    known_ids = _known_identifiers(metadata)
     wishlist = {
             'hip': [],
             'cuda': [],
             }
-    for label in id_lists:
+    for label in metadata['list']:
         if label == 'hop':
             root = label
         else:
             root = 'source/' + label
-        for filename in id_lists[label]:
+        for filename in metadata['list'][label]:
             path = file_path(os.path.join(root, filename))
             _check_regular_file(path, warn)
             if not filename in files[label]:
@@ -136,8 +136,8 @@ def check_lists(tree, id_lists, id_maps, reference):
                     root, filename))
             if not reference:
                 continue
-            _check_id_list(id_lists[label][filename], label, id_maps,
-                           reference, warn, wishlist)
+            _check_id_list(filename, label, metadata, reference, warn,
+                           wishlist)
     for label in wishlist:
         for tgt in sorted(set(wishlist[label])):
             if tgt not in known_ids[label]:
@@ -145,16 +145,7 @@ def check_lists(tree, id_lists, id_maps, reference):
 
 
 def check(args):
-    tree = read_tree('data/file.tree')
-    id_maps = {
-            'source': read_map('data/source.map', source=True),
-            'target': read_map('data/target.map'),
-            }
-    id_lists = {
-            'hop': read_list('data/hop.list'),
-            'hip': read_list('data/hip.list'),
-            'cuda': read_list('data/cuda.list'),
-            }
+    metadata = read_metadata()
 
     if args.hipify:
         hipify = os.path.join(os.path.expanduser(args.hipify),
@@ -166,9 +157,9 @@ def check(args):
         print('Unable to scrape for reference mappings (cf. --hipify option)')
         reference = None
 
-    check_tree(tree)
-    check_lists(tree, id_lists, id_maps, reference)
-    check_maps(tree, id_maps, reference)
+    check_tree(metadata)
+    check_lists(metadata, reference)
+    check_maps(metadata, reference)
     print('Warnings: {}'.format(len(warnings)))
     for msg in sorted(warnings):
         print(' ', msg)
