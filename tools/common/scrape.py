@@ -18,6 +18,20 @@ def _find_subst(txt, name):
     return []
 
 
+regex_perl_hash = re.compile('\nmy %(\w+)\s+=\s+\(([^)]*)\)')
+regex_key_value = re.compile('"(\w+)"\s+=>\s+"([\w.]+)"')
+
+def _find_key_values(txt, name):
+    for blob in regex_perl_hash.findall(txt):
+        logging.debug('blob={}'.format(blob))
+        if blob[0] == name:
+            return regex_key_value.findall(blob[1])
+    return []
+
+def obsolete_ids(txt):
+    return [x[0] for x in _find_key_values(txt, 'removed_funcs')]
+
+
 # mistaken IDs in hipify
 _errata_hipify = {
         'hipDeviceAttributeMaxBlocksPerMultiprocessor': 'hipDeviceAttributeMaxBlocksPerMultiProcessor',
@@ -32,6 +46,8 @@ def scrape_hipify(path, verbose=False, experimental=False,
     subs.extend(_find_subst(txt, 'simpleSubstitutions'))
     if experimental:
         subs.extend(_find_subst(txt, 'experimentalSubstitutions'))
+    obsolete = obsolete_ids(txt)
+    logging.debug('obsolete={}'.format(obsolete))
 
     if exclude:
         # exclude IDs with prefix
@@ -53,6 +69,9 @@ def scrape_hipify(path, verbose=False, experimental=False,
             continue
         elif _exclude(cuda) or _exclude(hip):
             logging.debug('  ignore (exclude)')
+            continue
+        elif cuda in obsolete:
+            logging.debug('  ignore (obsolete)')
             continue
         triplets.append((hop, hip, cuda))
     if verbose:
