@@ -64,6 +64,8 @@ class Translator:
     regex_default_upper = re.compile('^()(GPU|HIP|CUDA)')
     regex_lib_lower = re.compile('^()(gpu|hip|cuda|cu)(blas|fft|rand|sparse)')
     regex_lib_upper = re.compile('^()(GPU|HIP|cuda|cu)(BLAS|FFT|RAND|SPARSE)')
+    regex_rtc_lower = re.compile('^()(hip|nv)(rtc)')
+    regex_rtc_upper = re.compile('^()(HIP|NV)(RTC)')
 
     def _translate(self, name, target, default=False):
         if default:
@@ -74,6 +76,11 @@ class Translator:
             _regex_lower = self.regex_lower
             _regex_camel = self.regex_camel
             _regex_upper = self.regex_upper
+        if self.regex_rtc_lower.match(name):
+            return self.regex_rtc_lower.sub(r'\1{}\3'.format(target), name)
+        if self.regex_rtc_upper.match(name):
+            return self.regex_rtc_upper.sub(
+                    r'\1{}\3'.format(target.upper()), name)
         if _regex_lower.match(name):
             return _regex_lower.sub(r'\1' + target, name)
         if _regex_camel.match(name):
@@ -118,8 +125,11 @@ class Translator:
             _regex_lower = self.regex_lower
             _regex_camel = self.regex_camel
             _regex_upper = self.regex_upper
-        return (_regex_lower.match(name) or _regex_camel.match(name)
-                or _regex_upper.match(name))
+        return (_regex_lower.match(name)
+                or _regex_camel.match(name)
+                or _regex_upper.match(name)
+                or self.regex_rtc_lower.match(name)
+                or self.regex_rtc_upper.match(name))
 
 
 translate = Translator()
