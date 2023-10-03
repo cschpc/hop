@@ -61,16 +61,6 @@ def scrape_hipify(path, verbose=False, experimental=False,
     return triplets
 
 
-def _regex_lang(path):
-    _lang = lang(path)
-    if not _lang:
-        raise ValueError('Unable to guess header language: {}'.format(path))
-    prefix = [_lang.lower(), _lang.upper(), _lang.capitalize()]
-    if _lang == 'CUDA':
-        prefix.extend(['cu', 'CU', 'Cu'])
-    return re.compile('^(.*?)({})'.format('|'.join(prefix)))
-
-
 def _remove_id(name, id_list):
     for filename in id_list:
         if name in id_list[filename]:
@@ -234,7 +224,6 @@ def _add_hop(args, path, name, label, metadata, known_ids, triplets, count):
 def scrape_header(args, path, metadata, known_ids, triplets, count):
     label = lang(path).lower()
     filename = header_name(path)
-    regex_lang = _regex_lang(path)
     if args.verbose:
         print('Scrape header: {}'.format(filename))
     included_ids = _included_ids(path, metadata)
@@ -250,7 +239,7 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
             continue
         if (name.startswith('_')
                 or name.endswith('_H')
-                or not regex_lang.match(name)):
+                or not translate.match(name)):
             logging.debug('  ignore (_ | regex)')
             continue
         if name in included_ids:
