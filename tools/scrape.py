@@ -5,7 +5,7 @@ import copy
 import logging
 
 from common.io import read_metadata, write_map, write_list
-from common.metadata import translate
+from common.metadata import known_list_ids, translate
 from common.parser import ArgumentParser
 from common.scrape import scrape_hipify, scrape_header
 
@@ -19,12 +19,14 @@ def update_maps(args, metadata, triplets, known_ids):
         _hop = hop
         if cuda in metadata['map']['source']['cuda']:
             _hop = metadata['map']['source']['cuda'][cuda]
-        elif cuda in known_ids and not translate.is_default_cuda(_hop, cuda):
+        elif (cuda in known_ids['cuda']
+                and not translate.is_default_cuda(_hop, cuda)):
             metadata['map']['source']['cuda'][cuda] = _hop
             count += 1
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(cuda, _hop))
-        if hip in known_ids and _hop not in metadata['map']['target']['hip']:
+        if (hip in known_ids['hip']
+                and _hop not in metadata['map']['target']['hip']):
             if not translate.is_default_hip(_hop, hip):
                 metadata['map']['target']['hip'][_hop] = hip
                 count += 1
@@ -34,12 +36,14 @@ def update_maps(args, metadata, triplets, known_ids):
         _hop = hop
         if hip in metadata['map']['source']['hip']:
             _hop = metadata['map']['source']['hip'][hip]
-        elif hip in known_ids and not translate.is_default_hip(_hop, hip):
+        elif (hip in known_ids['hip']
+                and not translate.is_default_hip(_hop, hip)):
             metadata['map']['source']['hip'][hip] = _hop
             count += 1
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(hip, _hop))
-        if cuda in known_ids and _hop not in metadata['map']['target']['cuda']:
+        if (cuda in known_ids['cuda']
+                and _hop not in metadata['map']['target']['cuda']):
             if not translate.is_default_cuda(_hop, cuda):
                 metadata['map']['target']['cuda'][_hop] = cuda
                 count += 1
@@ -51,25 +55,19 @@ def update_maps(args, metadata, triplets, known_ids):
     return count
 
 
-def _all_identifiers(id_lists):
-    ids = []
-    for label in id_lists:
-        for filename in id_lists[label]:
-            ids.extend(id_lists[label][filename])
-    return ids
-
-
 def _known_triplets(triplets, known_ids):
     known = []
     for hop, hip, cuda in triplets:
-        if hop in known_ids or hip in known_ids or cuda in known_ids:
+        if (hop in known_ids['hop']
+                or hip in known_ids['hip']
+                or cuda in known_ids['cuda']):
             known.append((hop, hip, cuda))
     return known
 
 
 def scrape(args):
     metadata = read_metadata()
-    known_ids = _all_identifiers(metadata['list'])
+    known_ids = known_list_ids(metadata)
 
     orig_metadata = copy.deepcopy(metadata)
 

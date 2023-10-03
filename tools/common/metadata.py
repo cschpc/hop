@@ -21,6 +21,15 @@ def log(f):
     return logger
 
 
+def known_list_ids(metadata):
+    known_ids = {}
+    for label in metadata['list']:
+        known_ids.setdefault(label, [])
+        for filename in metadata['list'][label]:
+            known_ids[label].extend(metadata['list'][label][filename])
+    return known_ids
+
+
 class Map(collections.UserDict):
     """Custom dictionary for identifier maps
 

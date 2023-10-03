@@ -7,6 +7,7 @@ import logging
 from common.io import read_metadata, file_path
 from common.abc import UniqueList
 from common.parser import ArgumentParser
+from common.metadata import known_list_ids
 from common.reference import reference_map
 
 
@@ -105,20 +106,8 @@ def _check_id_list(filename, label, metadata, reference, warn, wishlist):
             wishlist['cuda'].append(cuda)
 
 
-def _known_identifiers(metadata):
-    known_ids = {
-            'hip': [],
-            'cuda': [],
-            }
-    for label in known_ids:
-        for filename in metadata['list'][label]:
-            known_ids[label].extend(metadata['list'][label][filename])
-    return known_ids
-
-
 def check_lists(metadata, reference):
     files = _all_files_in_tree(metadata)
-    known_ids = _known_identifiers(metadata)
     wishlist = {
             'hip': [],
             'cuda': [],
@@ -138,6 +127,7 @@ def check_lists(metadata, reference):
                 continue
             _check_id_list(filename, label, metadata, reference, warn,
                            wishlist)
+    known_ids = known_list_ids(metadata)
     for label in wishlist:
         for tgt in sorted(set(wishlist[label])):
             if tgt not in known_ids[label]:

@@ -187,14 +187,14 @@ def _add_identifier(args, filename, name, label, metadata, known_ids, count):
     metadata['list'][label].setdefault(filename, [])
     if name in metadata['list'][label][filename]:
         return
-    if name in known_ids:
+    if name in known_ids[label]:
         if not args.ignore_moved:
             _remove_id(name, metadata['list'][label])
             if args.verbose:
                 print('  Moved identifier: ', name)
             count['move'] += 1
     else:
-        known_ids.append(name)
+        known_ids[label].append(name)
         if args.verbose:
             print('  New identifier: ', name)
         count['new'] += 1
@@ -234,7 +234,7 @@ def _add_hop(args, path, name, label, metadata, known_ids, triplets, count):
         else:
             return
     logging.debug('_add_hop: hop={}'.format(hop))
-    if (hop not in known_ids
+    if (hop not in known_ids[label]
             or (label == 'hip'
                 and hop not in _all_hop_ids(metadata, filename))):
         _add_identifier(args, filename, hop, 'hop', metadata, known_ids, count)
