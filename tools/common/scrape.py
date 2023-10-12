@@ -28,8 +28,13 @@ def _find_key_values(txt, name):
             return regex_key_value.findall(blob[1])
     return []
 
-def obsolete_ids(txt):
-    return [x[0] for x in _find_key_values(txt, 'removed_funcs')]
+
+def _find_keys(txt, name):
+    return [x[0] for x in _find_key_values(txt, name)]
+
+
+def obsolete_ids(path):
+    return _find_keys(open(path).read(), 'removed_funcs')
 
 
 # mistaken IDs in hipify
