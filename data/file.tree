@@ -40,6 +40,9 @@ hop/hopsparse.h
 
 cuComplex.h
 
+cuda.h
+~ driver_types.h
+
 driver_functions.h
 ~ driver_types.h
 ~ surface_types.h
@@ -54,9 +57,6 @@ library_types.h
 cuda_profiler_api.h
 ~ driver_types.h
 
-cuda.h
-~ driver_types.h
-
 cuda_runtime.h
 + cuda_runtime_api.h
 + driver_functions.h
@@ -69,6 +69,8 @@ cuda_runtime_api.h
 - driver_types.h
 - surface_types.h
 - texture_types.h
+
+nvrtc.h
 
 surface_types.h
 = cuda_runtime_api.h
@@ -99,11 +101,20 @@ curand.h
 + driver_functions.h
 + library_types.h
 
+curand_kernel.h
++ cuda.h
++ cuda_runtime.h
+- curand_mtgp32.h
+- curand_mtgp32_host.h
+
 cusparse.h
 + cuComplex.h
 + driver_types.h
 + library_types.h
 + vector_types.h
+
+cusparse_v2.h
+= cusparse.h
 
 
 [source/hip]
@@ -115,6 +126,8 @@ hip/hip_complex.h
 
 hip/driver_types.h
 = hip/hip_runtime_api.h
+
+hip/hiprtc.h
 
 hip/hip_runtime.h
 + hip/hip_runtime_api.h
@@ -143,17 +156,14 @@ hiprand/hiprand.h
 + hip/hip_runtime.h
 + hip/hip_runtime_api.h
 - hiprand/hiprand.hpp
-- hiprand/hiprand_kernel.h
-- hiprand/hiprand_mtgp32_host.h
 
 hiprand/hiprand.hpp
 = hiprand/hiprand.h
 
 hiprand/hiprand_kernel.h
-= hiprand/hiprand.h
-
-hiprand/hiprand_mtgp32_host.h
-= hiprand/hiprand.h
++ hip/hip_runtime.h
++ hip/hip_runtime_api.h
+- hiprand/hiprand_mtgp32_host.h
 
 hipsparse/hipsparse.h
 + hip/hip_complex.h
