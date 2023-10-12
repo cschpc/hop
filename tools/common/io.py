@@ -350,3 +350,37 @@ def write_all_lists(id_lists, force=False):
     for key in id_lists:
         filename = 'data/{}.list'.format(key)
         write_list(filename, id_lists[key], force=force)
+
+
+def write_metadata(metadata, force=False):
+    orig_metadata = read_metadata()
+    todo = []
+    if not metadata['map']['source'] == orig_metadata['map']['source']:
+        todo.append('data/source.map')
+    if not metadata['map']['target'] == orig_metadata['map']['target']:
+        todo.append('data/target.map')
+    if not metadata['list']['hop'] == orig_metadata['list']['hop']:
+        todo.append('data/hop.list')
+    if not metadata['list']['hip'] == orig_metadata['list']['hip']:
+        todo.append('data/hip.list')
+    if not metadata['list']['cuda'] == orig_metadata['list']['cuda']:
+        todo.append('data/cuda.list')
+    if not todo:
+        return
+    print('')
+    print('Updated metadata:')
+    print('  ' + '\n  '.join(todo))
+    if force or input('Overwrite file(s)? [Y/n] ') in ['y', 'yes', '']:
+        for filename in todo:
+            base, ext = os.path.splitext(filename)
+            label = os.path.basename(base)
+            if ext == '.map':
+                source = True if label == 'source' else False
+                if not args.dry_run:
+                    write_map(filename, metadata['map'][label], source,
+                              force=True)
+            elif ext == '.list':
+                if not args.dry_run:
+                    write_list(filename, metadata['list'][label], force=True)
+            else:
+                raise ValueError('Unknown file type: {}'.format(filename))

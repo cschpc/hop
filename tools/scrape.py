@@ -4,10 +4,10 @@ import os
 import copy
 import logging
 
-from common.io import read_metadata, write_map, write_list
-from common.metadata import known_list_ids, translate
+from common.io import read_metadata, write_metadata
 from common.parser import ArgumentParser
-from common.scrape import scrape_hipify, scrape_header
+from common.scrape import scrape_header, scrape_hipify
+from common.metadata import known_list_ids, translate
 
 
 def update_maps(args, metadata, triplets, known_ids):
@@ -69,8 +69,6 @@ def scrape(args):
     metadata = read_metadata()
     known_ids = known_list_ids(metadata)
 
-    orig_metadata = copy.deepcopy(metadata)
-
     path = os.path.join(os.path.expanduser(args.hipify),
                         'bin/hipify-perl')
     if not os.path.exists(path):
@@ -99,35 +97,7 @@ def scrape(args):
     print('Moved identifiers:  {}'.format(count['move']))
     print('New mapping chains: {}'.format(count['map']))
 
-    todo = []
-    if not metadata['map']['source'] == orig_metadata['map']['source']:
-        todo.append('data/source.map')
-    if not metadata['map']['target'] == orig_metadata['map']['target']:
-        todo.append('data/target.map')
-    if not metadata['list']['hop'] == orig_metadata['list']['hop']:
-        todo.append('data/hop.list')
-    if not metadata['list']['hip'] == orig_metadata['list']['hip']:
-        todo.append('data/hip.list')
-    if not metadata['list']['cuda'] == orig_metadata['list']['cuda']:
-        todo.append('data/cuda.list')
-    if not todo:
-        return
-    print('')
-    print('Updated metadata:')
-    print('  ' + '\n  '.join(todo))
-    if args.force or input('Overwrite file(s)? [Y/n] ') in ['y', 'yes', '']:
-        for filename in todo:
-            base, ext = os.path.splitext(filename)
-            label = os.path.basename(base)
-            if ext == '.map':
-                source = True if label == 'source' else False
-                if not args.dry_run:
-                    write_map(filename, metadata['map'][label], source, force=True)
-            elif ext == '.list':
-                if not args.dry_run:
-                    write_list(filename, metadata['list'][label], force=True)
-            else:
-                raise ValueError('Unknown file type: {}'.format(filename))
+    write_metadata(metadata, force=args.force)
 
 
 if __name__ == '__main__':
