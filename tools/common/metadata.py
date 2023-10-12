@@ -21,7 +21,14 @@ def log(f):
     return logger
 
 
-def known_list_ids(metadata):
+def _ids_as_list(id_dict):
+    ids = []
+    for key in id_dict:
+        ids.extend(id_dict[key])
+    return ids
+
+
+def known_list_ids(metadata, flat=True):
     ids = {}
     for label in metadata['list']:
         ids.setdefault(label, [])
@@ -30,12 +37,15 @@ def known_list_ids(metadata):
     return ids
 
 
-def known_map_ids(metadata):
-    ids = []
+def known_map_ids(metadata, flat=True):
+    ids = {}
     for direction in metadata['map']:
         for label in metadata['map'][direction]:
-            ids.extend(metadata['map'][direction][label].keys())
-            ids.extend(metadata['map'][direction][label].values())
+            ids.setdefault(label, [])
+            ids[label].extend(metadata['map'][direction][label].keys())
+            ids[label].extend(metadata['map'][direction][label].values())
+    if flat:
+        return _ids_as_list(ids)
     return ids
 
 
