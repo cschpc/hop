@@ -7,7 +7,7 @@ import logging
 from common.io import read_metadata, file_path
 from common.abc import UniqueList
 from common.parser import ArgumentParser
-from common.metadata import known_list_ids
+from common.metadata import known_list_ids, make_triplet
 from common.reference import reference_map
 
 
@@ -84,24 +84,16 @@ def _all_files_in_tree(metadata):
 
 def _check_id_list(filename, label, metadata, reference, warn, wishlist):
     for name in metadata['list'][label][filename]:
+        hop, hip, cuda = make_triplet(metadata, label, name)
         if label == 'hip':
-            hip = name
-            hop = metadata['map']['source']['hip'][hip]
-            cuda = metadata['map']['target']['cuda'][hop]
             if cuda not in reference['hip'].get(hip, []):
                 warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
             wishlist['cuda'].append(cuda)
         elif label == 'cuda':
-            cuda = name
-            hop = metadata['map']['source']['cuda'][cuda]
-            hip = metadata['map']['target']['hip'][hop]
             if hip != reference['cuda'].get(cuda):
                 warn('Incorrect mapping: {} -> {} -> {}'.format(cuda, hop, hip))
             wishlist['hip'].append(hip)
         else:
-            hop = name
-            hip = metadata['map']['target']['hip'][hop]
-            cuda = metadata['map']['target']['cuda'][hop]
             wishlist['hip'].append(hip)
             wishlist['cuda'].append(cuda)
 

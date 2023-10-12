@@ -49,6 +49,22 @@ def known_map_ids(metadata, flat=True):
     return ids
 
 
+def make_triplet(metadata, source, name):
+    if source == 'hip':
+        hip = name
+        hop = metadata['map']['source']['hip'][hip]
+        cuda = metadata['map']['target']['cuda'][hop]
+    elif source == 'cuda':
+        cuda = name
+        hop = metadata['map']['source']['cuda'][cuda]
+        hip = metadata['map']['target']['hip'][hop]
+    else:
+        hop = name
+        hip = metadata['map']['target']['hip'][hop]
+        cuda = metadata['map']['target']['cuda'][hop]
+    return (hop, hip, cuda)
+
+
 class Map(collections.UserDict):
     """Custom dictionary for identifier maps
 
