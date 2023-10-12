@@ -82,6 +82,15 @@ class Map(collections.UserDict):
                 "Unable to guess translation for identifier "
                 "'{}' in {} {} map".format(key, self.label.upper(), kind))
 
+    def pop(self, key, alt=...):
+        if key in self:
+            value = self[key]
+            del self[key]
+            return value
+        if alt is not Ellipsis:
+            return alt
+        raise KeyError(key)
+
 
 class Translator:
     regex_lower = re.compile('^(.*?)(gpu|hip|cuda|cu)')
