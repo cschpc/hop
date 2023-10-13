@@ -136,7 +136,7 @@ def prune(args):
     if removed and args.verbose:
         print('')
         print('Removed IDs:')
-        for name in removed:
+        for name in sorted(removed):
             print('  ' + name)
 
     print('')
