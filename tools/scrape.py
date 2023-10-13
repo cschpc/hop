@@ -74,7 +74,8 @@ def scrape(args):
     if not os.path.exists(path):
         raise FileNotFoundError(path)
     triplets = scrape_hipify(path, args.verbose, args.include_experimental,
-                             args.exclude, args.exclude_group)
+                             args.exclude, args.exclude_group,
+                             args.cuda_version)
     logging.debug('triplets={}'.format(triplets))
 
     count = {
@@ -124,6 +125,8 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--ignore-moved',
             action='store_true', default=False,
             help='ignore moved identifiers')
+    parser.add_argument('--cuda-version', default=None,
+            help='version of CUDA to use for obsolete IDs')
     parser.add_argument('--force', action='store_true', default=False,
             help='force overwriting of existing files')
     parser.add_argument('-d', '--dry-run', action='store_true', default=False,

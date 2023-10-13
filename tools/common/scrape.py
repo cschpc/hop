@@ -33,7 +33,30 @@ def _find_keys(txt, name):
     return [x[0] for x in _find_key_values(txt, name)]
 
 
-def obsolete_ids(path):
+def _version(string):
+    logging.debug('_version < {}'.format(string))
+    bits = []
+    for bit in string.split('.'):
+        try:
+            bits.append(int(bit))
+        except ValueError:
+            bits.append(0)
+    while len(bits) < 4:
+        bits.append(0)
+    logging.debug('_version > {}'.format(tuple(bits)))
+    return tuple(bits)
+
+
+def obsolete_ids(path, version=None):
+    logging.debug('obsolete_ids < path={} version={}'.format(path, version))
+    if version:
+        ids = []
+        for key, value in _find_key_values(open(path).read(), 'removed_funcs'):
+            logging.debug('obsolete_ids: key={} value={}'.format(key, value))
+            if _version(value) <= _version(version):
+                logging.debug('obsolete_ids: {} <= {}'.format(value, version))
+                ids.append(key)
+        return ids
     return _find_keys(open(path).read(), 'removed_funcs')
 
 
@@ -43,7 +66,7 @@ _errata_hipify = {
         }
 
 def scrape_hipify(path, verbose=False, experimental=False,
-                  exclude=[], exclude_group=[]):
+                  exclude=[], exclude_group=[], cuda_version=None):
     if verbose:
         print('Scrape hipify: {}'.format(path))
     txt = open(path).read()
@@ -51,7 +74,7 @@ def scrape_hipify(path, verbose=False, experimental=False,
     subs.extend(_find_subst(txt, 'simpleSubstitutions'))
     if experimental:
         subs.extend(_find_subst(txt, 'experimentalSubstitutions'))
-    obsolete = obsolete_ids(txt)
+    obsolete = obsolete_ids(txt, cuda_version)
     logging.debug('obsolete={}'.format(obsolete))
 
     if exclude:
