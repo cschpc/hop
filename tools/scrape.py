@@ -73,9 +73,7 @@ def scrape(args):
                         'bin/hipify-perl')
     if not os.path.exists(path):
         raise FileNotFoundError(path)
-    triplets = scrape_hipify(path, args.verbose, args.include_experimental,
-                             args.exclude, args.exclude_group,
-                             args.cuda_version)
+    triplets = scrape_hipify(args, path)
     logging.debug('triplets={}'.format(triplets))
 
     count = {

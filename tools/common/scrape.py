@@ -65,21 +65,20 @@ _errata_hipify = {
         'hipDeviceAttributeMaxBlocksPerMultiprocessor': 'hipDeviceAttributeMaxBlocksPerMultiProcessor',
         }
 
-def scrape_hipify(path, verbose=False, experimental=False,
-                  exclude=[], exclude_group=[], cuda_version=None):
-    if verbose:
+def scrape_hipify(args, path):
+    if args.verbose:
         print('Scrape hipify: {}'.format(path))
     txt = open(path).read()
     subs = []
     subs.extend(_find_subst(txt, 'simpleSubstitutions'))
-    if experimental:
+    if args.include_experimental:
         subs.extend(_find_subst(txt, 'experimentalSubstitutions'))
-    obsolete = obsolete_ids(txt, cuda_version)
+    obsolete = obsolete_ids(txt, args.cuda_version)
     logging.debug('obsolete={}'.format(obsolete))
 
-    if exclude:
+    if args.exclude:
         # exclude IDs with prefix
-        regex_exclude = re.compile('^({})'.format('|'.join(exclude)))
+        regex_exclude = re.compile('^({})'.format('|'.join(args.exclude)))
         _exclude = lambda x: regex_exclude.match(x)
     else:
         _exclude = lambda x: False
@@ -92,7 +91,7 @@ def scrape_hipify(path, verbose=False, experimental=False,
         hop = translate.to_hop(hip)
         logging.debug('scrape_hipify: ({}, {}, {})'.format(hop, hip, cuda))
         # skip excluded IDs
-        if group in exclude_group:
+        if group in args.exclude_group:
             logging.debug('  ignore (group)')
             continue
         elif _exclude(cuda) or _exclude(hip):
@@ -102,7 +101,7 @@ def scrape_hipify(path, verbose=False, experimental=False,
             logging.debug('  ignore (obsolete)')
             continue
         triplets.append((hop, hip, cuda))
-    if verbose:
+    if args.verbose:
         print('  Substitutions found: {}'.format(len(triplets)))
         print('')
     return triplets
