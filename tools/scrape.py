@@ -96,7 +96,7 @@ def scrape(args):
     print('Moved identifiers:  {}'.format(count['move']))
     print('New mapping chains: {}'.format(count['map']))
 
-    write_metadata(metadata, force=args.force)
+    write_metadata(metadata, force=args.force, dry_run=args.dry_run)
 
 
 if __name__ == '__main__':

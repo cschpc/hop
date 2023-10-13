@@ -352,7 +352,7 @@ def write_all_lists(id_lists, force=False):
         write_list(filename, id_lists[key], force=force)
 
 
-def write_metadata(metadata, force=False):
+def write_metadata(metadata, force=False, dry_run=False):
     orig_metadata = read_metadata()
     todo = []
     if not metadata['map']['source'] == orig_metadata['map']['source']:
@@ -376,11 +376,11 @@ def write_metadata(metadata, force=False):
             label = os.path.basename(base)
             if ext == '.map':
                 source = True if label == 'source' else False
-                if not args.dry_run:
+                if not dry_run:
                     write_map(filename, metadata['map'][label], source,
                               force=True)
             elif ext == '.list':
-                if not args.dry_run:
+                if not dry_run:
                     write_list(filename, metadata['list'][label], force=True)
             else:
                 raise ValueError('Unknown file type: {}'.format(filename))

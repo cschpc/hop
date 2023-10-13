@@ -143,7 +143,7 @@ def prune(args):
     print('Obsolete IDs: {}'.format(len(obsolete)))
     print('Removed IDs:  {}'.format(len(removed)))
 
-    write_metadata(metadata)
+    write_metadata(metadata, dry_run=args.dry_run)
 
 
 if __name__ == '__main__':
