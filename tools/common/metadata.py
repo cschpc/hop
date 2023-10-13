@@ -184,6 +184,18 @@ class Translator:
                 or self.regex_rtc_lower.match(name)
                 or self.regex_rtc_upper.match(name))
 
+    def lang(self, name):
+        for regex in [self.regex_lower, self.regex_camel, self.regex_upper]:
+            match = regex.match(name)
+            if match:
+                label = match.group(2).lower()
+                if label == 'cu':
+                    label = 'cuda'
+                elif label == 'gpu':
+                    label = 'hop'
+                return label
+        return None
+
 
 translate = Translator()
 
