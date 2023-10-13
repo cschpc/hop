@@ -73,7 +73,7 @@ def scrape_hipify(args, path):
     subs.extend(_find_subst(txt, 'simpleSubstitutions'))
     if args.include_experimental:
         subs.extend(_find_subst(txt, 'experimentalSubstitutions'))
-    obsolete = obsolete_ids(txt, args.cuda_version)
+    obsolete = obsolete_ids(path, args.cuda_version)
     logging.debug('obsolete={}'.format(obsolete))
 
     if args.exclude:
@@ -270,7 +270,7 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
         print('Scrape header: {}'.format(filename))
     included_ids = _included_ids(path, metadata)
     logging.debug('included_ids={}'.format(included_ids))
-    known_maps = known_map_ids(metadata) + known_triplet_ids(triplets)
+    known_maps = known_map_ids(metadata) + _known_triplet_ids(triplets)
     for line in _ctags(args, path):
         if not line:
             break
