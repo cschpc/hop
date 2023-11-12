@@ -908,6 +908,7 @@ hipOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 hipOccupancyMaxPotentialBlockSize
 hipOccupancyMaxPotentialBlockSizeVariableSMem
 hipOccupancyMaxPotentialBlockSizeVariableSMemWithFlags
+hipOccupancyMaxPotentialBlockSizeWithFlags
 hipPeekAtLastError
 hipPointerAttribute_t
 hipPointerGetAttribute
@@ -1148,6 +1149,7 @@ hipblasCdotc
 hipblasCdotu
 hipblasCgbmv
 hipblasCgeam
+hipblasCgelsBatched
 hipblasCgemm
 hipblasCgemmBatched
 hipblasCgemmStridedBatched
@@ -1201,6 +1203,7 @@ hipblasDdot
 hipblasDestroy
 hipblasDgbmv
 hipblasDgeam
+hipblasDgelsBatched
 hipblasDgemm
 hipblasDgemmBatched
 hipblasDgemmStridedBatched
@@ -1287,6 +1290,7 @@ hipblasSetVector
 hipblasSetVectorAsync
 hipblasSgbmv
 hipblasSgeam
+hipblasSgelsBatched
 hipblasSgemm
 hipblasSgemmBatched
 hipblasSgemmStridedBatched
@@ -1334,6 +1338,7 @@ hipblasZdrot
 hipblasZdscal
 hipblasZgbmv
 hipblasZgeam
+hipblasZgelsBatched
 hipblasZgemm
 hipblasZgemmBatched
 hipblasZgemmStridedBatched

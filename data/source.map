@@ -12,7 +12,6 @@ make_gpuPos                                   make_hipPos                       
 [hip]
 
 [cuda]
-gpusparseCcsc2dense cusparseCcsc2dense
 GPUBLAS_C_16B                                                CUDA_C_16BF
 GPUBLAS_C_16F                                                CUDA_C_16F
 GPUBLAS_C_32F                                                CUDA_C_32F
@@ -83,6 +82,8 @@ GPU_AD_FORMAT_UNSIGNED_INT8                                  CU_AD_FORMAT_UNSIGN
 GPU_ARRAY3D_DESCRIPTOR                                       CUDA_ARRAY3D_DESCRIPTOR_st
 GPU_ARRAY3D_DESCRIPTOR                                       CUDA_ARRAY3D_DESCRIPTOR_v2
 GPU_ARRAY_DESCRIPTOR                                         CUDA_ARRAY_DESCRIPTOR_st
+GPU_ARRAY_DESCRIPTOR                                         CUDA_ARRAY_DESCRIPTOR_v1
+GPU_ARRAY_DESCRIPTOR                                         CUDA_ARRAY_DESCRIPTOR_v1_st
 GPU_ARRAY_DESCRIPTOR                                         CUDA_ARRAY_DESCRIPTOR_v2
 GPU_FUNC_ATTRIBUTE_BINARY_VERSION                            CU_FUNC_ATTRIBUTE_BINARY_VERSION
 GPU_FUNC_ATTRIBUTE_CACHE_MODE_CA                             CU_FUNC_ATTRIBUTE_CACHE_MODE_CA
@@ -100,6 +101,8 @@ GPU_LAUNCH_PARAM_BUFFER_POINTER                              CU_LAUNCH_PARAM_BUF
 GPU_LAUNCH_PARAM_BUFFER_SIZE                                 CU_LAUNCH_PARAM_BUFFER_SIZE
 GPU_LAUNCH_PARAM_END                                         CU_LAUNCH_PARAM_END
 GPU_MEMCPY3D                                                 CUDA_MEMCPY3D_st
+GPU_MEMCPY3D                                                 CUDA_MEMCPY3D_v1
+GPU_MEMCPY3D                                                 CUDA_MEMCPY3D_v1_st
 GPU_MEMCPY3D                                                 CUDA_MEMCPY3D_v2
 GPU_POINTER_ATTRIBUTE_ACCESS_FLAGS                           CU_POINTER_ATTRIBUTE_ACCESS_FLAGS
 GPU_POINTER_ATTRIBUTE_ALLOWED_HANDLE_TYPES                   CU_POINTER_ATTRIBUTE_ALLOWED_HANDLE_TYPES
@@ -505,6 +508,7 @@ gpuDeviceTotalMem                                            cuDeviceTotalMem_v2
 gpuDevice_t                                                  CUdevice
 gpuDevice_t                                                  CUdevice_v1
 gpuDeviceptr_t                                               CUdeviceptr
+gpuDeviceptr_t                                               CUdeviceptr_v1
 gpuDeviceptr_t                                               CUdeviceptr_v2
 gpuDoubleComplex                                             cuDoubleComplex
 gpuDriverGetVersion                                          cuDriverGetVersion
@@ -1107,6 +1111,7 @@ gpuTexRefGetMipmapLevelClamp                                 cuTexRefGetMipmapLe
 gpuTexRefSetAddress                                          cuTexRefSetAddress
 gpuTexRefSetAddress                                          cuTexRefSetAddress_v2
 gpuTexRefSetAddress2D                                        cuTexRefSetAddress2D
+gpuTexRefSetAddress2D                                        cuTexRefSetAddress2D_v2
 gpuTexRefSetAddress2D                                        cuTexRefSetAddress2D_v3
 gpuTexRefSetAddressMode                                      cuTexRefSetAddressMode
 gpuTexRefSetArray                                            cuTexRefSetArray
@@ -1137,6 +1142,8 @@ gpuUserObject_t                                              CUuserObject
 gpuWaitExternalSemaphoresAsync                               cuWaitExternalSemaphoresAsync
 gpu_Memcpy2D                                                 CUDA_MEMCPY2D
 gpu_Memcpy2D                                                 CUDA_MEMCPY2D_st
+gpu_Memcpy2D                                                 CUDA_MEMCPY2D_v1
+gpu_Memcpy2D                                                 CUDA_MEMCPY2D_v1_st
 gpu_Memcpy2D                                                 CUDA_MEMCPY2D_v2
 gpublasCaxpy                                                 cublasCaxpy_v2
 gpublasCcopy                                                 cublasCcopy_v2
@@ -1333,3 +1340,4 @@ gpurtcLinkState                                              CUlinkState
 gpurtcProgram                                                nvrtcProgram
 gpurtcResult                                                 nvrtcResult
 gpurtcVersion                                                nvrtcVersion
+gpusparseCcsc2dense                                          cusparseCcsc2dense

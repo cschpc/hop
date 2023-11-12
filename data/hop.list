@@ -214,7 +214,6 @@ make_gpuDoubleComplex
 make_gpuFloatComplex
 
 [hop_runtime.h]
-gpuOccupancyMaxPotentialBlockSizeWithFlags
 
 [hop_runtime_api.h]
 GPU_IPC_HANDLE_SIZE
@@ -916,6 +915,7 @@ gpuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags
 gpuOccupancyMaxPotentialBlockSize
 gpuOccupancyMaxPotentialBlockSizeVariableSMem
 gpuOccupancyMaxPotentialBlockSizeVariableSMemWithFlags
+gpuOccupancyMaxPotentialBlockSizeWithFlags
 gpuPeekAtLastError
 gpuPointerAttribute_t
 gpuPointerGetAttribute
