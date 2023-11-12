@@ -107,6 +107,9 @@ if __name__ == '__main__':
             help='path to HIPIFY git repository / installation')
     parser.add_argument('files', nargs='+',
             help='header files to scrape')
+    parser.add_argument('-r', '--no-preprocess',
+            action='store_true', default=False,
+            help='do not preprocess headers')
     parser.add_argument('-p', '--cpp-macros',
             action='store_true', default=False,
             help='preprocess for C++ with CUDA/HIP macros')

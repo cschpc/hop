@@ -124,17 +124,21 @@ def _ctags(args, path):
         else:
             if args.cpp_macros:
                 define += ' -D__CUDACC__'
+        cmd = ''
+        header = path
         # preprocess to get also included files
-        cpp = 'cpp '
-        if args.cpp_macros:
-            cpp = 'c++ -E '
-        if not args.expand_macros:
-            cpp += '-fdirectives-only '
-        cpp += '-I{} {} {} > {}'.format(header_root(path), define, path,
-                                        fp.name)
+        if not args.no_preprocess:
+            cpp = 'cpp '
+            if args.cpp_macros:
+                cpp = 'c++ -E '
+            if not args.expand_macros:
+                cpp += '-fdirectives-only '
+            cpp += '-I{} {} {} > {}'.format(header_root(path), define, path,
+                                            fp.name)
+            cmd += cpp + ' ; '
+            header = fp.name
         # get only identifiers that are visible externally
-        ctags = 'ctags -x --c-kinds=defgstuvp --extras=-F {}'.format(fp.name)
-        cmd = cpp + ' ; ' + ctags
+        cmd += 'ctags -x --c-kinds=defgstuvp --extras=-F {}'.format(header)
         logging.debug('_ctags command: ' + cmd)
         status, output = subprocess.getstatusoutput(cmd)
         if status:
