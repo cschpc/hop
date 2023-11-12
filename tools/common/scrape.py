@@ -63,6 +63,7 @@ def obsolete_ids(path, version=None):
 # mistaken IDs in hipify
 _errata_hipify = {
         'hipDeviceAttributeMaxBlocksPerMultiprocessor': 'hipDeviceAttributeMaxBlocksPerMultiProcessor',
+        'hipDeviceAttributeMultiGpuBoardGroupId': 'hipDeviceAttributeMultiGpuBoardGroupID',
         }
 
 def scrape_hipify(args, path):
