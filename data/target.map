@@ -511,7 +511,6 @@ gpuGraphDebugDotFlagsKernelNodeAttributes                    CU_GRAPH_DEBUG_DOT_
 gpuGraphDebugDotFlagsKernelNodeParams                        CU_GRAPH_DEBUG_DOT_FLAGS_KERNEL_NODE_PARAMS
 gpuGraphDebugDotFlagsMemcpyNodeParams                        CU_GRAPH_DEBUG_DOT_FLAGS_MEMCPY_NODE_PARAMS
 gpuGraphDebugDotFlagsMemsetNodeParams                        CU_GRAPH_DEBUG_DOT_FLAGS_MEMSET_NODE_PARAMS
-gpuGraphDebugDotFlagsRuntimeTypes                            CU_GRAPH_DEBUG_DOT_FLAGS_RUNTIME_TYPES
 gpuGraphDebugDotFlagsVerbose                                 CU_GRAPH_DEBUG_DOT_FLAGS_VERBOSE
 gpuGraphDebugDotPrint                                        cuGraphDebugDotPrint
 gpuGraphDestroy                                              cuGraphDestroy
@@ -839,7 +838,6 @@ gpuTexObjectGetTextureDesc                                   cuTexObjectGetTextu
 gpuTexRef                                                    CUtexref
 gpuTexRefGetAddress                                          cuTexRefGetAddress_v2
 gpuTexRefGetAddressMode                                      cuTexRefGetAddressMode
-gpuTexRefGetArray                                            cuTexRefGetArray
 gpuTexRefGetFilterMode                                       cuTexRefGetFilterMode
 gpuTexRefGetFlags                                            cuTexRefGetFlags
 gpuTexRefGetFormat                                           cuTexRefGetFormat

@@ -180,10 +180,6 @@ make_gpuExtent
 make_gpuPitchedPtr
 make_gpuPos
 
-[hop.h]
-gpuGraphDebugDotFlagsRuntimeTypes
-gpuTexRefGetArray
-
 [hop_complex.h]
 gpuCabs
 gpuCabsf
@@ -211,8 +207,6 @@ gpuFloatComplex
 make_gpuComplex
 make_gpuDoubleComplex
 make_gpuFloatComplex
-
-[hop_runtime.h]
 
 [hop_runtime_api.h]
 GPU_IPC_HANDLE_SIZE

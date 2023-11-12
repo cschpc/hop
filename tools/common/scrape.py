@@ -66,6 +66,12 @@ _errata_hipify = {
         'hipDeviceAttributeMultiGpuBoardGroupId': 'hipDeviceAttributeMultiGpuBoardGroupID',
         }
 
+# unknown IDs (only defined in hipify)
+_missing_hipify = [
+        'hipGraphDebugDotFlagsRuntimeTypes',
+        'hipTexRefGetArray', # cf. https://github.com/ROCm-Developer-Tools/HIP/issues/2514
+        ]
+
 def scrape_hipify(args, path):
     if args.verbose:
         print('Scrape hipify: {}'.format(path))
