@@ -215,11 +215,12 @@ def _add_identifier(args, filename, name, label, metadata, known_ids, count):
     if name in metadata['list'][label][filename]:
         return
     if name in known_ids[label]:
-        if not args.ignore_moved:
-            _remove_id(name, metadata['list'][label])
-            if args.verbose:
-                print('  Moved identifier: ', name)
-            count['move'] += 1
+        if args.ignore_moved:
+            return
+        _remove_id(name, metadata['list'][label])
+        if args.verbose:
+            print('  Moved identifier: ', name)
+        count['move'] += 1
     else:
         known_ids[label].append(name)
         if args.verbose:
