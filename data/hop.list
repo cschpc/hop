@@ -181,7 +181,6 @@ make_gpuPitchedPtr
 make_gpuPos
 
 [hop.h]
-gpuDeviceAttributeMultiGpuBoardGroupId
 gpuGraphDebugDotFlagsRuntimeTypes
 gpuTexRefGetArray
 

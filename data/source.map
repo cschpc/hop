@@ -422,8 +422,8 @@ gpuDeviceAttributeMemoryClockRate                            CU_DEVICE_ATTRIBUTE
 gpuDeviceAttributeMemoryClockRate                            cudaDevAttrMemoryClockRate
 gpuDeviceAttributeMemoryPoolsSupported                       CU_DEVICE_ATTRIBUTE_MEMORY_POOLS_SUPPORTED
 gpuDeviceAttributeMemoryPoolsSupported                       cudaDevAttrMemoryPoolsSupported
+gpuDeviceAttributeMultiGpuBoardGroupID                       CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD_GROUP_ID
 gpuDeviceAttributeMultiGpuBoardGroupID                       cudaDevAttrMultiGpuBoardGroupID
-gpuDeviceAttributeMultiGpuBoardGroupId                       CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD_GROUP_ID
 gpuDeviceAttributeMultiprocessorCount                        CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT
 gpuDeviceAttributeMultiprocessorCount                        cudaDevAttrMultiProcessorCount
 gpuDeviceAttributePageableMemoryAccess                       CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS

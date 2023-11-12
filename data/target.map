@@ -308,7 +308,6 @@ gpuDeviceAttributeMemoryBusWidth                             cudaDevAttrGlobalMe
 gpuDeviceAttributeMemoryClockRate                            cudaDevAttrMemoryClockRate
 gpuDeviceAttributeMemoryPoolsSupported                       cudaDevAttrMemoryPoolsSupported
 gpuDeviceAttributeMultiGpuBoardGroupID                       cudaDevAttrMultiGpuBoardGroupID
-gpuDeviceAttributeMultiGpuBoardGroupId                       CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD_GROUP_ID
 gpuDeviceAttributeMultiprocessorCount                        cudaDevAttrMultiProcessorCount
 gpuDeviceAttributePageableMemoryAccess                       cudaDevAttrPageableMemoryAccess
 gpuDeviceAttributePageableMemoryAccessUsesHostPageTables     cudaDevAttrPageableMemoryAccessUsesHostPageTables
