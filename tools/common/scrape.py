@@ -221,8 +221,7 @@ def _known_triplet_ids(triplets):
 
 
 def _add_identifier(args, filename, name, label, metadata, known_ids, count):
-    metadata['list'][label].setdefault(filename, [])
-    if name in metadata['list'][label][filename]:
+    if name in metadata['list'][label].get(filename, []):
         return
     if name in known_ids[label]:
         if args.ignore_moved:
@@ -236,6 +235,7 @@ def _add_identifier(args, filename, name, label, metadata, known_ids, count):
         if args.verbose:
             print('  New identifier: ', name)
         count['new'] += 1
+    metadata['list'][label].setdefault(filename, [])
     metadata['list'][label][filename].append(name)
 
 
