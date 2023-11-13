@@ -1433,6 +1433,16 @@ cuUserObjectRetain
 cuWaitExternalSemaphoresAsync
 cudaError_enum
 
+[cudaGL.h]
+CUGLDeviceList
+CUGLDeviceList_enum
+CU_GL_DEVICE_LIST_ALL
+CU_GL_DEVICE_LIST_CURRENT_FRAME
+CU_GL_DEVICE_LIST_NEXT_FRAME
+cuGLGetDevices
+cuGraphicsGLRegisterBuffer
+cuGraphicsGLRegisterImage
+
 [cuda_profiler_api.h]
 cudaProfilerStart
 cudaProfilerStop

@@ -665,6 +665,12 @@ gpuFunctionLaunchParams_t                                    CUDA_LAUNCH_PARAMS_
 gpuFunction_attribute                                        CUfunction_attribute
 gpuFunction_attribute                                        CUfunction_attribute_enum
 gpuFunction_t                                                CUfunction
+gpuGLDeviceList                                              CUGLDeviceList
+gpuGLDeviceList                                              CUGLDeviceList_enum
+gpuGLDeviceListAll                                           CU_GL_DEVICE_LIST_ALL
+gpuGLDeviceListCurrentFrame                                  CU_GL_DEVICE_LIST_CURRENT_FRAME
+gpuGLDeviceListNextFrame                                     CU_GL_DEVICE_LIST_NEXT_FRAME
+gpuGLGetDevices                                              cuGLGetDevices
 gpuGetDeviceCount                                            cuDeviceGetCount
 gpuGraphAddChildGraphNode                                    cuGraphAddChildGraphNode
 gpuGraphAddDependencies                                      cuGraphAddDependencies
@@ -772,6 +778,8 @@ gpuGraphRetainUserObject                                     cuGraphRetainUserOb
 gpuGraphUpload                                               cuGraphUpload
 gpuGraphUserObjectMove                                       CU_GRAPH_USER_OBJECT_MOVE
 gpuGraph_t                                                   CUgraph
+gpuGraphicsGLRegisterBuffer                                  cuGraphicsGLRegisterBuffer
+gpuGraphicsGLRegisterImage                                   cuGraphicsGLRegisterImage
 gpuGraphicsMapResources                                      cuGraphicsMapResources
 gpuGraphicsRegisterFlags                                     CUgraphicsRegisterFlags
 gpuGraphicsRegisterFlags                                     CUgraphicsRegisterFlags_enum

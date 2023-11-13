@@ -43,6 +43,8 @@ cuComplex.h
 cuda.h
 ~ driver_types.h
 
+cudaGL.h
+
 driver_functions.h
 ~ driver_types.h
 ~ surface_types.h
