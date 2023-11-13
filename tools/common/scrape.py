@@ -107,6 +107,9 @@ def scrape_hipify(args, path):
         elif cuda in obsolete:
             logging.debug('  ignore (obsolete)')
             continue
+        elif hip in _missing_hipify:
+            logging.debug('  ignore (missing)')
+            continue
         triplets.append((hop, hip, cuda))
     if args.verbose:
         print('  Substitutions found: {}'.format(len(triplets)))
