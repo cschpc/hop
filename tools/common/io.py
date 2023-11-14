@@ -194,18 +194,17 @@ def read_license():
 
 
 def read_metadata(base='data'):
-    if base and not base.endswith('/'):
-        base += '/'
+    _base = lambda x: os.path.join(base, x)
     metadata = {}
-    metadata['tree'] = read_tree(base + 'file.tree'))
+    metadata['tree'] = read_tree(_base('file.tree'))
     metadata['map'] = {
-            'source': read_map(base + 'source.map', source=True),
-            'target': read_map(base + 'target.map'),
+            'source': read_map(_base('source.map'), source=True),
+            'target': read_map(_base('target.map')),
             }
     metadata['list'] = {
-            'hop': read_list(base + 'hop.list'),
-            'hip': read_list(base + 'hip.list'),
-            'cuda': read_list(base + 'cuda.list'),
+            'hop': read_list(_base('hop.list')),
+            'hip': read_list(_base('hip.list')),
+            'cuda': read_list(_base('cuda.list')),
             }
     logging.debug('read metadata={}'.format(metadata))
     return metadata
