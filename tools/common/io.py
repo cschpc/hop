@@ -81,10 +81,13 @@ def lang(filename):
 
 
 def read_tree(filename):
-    with open(file_path(filename)) as fp:
-        txt = fp.read()
-
     tree = {}
+    try:
+        with open(file_path(filename)) as fp:
+            txt = fp.read()
+    except FileNotFoundError:
+        return tree
+
     for block in regex_block.finditer(txt):
         root = block.group(1).strip()
         content = block.group(2).strip()
@@ -123,8 +126,15 @@ def _find_identifiers(line):
 
 
 def read_map(filename, source=False):
-    with open(file_path(filename)) as fp:
-        txt = fp.read()
+    id_maps = {
+            'hip': Map(label='hip', source=source),
+            'cuda': Map(label='cuda', source=source),
+            }
+    try:
+        with open(file_path(filename)) as fp:
+            txt = fp.read()
+    except FileNotFoundError:
+        return id_maps
 
     # if source translation, reverse order of mapping
     if source:
@@ -132,10 +142,6 @@ def read_map(filename, source=False):
     else:
         order = lambda k,v: (k,v)
 
-    id_maps = {
-            'hip': Map(label='hip', source=source),
-            'cuda': Map(label='cuda', source=source),
-            }
     for block in regex_block.finditer(txt):
         label = block.group(1).strip().lower()
         content = block.group(2).strip()
@@ -164,10 +170,13 @@ def read_map(filename, source=False):
 
 
 def read_list(filename):
-    with open(file_path(filename)) as fp:
-        txt = fp.read()
-
     id_lists = {}
+    try:
+        with open(file_path(filename)) as fp:
+            txt = fp.read()
+    except FileNotFoundError:
+        return id_lists
+
     for block in regex_block.finditer(txt):
         filename = block.group(1).strip()
         content = block.group(2).strip()
