@@ -4,6 +4,7 @@ import string
 import inspect
 import logging
 
+from common.abc import UniqueList
 from common.metadata import Map, Node, Include, Embed, Special
 
 # match '[file path] ...' grouped as '[\1] \2'
@@ -171,7 +172,7 @@ def read_list(filename):
         filename = block.group(1).strip()
         content = block.group(2).strip()
 
-        id_lists.setdefault(filename, [])
+        id_lists.setdefault(filename, UniqueList())
         for line in content.split('\n'):
             line = line.strip()
             if not line or line.startswith('#'):
