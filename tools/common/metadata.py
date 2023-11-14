@@ -107,6 +107,15 @@ class Map(collections.UserDict):
             return alt
         raise KeyError(key)
 
+    def update(self, *args, overwrite=True):
+        if not overwrite:
+            for src in args:
+                for key in src:
+                    if key not in self:
+                        self[key] = src[key]
+        else:
+            super().update(*args)
+
 
 class Translator:
     regex_lower = re.compile('^(.*?)(gpu|hip|cuda|cu)')
