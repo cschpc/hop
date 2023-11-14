@@ -1,0 +1,14 @@
+# HOP identifier list for: CUDA
+
+[cuda.h]
+CUarray_st
+CUmipmappedArray_st
+CUgraphicsResource_st
+
+[curand.h]
+curandGenerator_st
+
+[driver_types.h]
+cudaArray
+cudaMipmappedArray
+cudaGraphicsResource

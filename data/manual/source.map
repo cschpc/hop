@@ -1,0 +1,10 @@
+# HOP identifier map
+
+[cuda]
+gpuArray             CUarray_st
+gpuArray             cudaArray
+gpuMipmappedArray    CUmipmappedArray_st
+gpuMipmappedArray    cudaMipmappedArray
+gpuGraphicsResource  CUgraphicsResource_st
+gpuGraphicsResource  cudaGraphicsResource
+gpurandGenerator_st  curandGenerator_st
