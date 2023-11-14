@@ -548,6 +548,8 @@ gpuGraphHostNodeGetParams                                    cuGraphHostNodeGetP
 gpuGraphHostNodeSetParams                                    cuGraphHostNodeSetParams
 gpuGraphInstantiate                                          cuGraphInstantiate_v2
 gpuGraphInstantiateFlagAutoFreeOnLaunch                      CUDA_GRAPH_INSTANTIATE_FLAG_AUTO_FREE_ON_LAUNCH
+gpuGraphInstantiateFlagDeviceLaunch                          CUDA_GRAPH_INSTANTIATE_FLAG_DEVICE_LAUNCH
+gpuGraphInstantiateFlagUpload                                CUDA_GRAPH_INSTANTIATE_FLAG_UPLOAD
 gpuGraphInstantiateFlagUseNodePriority                       CUDA_GRAPH_INSTANTIATE_FLAG_USE_NODE_PRIORITY
 gpuGraphInstantiateFlags                                     CUgraphInstantiate_flags
 gpuGraphInstantiateWithFlags                                 cuGraphInstantiateWithFlags

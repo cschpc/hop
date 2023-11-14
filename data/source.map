@@ -278,6 +278,7 @@ gpuDeviceAttributeCanMapHostMemory                           cudaDevAttrCanMapHo
 gpuDeviceAttributeCanUseHostPointerForRegisteredMem          CU_DEVICE_ATTRIBUTE_CAN_USE_HOST_POINTER_FOR_REGISTERED_MEM
 gpuDeviceAttributeCanUseHostPointerForRegisteredMem          cudaDevAttrCanUseHostPointerForRegisteredMem
 gpuDeviceAttributeCanUseStreamWaitValue                      CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR
+gpuDeviceAttributeCanUseStreamWaitValue                      CU_DEVICE_ATTRIBUTE_CAN_USE_STREAM_WAIT_VALUE_NOR_V1
 gpuDeviceAttributeCanUseStreamWaitValue                      cudaDevAttrReserved94
 gpuDeviceAttributeClockRate                                  CU_DEVICE_ATTRIBUTE_CLOCK_RATE
 gpuDeviceAttributeClockRate                                  cudaDevAttrClockRate
@@ -729,6 +730,8 @@ gpuGraphHostNodeSetParams                                    cuGraphHostNodeSetP
 gpuGraphInstantiate                                          cuGraphInstantiate
 gpuGraphInstantiate                                          cuGraphInstantiate_v2
 gpuGraphInstantiateFlagAutoFreeOnLaunch                      CUDA_GRAPH_INSTANTIATE_FLAG_AUTO_FREE_ON_LAUNCH
+gpuGraphInstantiateFlagDeviceLaunch                          CUDA_GRAPH_INSTANTIATE_FLAG_DEVICE_LAUNCH
+gpuGraphInstantiateFlagUpload                                CUDA_GRAPH_INSTANTIATE_FLAG_UPLOAD
 gpuGraphInstantiateFlagUseNodePriority                       CUDA_GRAPH_INSTANTIATE_FLAG_USE_NODE_PRIORITY
 gpuGraphInstantiateFlags                                     CUgraphInstantiate_flags
 gpuGraphInstantiateFlags                                     CUgraphInstantiate_flags_enum
