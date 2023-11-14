@@ -193,17 +193,19 @@ def read_license():
     return re.sub('^MIT License\s*', '', txt)
 
 
-def read_metadata():
+def read_metadata(base='data'):
+    if base and not base.endswith('/'):
+        base += '/'
     metadata = {}
-    metadata['tree'] = read_tree('data/file.tree')
+    metadata['tree'] = read_tree(base + 'file.tree'))
     metadata['map'] = {
-            'source': read_map('data/source.map', source=True),
-            'target': read_map('data/target.map'),
+            'source': read_map(base + 'source.map', source=True),
+            'target': read_map(base + 'target.map'),
             }
     metadata['list'] = {
-            'hop': read_list('data/hop.list'),
-            'hip': read_list('data/hip.list'),
-            'cuda': read_list('data/cuda.list'),
+            'hop': read_list(base + 'hop.list'),
+            'hip': read_list(base + 'hip.list'),
+            'cuda': read_list(base + 'cuda.list'),
             }
     logging.debug('read metadata={}'.format(metadata))
     return metadata
