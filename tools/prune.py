@@ -6,8 +6,9 @@ import logging
 
 from common.io import read_metadata, write_metadata
 from common.parser import ArgumentParser
-from common.scrape import obsolete_ids
-from common.metadata import known_list_ids, make_triplet, translate
+from common.scrape import obsolete_ids, scrape_hipify
+from common.metadata import (known_list_ids, make_metadata, make_triplet,
+                             translate, update_metadata)
 
 
 def _map_keys(metadata, direction, label, name):
@@ -56,11 +57,11 @@ def _remove_id(metadata, label, name):
     return []
 
 
-def _remove_obsolete(metadata, label, name):
+def _remove_obsolete(metadata, label, name, translate_metadata):
     logging.debug('_remove_obsolete < label={} name={}'.format(label, name))
 
     # forward translation
-    hop, hip, cuda = make_triplet(metadata, label, name)
+    hop, hip, cuda = make_triplet(translate_metadata, label, name)
     logging.debug('(hop, hip, cuda)=({}, {}, {})'.format(hop, hip, cuda))
     if label == 'hip':
         tgt = cuda
@@ -71,7 +72,7 @@ def _remove_obsolete(metadata, label, name):
     logging.debug('hop={}  tgt={}  other={}'.format(hop, tgt, other))
 
     # backward translation
-    hop2, hip2, cuda2 = make_triplet(metadata, other, tgt)
+    hop2, hip2, cuda2 = make_triplet(translate_metadata, other, tgt)
     logging.debug('(hop2, hip2, cuda2)=({}, {}, {})'.format(hop2, hip2, cuda2))
 
     # count occurrences
@@ -124,6 +125,20 @@ def prune(args):
     obsolete = obsolete_ids(path, args.cuda_version)
     logging.debug('obsolete={}'.format(obsolete))
 
+    # include all IDs from hipify
+    args.exclude = False
+    args.exclude_group = []
+    args.include_experimental = True
+    args.cuda_version = '0'
+    hipify_triplets = scrape_hipify(args, path)
+
+    # create metadata based on hipify triplets and update with real metadata
+    # to ensure correct translation even for unknown obsolete IDs
+    translate_metadata = make_metadata(hipify_triplets)
+    logging.debug('translate_metadata={}'.format(translate_metadata))
+    update_metadata(translate_metadata, metadata)
+    logging.debug('updated translate_metadata={}'.format(translate_metadata))
+
     if args.verbose:
         print('Obsolete IDs:')
     removed = []
@@ -132,7 +147,8 @@ def prune(args):
         label = translate.lang(name)
         if not label:
             continue
-        removed.extend(_remove_obsolete(metadata, label, name))
+        removed.extend(_remove_obsolete(metadata, label, name,
+                                        translate_metadata))
     if removed and args.verbose:
         print('')
         print('Removed IDs:')
