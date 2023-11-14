@@ -179,6 +179,7 @@ gpuAccessProperty                                            CUaccessProperty
 gpuAccessPropertyNormal                                      CU_ACCESS_PROPERTY_NORMAL
 gpuAccessPropertyPersisting                                  CU_ACCESS_PROPERTY_PERSISTING
 gpuAccessPropertyStreaming                                   CU_ACCESS_PROPERTY_STREAMING
+gpuArray                                                     cudaArray
 gpuArray3DCreate                                             cuArray3DCreate_v2
 gpuArray3DGetDescriptor                                      cuArray3DGetDescriptor_v2
 gpuArrayCreate                                               cuArrayCreate_v2
@@ -605,6 +606,7 @@ gpuGraphicsRegisterFlagsReadOnly                             CU_GRAPHICS_REGISTE
 gpuGraphicsRegisterFlagsSurfaceLoadStore                     CU_GRAPHICS_REGISTER_FLAGS_SURFACE_LDST
 gpuGraphicsRegisterFlagsTextureGather                        CU_GRAPHICS_REGISTER_FLAGS_TEXTURE_GATHER
 gpuGraphicsRegisterFlagsWriteDiscard                         CU_GRAPHICS_REGISTER_FLAGS_WRITE_DISCARD
+gpuGraphicsResource                                          cudaGraphicsResource
 gpuGraphicsResourceGetMappedPointer                          cuGraphicsResourceGetMappedPointer_v2
 gpuGraphicsResource_t                                        CUgraphicsResource
 gpuGraphicsSubResourceGetMappedArray                         cuGraphicsSubResourceGetMappedArray
@@ -767,6 +769,7 @@ gpuMemsetD32Async                                            cuMemsetD32Async
 gpuMemsetD8                                                  cuMemsetD8_v2
 gpuMemsetD8Async                                             cuMemsetD8Async
 gpuMemsetParams                                              CUDA_MEMSET_NODE_PARAMS
+gpuMipmappedArray                                            cudaMipmappedArray
 gpuMipmappedArrayCreate                                      cuMipmappedArrayCreate
 gpuMipmappedArrayDestroy                                     cuMipmappedArrayDestroy
 gpuMipmappedArrayGetLevel                                    cuMipmappedArrayGetLevel
@@ -1045,6 +1048,7 @@ gpublasZtrmm                                                 cublasZtrmm_v2
 gpublasZtrmv                                                 cublasZtrmv_v2
 gpublasZtrsm                                                 cublasZtrsm_v2
 gpublasZtrsv                                                 cublasZtrsv_v2
+gpurandGenerator_st                                          curandGenerator_st
 gpurandRngType_t                                             curandRngType
 gpurandStatus_t                                              curandStatus
 gpurtcAddNameExpression                                      nvrtcAddNameExpression
