@@ -728,7 +728,6 @@ gpuKernelNodeAttrValue
 gpuKernelNodeAttributeAccessPolicyWindow
 gpuKernelNodeAttributeCooperative
 gpuKernelNodeParams
-gpuLaunchByPtr
 gpuLaunchCooperativeKernel
 gpuLaunchCooperativeKernelMultiDevice
 gpuLaunchHostFunc

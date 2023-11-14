@@ -728,7 +728,6 @@ hipKernelNodeAttrValue
 hipKernelNodeAttributeAccessPolicyWindow
 hipKernelNodeAttributeCooperative
 hipKernelNodeParams
-hipLaunchByPtr
 hipLaunchCooperativeKernel
 hipLaunchCooperativeKernelMultiDevice
 hipLaunchHostFunc
