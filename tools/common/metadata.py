@@ -3,6 +3,8 @@ import logging
 import functools
 import collections
 
+from common.abc import UniqueList
+
 
 def log(f):
     def _format(f, args, kwargs):
@@ -63,6 +65,50 @@ def make_triplet(metadata, source, name):
         hip = metadata['map']['target']['hip'][hop]
         cuda = metadata['map']['target']['cuda'][hop]
     return (hop, hip, cuda)
+
+
+def empty_metadata():
+    metadata = {}
+    metadata['tree'] = {}
+    metadata['map'] = {
+            'source': {
+                'hip': Map(label='hip', source=True),
+                'cuda': Map(label='cuda', source=True),
+                },
+            'target': {
+                'hip': Map(label='hip'),
+                'cuda': Map(label='cuda'),
+                },
+            }
+    metadata['list'] = {
+            'hop': {},
+            'hip': {},
+            'cuda': {},
+            }
+    return metadata
+
+
+def make_metadata(triplets):
+    metadata = empty_metadata()
+    for (hop, hip, cuda) in triplets:
+        metadata['map']['source']['cuda'][cuda] = hop
+        metadata['map']['source']['hip'][hip] = hop
+        metadata['map']['target']['cuda'][hop] = cuda
+        metadata['map']['target']['hip'][hop] = hip
+    return metadata
+
+
+def update_metadata(tgt, src):
+    for root in src['tree']:
+        tgt['tree'].setdefault(root, {})
+        tgt['tree'][root].update(src['tree'][root])
+    for label in ['hop', 'hip', 'cuda']:
+        if label != 'hop':
+            tgt['map']['source'][label].update(src['map']['source'][label])
+            tgt['map']['target'][label].update(src['map']['target'][label])
+        for filename in src['list'][label]:
+            tgt['list'][label].setdefault(filename, UniqueList())
+            tgt['list'][label][filename].extend(src['list'][label][filename])
 
 
 class Map(collections.UserDict):
