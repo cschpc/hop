@@ -50,6 +50,8 @@ def _version(string):
 def obsolete_ids(path, version=None):
     logging.debug('obsolete_ids < path={} version={}'.format(path, version))
     if version:
+        if version is Ellipsis:
+            return []
         ids = []
         for key, value in _find_key_values(open(path).read(), 'removed_funcs'):
             logging.debug('obsolete_ids: key={} value={}'.format(key, value))
@@ -72,20 +74,21 @@ _missing_hipify = [
         'hipTexRefGetArray', # cf. https://github.com/ROCm-Developer-Tools/HIP/issues/2514
         ]
 
-def scrape_hipify(args, path):
-    if args.verbose:
+def scrape_hipify(path, cuda_version=..., exclude=[], exclude_group=[],
+                  include_experimental=False, verbose=False):
+    if verbose:
         print('Scrape hipify: {}'.format(path))
     txt = open(path).read()
     subs = []
     subs.extend(_find_subst(txt, 'simpleSubstitutions'))
-    if args.include_experimental:
+    if include_experimental:
         subs.extend(_find_subst(txt, 'experimentalSubstitutions'))
-    obsolete = obsolete_ids(path, args.cuda_version)
+    obsolete = obsolete_ids(path, cuda_version)
     logging.debug('obsolete={}'.format(obsolete))
 
-    if args.exclude:
+    if exclude:
         # exclude IDs with prefix
-        regex_exclude = re.compile('^({})'.format('|'.join(args.exclude)))
+        regex_exclude = re.compile('^({})'.format('|'.join(exclude)))
         _exclude = lambda x: regex_exclude.match(x)
     else:
         _exclude = lambda x: False
@@ -98,7 +101,7 @@ def scrape_hipify(args, path):
         hop = translate.to_hop(hip)
         logging.debug('scrape_hipify: ({}, {}, {})'.format(hop, hip, cuda))
         # skip excluded IDs
-        if group in args.exclude_group:
+        if group in exclude_group:
             logging.debug('  ignore (group)')
             continue
         elif _exclude(cuda) or _exclude(hip):
@@ -111,7 +114,7 @@ def scrape_hipify(args, path):
             logging.debug('  ignore (missing)')
             continue
         triplets.append((hop, hip, cuda))
-    if args.verbose:
+    if verbose:
         print('  Substitutions found: {}'.format(len(triplets)))
         print('')
     return triplets

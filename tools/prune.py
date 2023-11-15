@@ -125,12 +125,7 @@ def prune(args):
     obsolete = obsolete_ids(path, args.cuda_version)
     logging.debug('obsolete={}'.format(obsolete))
 
-    # include all IDs from hipify
-    args.exclude = False
-    args.exclude_group = []
-    args.include_experimental = True
-    args.cuda_version = '0'
-    hipify_triplets = scrape_hipify(args, path)
+    hipify_triplets = scrape_hipify(path, include_experimental=True)
 
     # create metadata based on hipify triplets and update with real metadata
     # to ensure correct translation even for unknown obsolete IDs
