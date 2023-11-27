@@ -3,7 +3,7 @@
 import logging
 
 from common.headers import make_headers
-from common.io import read_metadata, write_header
+from common.io import read_metadata, root_path, write_header
 from common.parser import ArgumentParser
 
 
@@ -12,6 +12,9 @@ def generate(args):
 
     headers = make_headers(metadata)
     if args.verbose:
+        print('Working directory:')
+        print('  {}'.format(root_path()))
+        print('')
         print('Writing headers:')
         for path, content in headers.items():
             print('  {}'.format(path))

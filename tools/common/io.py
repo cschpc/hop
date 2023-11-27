@@ -14,14 +14,14 @@ regex_block = re.compile('\s*\[([^]]+)\]\s*([^[]+)')
 regex_id = re.compile('(\w+(\([\w\s,]*\))?)')
 
 
-def _root_path():
+def root_path():
     src = inspect.getsourcefile(lambda:42)
     path = os.path.join(os.path.dirname(src), '../..')
     return os.path.abspath(path)
 
 
 def file_path(filename):
-    return os.path.join(_root_path(), filename)
+    return os.path.join(root_path(), filename)
 
 
 def _in_hip_root(path):
@@ -221,6 +221,7 @@ def read_metadata(base='data'):
 
 
 def _ok_to_overwrite(path):
+    path = pathlib.Path(path).relative_to(root_path())
     answer = input('File {} exists. Overwrite? [Y/n] '.format(path))
     if answer.lower() in ['n', 'no']:
         return False
