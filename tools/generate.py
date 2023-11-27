@@ -11,9 +11,12 @@ def generate(args):
     metadata = read_metadata()
 
     headers = make_headers(metadata)
+    if args.verbose:
+        print('Writing headers:')
+        for path, content in headers.items():
+            print('  {}'.format(path))
+        print('')
     for path, content in headers.items():
-        if args.verbose:
-            print('Writing header: {}'.format(path))
         logging.debug('path={}'.format(path))
         logging.debug('content={}'.format(content))
         if not args.dry_run:
