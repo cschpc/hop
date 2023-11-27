@@ -3,6 +3,7 @@ import os
 import string
 import inspect
 import logging
+import pathlib
 
 from common.abc import UniqueList
 from common.metadata import Map, Node, Include, Embed, Special
@@ -226,10 +227,20 @@ def _ok_to_overwrite(path):
     return True
 
 
+def _create_directory(path, force=False):
+    if not force:
+        answer = input("Create directory {} ? [Y/n] ".format(path))
+        if answer.lower() in ['n', 'no']:
+            return False
+    pathlib.Path(path).mkdir(parents=True, exist_ok=True)
+
+
 def write_header(path, content, force=False):
     path = file_path(path)
     if not force and os.path.exists(path) and not _ok_to_overwrite(path):
         return
+    if not os.path.exists(os.path.dirname(path)):
+        _create_directory(os.path.dirname(path), force)
     with open(path, 'w') as fp:
         fp.write(content)
 
