@@ -40,7 +40,7 @@ def _collect(root, filename, included, all_filenames):
             _collect(root, include, included, all_filenames)
 
 
-def _single(root, filename, expanded, indent=0):
+def _single(root, filename, expanded, shallow=False, indent=0):
     logging.debug('_single < root={} filename={} expanded={}'.format(
         root, filename, expanded))
     prefix = ' ' * indent
@@ -49,6 +49,8 @@ def _single(root, filename, expanded, indent=0):
     print(prefix + filename)
     dirname = os.path.dirname(filename)
     logging.debug('_single: dirname={}'.format(dirname))
+    if indent and shallow:
+        return
     for include in sorted(_includes(os.path.join(root, filename))):
         logging.debug('_single: include={}'.format(include))
         if os.path.exists(os.path.join(root, dirname, include)):
@@ -60,7 +62,7 @@ def _single(root, filename, expanded, indent=0):
             print(' ' * (indent + 2) + '* ' + include)
         else:
             expanded.append(include)
-            _single(root, include, expanded, indent + 2)
+            _single(root, include, expanded, shallow, indent + 2)
 
 
 def graph(args):
@@ -79,7 +81,7 @@ def graph(args):
             for include in sorted(included):
                 print('+', include)
         else:
-            _single(root, filename, expanded)
+            _single(root, filename, expanded, args.shallow)
             expanded.append(filename)
 
 
@@ -93,6 +95,8 @@ if __name__ == '__main__':
             help='full hierarchy repeating already expanded entries')
     parser.add_argument('-f', '--flatten', action='store_true', default=False,
             help='flatten hierarchy to a single level')
+    parser.add_argument('-s', '--shallow', action='store_true', default=False,
+            help='do not expand entries')
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
             help='display additional information while running')
     parser.add_argument('--debug', action='store_true', default=False,
