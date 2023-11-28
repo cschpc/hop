@@ -12,10 +12,17 @@ _license = io.read_license()
 
 
 def _custom_template(filename, default):
+    logging.debug('_custom_template() < {} {}'.format(filename, default))
     name = filename.replace('.', '_').replace('/', '.')
-    if name.startswith('hop.'):
+    if name.startswith('hop.source.hip'):
+        _, ext = os.path.splitext(name)
+        name = 'source.hip' + ext
+    elif name.startswith('hop.source.cuda'):
+        name = name.replace('hop.', '')
+    elif name.startswith('hop.'):
         name = name.replace('hop.', 'target.')
     template = os.path.join('data/templates', 'template.' + name)
+    logging.debug('template={}'.format(template))
     if os.path.exists(template):
         return template
     return os.path.join('data/templates', default)
