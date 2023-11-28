@@ -1,39 +1,37 @@
 [hop]
 
-hop/channel_descriptor.h
-= hop/hop_runtime_api.h
+channel_descriptor.h
+= hop_runtime_api.h
 
-hop/hop_complex.h
+hop_complex.h
 
-hop/driver_types.h
-= hop/hop_runtime_api.h
+driver_types.h
+= hop_runtime_api.h
 
-hop/hop_runtime.h
-+ hop/hop_runtime_api.h
+hoprtc.h
 
-hop/hop_runtime_api.h
-- hop/channel_descriptor.h
-- hop/driver_types.h
-- hop/surface_types.h
-- hop/texture_types.h
+hop_runtime.h
++ hop_runtime_api.h
 
-hop/surface_types.h
-= hop/hop_runtime_api.h
+hop_runtime_api.h
+- channel_descriptor.h
+- driver_types.h
+- surface_types.h
+- texture_types.h
 
-hop/texture_types.h
-= hop/hop_runtime_api.h
+surface_types.h
+= hop_runtime_api.h
 
-hop/hopblas.h
+texture_types.h
+= hop_runtime_api.h
 
-hop/hopfft.h
+hopblas.h
 
-hop/hoprand.h
-- hop/hoprand_hcc.h
+hopfft.h
 
-hop/hoprand_hcc.h
-= hop/hoprand.h
+hoprand.h
 
-hop/hopsparse.h
+hopsparse.h
 
 
 [source/cuda]
@@ -41,33 +39,29 @@ hop/hopsparse.h
 cuComplex.h
 
 cuda.h
-~ driver_types.h
 
 cudaGL.h
+= cuda_runtime_api.h
 
 driver_functions.h
-~ driver_types.h
-~ surface_types.h
-~ texture_types.h
+= cuda_runtime_api.h
 
 driver_types.h
 = cuda_runtime_api.h
 
 library_types.h
-= cublas.h
 
 cuda_profiler_api.h
-~ driver_types.h
+= cuda_runtime_api.h
 
 cuda_runtime.h
 + cuda_runtime_api.h
-+ driver_functions.h
-+ driver_types.h
-~ library_types.h
-+ surface_types.h
-+ texture_types.h
++ library_types.h
 
 cuda_runtime_api.h
+- cuda_profiler_api.h
+- cudaGL.h
+- driver_functions.h
 - driver_types.h
 - surface_types.h
 - texture_types.h
@@ -84,13 +78,14 @@ cublas.h
 = cublas_v2.h
 
 cublas_v2.h
-+ cublas_api.h
+- cublas_api.h
 - cublas.h
-
-cublas_api.h
 + cuComplex.h
 + driver_types.h
-- library_types.h
++ library_types.h
+
+cublas_api.h
+= cublas_v2.h
 
 cufft.h
 + cuComplex.h
@@ -98,22 +93,28 @@ cufft.h
 + library_types.h
 
 curand.h
-+ cuda_runtime.h
-+ cuda_runtime_api.h
-+ driver_functions.h
-+ library_types.h
-
-curand_kernel.h
-+ cuda.h
-+ cuda_runtime.h
+- curand_discrete.h
+- curand_kernel.h
 - curand_mtgp32.h
 - curand_mtgp32_host.h
++ cuda_runtime.h
+
+curand_discrete.h
+= curand.h
+
+curand_kernel.h
+= curand.h
+
+curand_mtgp32.h
+= curand.h
+
+curand_mtgp32_host.h
+= curand.h
 
 cusparse.h
 + cuComplex.h
-+ driver_types.h
++ cuda_runtime_api.h
 + library_types.h
-+ vector_types.h
 
 cusparse_v2.h
 = cusparse.h
@@ -155,19 +156,19 @@ hipfft/hipfft.h
 + hip/hip_runtime_api.h
 
 hiprand/hiprand.h
-+ hip/hip_runtime.h
-+ hip/hip_runtime_api.h
 - hiprand/hiprand.hpp
+- hiprand/hiprand_mtgp32_host.h
++ hip/hip_runtime.h
 
 hiprand/hiprand.hpp
 = hiprand/hiprand.h
 
 hiprand/hiprand_kernel.h
-+ hip/hip_runtime.h
-+ hip/hip_runtime_api.h
-- hiprand/hiprand_mtgp32_host.h
+= hiprand/hiprand.h
+
+hiprand/hiprand_mtgp32_host.h
+= hiprand/hiprand.h
 
 hipsparse/hipsparse.h
 + hip/hip_complex.h
 + hip/hip_runtime.h
-+ hip/hip_runtime_api.h
