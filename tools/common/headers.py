@@ -64,10 +64,11 @@ def target_header(filename, include, content):
 
 def hop_header(filename, hipname, cudaname):
     sentinel = os.path.basename(filename).replace('.', '_').upper()
+    name, ext = os.path.splitext(os.path.basename(filename))
     args = {
             'license': _license,
             'sentinel': sentinel,
-            'corename': io.corename(filename),
+            'name': name,
             'cudaname': cudaname,
             'hipname': hipname,
             }

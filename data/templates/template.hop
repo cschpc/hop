@@ -10,10 +10,10 @@
 
 /* Target translation */
 #if defined(HOP_TARGET_HIP)
-#include "${corename}_hip.h"
+#include "${name}_hip.h"
 
 #elif defined(HOP_TARGET_CUDA)
-#include "${corename}_cuda.h"
+#include "${name}_cuda.h"
 
 #else
 #error "HOP target undefined (cf. HOP_TARGET_*)"
