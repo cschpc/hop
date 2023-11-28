@@ -62,7 +62,7 @@ def header_root(path):
 
 
 def corename(filename):
-    core = re.sub('^(hop_|hop|hip_|hip|cuda_|cuda|cu)', '',
+    core = re.sub('^(hop_|hop|hip_|hip|cuda_|cuda|cu|nv)', '',
                   os.path.basename(filename))
     return re.sub('.h$', '', core).lower()
 
