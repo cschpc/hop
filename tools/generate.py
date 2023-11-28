@@ -1,16 +1,35 @@
 #!/usr/bin/env python3
 
+import os
 import logging
 
 from common.headers import make_headers
-from common.io import read_metadata, root_path, write_header
+from common.io import (create_link, file_path, read_metadata, root_path,
+                       write_header)
 from common.parser import ArgumentParser
+
+
+def _make_links(metadata):
+    links = {}
+    for label in metadata['tree']:
+        if label == 'hop':
+            path = file_path(label)
+        else:
+            path = file_path(os.path.join('hop', label))
+        for node in metadata['tree'][label].values():
+            logging.debug('node={}'.format(repr(node)))
+            if not node.link:
+                continue
+            links.setdefault(path, [])
+            links[path].append((node.name, node.link))
+    return links
 
 
 def generate(args):
     metadata = read_metadata()
 
     headers = make_headers(metadata)
+    links = _make_links(metadata)
     if args.verbose:
         print('Working directory:')
         print('  {}'.format(root_path()))
@@ -19,11 +38,22 @@ def generate(args):
         for path, content in headers.items():
             print('  {}'.format(path))
         print('')
+        print('Creating links:')
+        for path in links:
+            _path = os.path.relpath(path, root_path())
+            for src, tgt in links[path]:
+                print('  {} -> {}'.format(os.path.join(_path, src),
+                                          os.path.join(_path, tgt)))
+        print('')
     for path, content in headers.items():
         logging.debug('path={}'.format(path))
         logging.debug('content={}'.format(content))
         if not args.dry_run:
             write_header(path, content, args.force)
+    for path in links:
+        for src, tgt in links[path]:
+            if not args.dry_run:
+                create_link(path, src, tgt, args.force)
 
 
 if __name__ == '__main__':

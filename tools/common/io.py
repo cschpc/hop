@@ -407,3 +407,20 @@ def write_metadata(metadata, force=False, dry_run=False):
                     write_list(filename, metadata['list'][label], force=True)
             else:
                 raise ValueError('Unknown file type: {}'.format(filename))
+
+
+def create_link(path, source, target, force=False):
+    src = pathlib.Path(path).joinpath(source)
+    tgt = pathlib.Path(path).joinpath(target)
+    if src.exists() or src.is_symlink:
+        if src.is_symlink() and src.readlink() == tgt:
+            logging.debug('Link exists and is correct: {}'.format(src))
+            return
+        if force or input(
+                'Link {} exists. Overwrite? [Y/n] ') in ['y', 'yes', '']:
+            logging.debug('unlink: {}'.format(src))
+            src.unlink()
+        else:
+            return
+    logging.debug('create_link: {} -> {}'.format(src, tgt.name))
+    src.symlink_to(tgt.name)
