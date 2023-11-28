@@ -5,7 +5,7 @@ import inspect
 import logging
 
 from common import io
-from common.metadata import Include, Embed
+from common.metadata import Include, Embed, translate
 
 
 _license = io.read_license()
@@ -37,11 +37,12 @@ def _fill_template(template, args):
 
 def source_header(filename, content):
     sentinel = os.path.basename(filename).replace('.', '_').upper()
+    include = translate.translate(os.path.basename(filename), 'hop')
     args = {
             'license': _license,
             'sentinel': 'HOP_SOURCE_{}'.format(sentinel),
             'content': content,
-            'include': 'hop/hop_{}.h'.format(io.corename(filename)),
+            'include': 'hop/{}'.format(include),
             'lang': io.lang(filename),
             }
     logging.debug('source_header: args={}'.format(args))
