@@ -2,6 +2,7 @@ import re
 import os
 import string
 import inspect
+import logging
 
 from common import io
 from common.metadata import Include, Embed
@@ -36,6 +37,7 @@ def source_header(filename, content):
             'include': 'hop/hop_{}.h'.format(io.corename(filename)),
             'lang': io.lang(filename),
             }
+    logging.debug('source_header: args={}'.format(args))
     return _fill_template(_custom_template(filename, 'template.source'), args)
 
 
@@ -47,6 +49,7 @@ def target_header(filename, include, content):
             'content': content,
             'include': include,
             }
+    logging.debug('target_header: args={}'.format(args))
     return _fill_template(_custom_template(filename, 'template.target'), args)
 
 
@@ -59,6 +62,7 @@ def hop_header(filename, hipname, cudaname):
             'cudaname': cudaname,
             'hipname': hipname,
             }
+    logging.debug('hop_header: args={}'.format(args))
     return _fill_template(_custom_template(filename, 'template.hop'), args)
 
 
@@ -86,6 +90,7 @@ def _embed(node):
 
 
 def content(node, id_map, id_list):
+    logging.debug('content() < node={}'.format(node))
     lines = _includes(node)
     if len(lines):
         lines.append('')
@@ -124,7 +129,7 @@ def make_headers(metadata):
         coresubs = [io.corename(x) for x in node]
 
         # main hop header
-        path = node.name
+        path = os.path.join('hop', node.name)
         hipname = coretree['source/hip'][corename]
         cudaname = coretree['source/cuda'][corename]
         headers[path] = hop_header(path, hipname, cudaname)
@@ -146,7 +151,7 @@ def make_headers(metadata):
     for node in branch.values():
         if node.link:
             continue
-        path = os.path.join('source/hip', node.name)
+        path = os.path.join('hop/source/hip', node.name)
         content_hip = content(node, metadata['map']['source']['hip'],
                               metadata['list']['hip'])
         headers[path] = source_header(path, content_hip)
@@ -156,7 +161,7 @@ def make_headers(metadata):
     for node in branch.values():
         if node.link:
             continue
-        path = os.path.join('source/cuda', node.name)
+        path = os.path.join('hop/source/cuda', node.name)
         content_cuda = content(node, metadata['map']['source']['cuda'],
                                metadata['list']['cuda'])
         headers[path] = source_header(path, content_cuda)
