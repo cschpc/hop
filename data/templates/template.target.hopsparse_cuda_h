@@ -1,0 +1,6 @@
+#if defined(HOP_OVERRIDE_CUSPARSE_V1)
+#include <cusparse.h>
+#else
+#include <cusparse_v2.h>
+#endif
+${content}

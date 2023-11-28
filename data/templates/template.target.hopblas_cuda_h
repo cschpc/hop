@@ -1,2 +1,6 @@
+#if defined(HOP_OVERRIDE_CUBLAS_V1)
+#include <cublas.h>
+#else
 #include <cublas_v2.h>
+#endif
 ${content}
