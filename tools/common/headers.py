@@ -38,12 +38,13 @@ def _fill_template(template, args):
 def source_header(filename, content):
     sentinel = os.path.basename(filename).replace('.', '_').upper()
     include = translate.translate(os.path.basename(filename), 'hop')
+    lang = io.lang(filename)
     args = {
             'license': _license,
-            'sentinel': 'HOP_SOURCE_{}'.format(sentinel),
+            'sentinel': 'SOURCE_{}_{}'.format(lang, sentinel),
             'content': content,
             'include': 'hop/{}'.format(include),
-            'lang': io.lang(filename),
+            'lang': lang,
             }
     logging.debug('source_header: args={}'.format(args))
     return _fill_template(_custom_template(filename, 'template.source'), args)
