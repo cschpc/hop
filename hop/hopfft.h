@@ -22,11 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef __HOP_HOPFFT_H__
+#define __HOP_HOPFFT_H__
+
 #include "hop_check.h"
 
 /* Source translation */
 #if defined(HOP_SOURCE_HIP)
-#include "source/hip/hip/hipfft.h"
+#include "source/hip/hipfft/hipfft.h"
 
 #elif defined(HOP_SOURCE_CUDA)
 #include "source/cuda/cufft.h"
@@ -41,4 +44,6 @@ SOFTWARE.
 
 #else
 #error "HOP target undefined (cf. HOP_TARGET_*)"
+#endif
+
 #endif

@@ -22,12 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_RUNTIME_HIP_H__
-#define __HOP_RUNTIME_HIP_H__
+#ifndef __HOP_HOP_RUNTIME_HIP_H__
+#define __HOP_HOP_RUNTIME_HIP_H__
 
 #include <hip/hip_runtime.h>
-#include "hop_runtime_api_hip.h"
 
-#define gpuLaunchKernel           hipLaunchKernelGGL
+#include <hop_runtime_api.h>
+
 
 #endif

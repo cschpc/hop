@@ -22,18 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_COMPLEX_HIP_H__
-#define __HOP_COMPLEX_HIP_H__
+#ifndef __HOP_HOP_COMPLEX_HIP_H__
+#define __HOP_HOP_COMPLEX_HIP_H__
 
 #include <hip/hip_complex.h>
 
-#define gpuFloatComplex           hipFloatComplex
-#define gpuDoubleComplex          hipDoubleComplex
-#define make_gpuDoubleComplex     make_hipDoubleComplex
-#define gpuCreal                  hipCreal
-#define gpuCimag                  hipCimag
-#define gpuCadd                   hipCadd
-#define gpuCmul                   hipCmul
-#define gpuConj                   hipConj
+#define gpuCabs                          hipCabs
+#define gpuCabsf                         hipCabsf
+#define gpuCadd                          hipCadd
+#define gpuCaddf                         hipCaddf
+#define gpuCdiv                          hipCdiv
+#define gpuCdivf                         hipCdivf
+#define gpuCfma                          hipCfma
+#define gpuCfmaf                         hipCfmaf
+#define gpuCimag                         hipCimag
+#define gpuCimagf                        hipCimagf
+#define gpuCmul                          hipCmul
+#define gpuCmulf                         hipCmulf
+#define gpuComplex                       hipComplex
+#define gpuComplexDoubleToFloat          hipComplexDoubleToFloat
+#define gpuComplexFloatToDouble          hipComplexFloatToDouble
+#define gpuConj                          hipConj
+#define gpuConjf                         hipConjf
+#define gpuCreal                         hipCreal
+#define gpuCrealf                        hipCrealf
+#define gpuCsub                          hipCsub
+#define gpuCsubf                         hipCsubf
+#define gpuDoubleComplex                 hipDoubleComplex
+#define gpuFloatComplex                  hipFloatComplex
+#define make_gpuComplex                  make_hipComplex
+#define make_gpuDoubleComplex            make_hipDoubleComplex
+#define make_gpuFloatComplex             make_hipFloatComplex
+
 
 #endif

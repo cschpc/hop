@@ -22,6 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef __HOP_HOP_RUNTIME_API_H__
+#define __HOP_HOP_RUNTIME_API_H__
+
 #include "hop_check.h"
 
 /* Source translation */
@@ -41,4 +44,6 @@ SOFTWARE.
 
 #else
 #error "HOP target undefined (cf. HOP_TARGET_*)"
+#endif
+
 #endif

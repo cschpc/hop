@@ -22,20 +22,76 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOPFFT_HIP_H__
-#define __HOPFFT_HIP_H__
-
-#define gpufftDoubleComplex      hipfftDoubleComplex
-#define gpufftDoubleReal         hipfftDoubleReal
-#define gpufftHandle             hipfftHandle
-#define gpufftExecD2Z            hipfftExecD2Z
-#define gpufftExecZ2D            hipfftExecZ2D
-#define gpufftDestroy            hipfftDestroy
-#define gpufftPlan2d             hipfftPlan2d
-
-#define GPUFFT_D2Z               HIPFFT_D2Z
-#define GPUFFT_Z2D               HIPFFT_Z2D
+#ifndef __HOP_HOPFFT_HIP_H__
+#define __HOP_HOPFFT_HIP_H__
 
 #include <hipfft/hipfft.h>
+
+#define GPUFFT_ALLOC_FAILED              HIPFFT_ALLOC_FAILED
+#define GPUFFT_BACKWARD                  HIPFFT_BACKWARD
+#define GPUFFT_C2C                       HIPFFT_C2C
+#define GPUFFT_C2R                       HIPFFT_C2R
+#define GPUFFT_D2Z                       HIPFFT_D2Z
+#define GPUFFT_EXEC_FAILED               HIPFFT_EXEC_FAILED
+#define GPUFFT_FORWARD                   HIPFFT_FORWARD
+#define GPUFFT_INCOMPLETE_PARAMETER_LIST HIPFFT_INCOMPLETE_PARAMETER_LIST
+#define GPUFFT_INTERNAL_ERROR            HIPFFT_INTERNAL_ERROR
+#define GPUFFT_INVALID_DEVICE            HIPFFT_INVALID_DEVICE
+#define GPUFFT_INVALID_PLAN              HIPFFT_INVALID_PLAN
+#define GPUFFT_INVALID_SIZE              HIPFFT_INVALID_SIZE
+#define GPUFFT_INVALID_TYPE              HIPFFT_INVALID_TYPE
+#define GPUFFT_INVALID_VALUE             HIPFFT_INVALID_VALUE
+#define GPUFFT_NOT_IMPLEMENTED           HIPFFT_NOT_IMPLEMENTED
+#define GPUFFT_NOT_SUPPORTED             HIPFFT_NOT_SUPPORTED
+#define GPUFFT_NO_WORKSPACE              HIPFFT_NO_WORKSPACE
+#define GPUFFT_PARSE_ERROR               HIPFFT_PARSE_ERROR
+#define GPUFFT_R2C                       HIPFFT_R2C
+#define GPUFFT_SETUP_FAILED              HIPFFT_SETUP_FAILED
+#define GPUFFT_SUCCESS                   HIPFFT_SUCCESS
+#define GPUFFT_UNALIGNED_DATA            HIPFFT_UNALIGNED_DATA
+#define GPUFFT_Z2D                       HIPFFT_Z2D
+#define GPUFFT_Z2Z                       HIPFFT_Z2Z
+#define gpufftComplex                    hipfftComplex
+#define gpufftCreate                     hipfftCreate
+#define gpufftDestroy                    hipfftDestroy
+#define gpufftDoubleComplex              hipfftDoubleComplex
+#define gpufftDoubleReal                 hipfftDoubleReal
+#define gpufftEstimate1d                 hipfftEstimate1d
+#define gpufftEstimate2d                 hipfftEstimate2d
+#define gpufftEstimate3d                 hipfftEstimate3d
+#define gpufftEstimateMany               hipfftEstimateMany
+#define gpufftExecC2C                    hipfftExecC2C
+#define gpufftExecC2R                    hipfftExecC2R
+#define gpufftExecD2Z                    hipfftExecD2Z
+#define gpufftExecR2C                    hipfftExecR2C
+#define gpufftExecZ2D                    hipfftExecZ2D
+#define gpufftExecZ2Z                    hipfftExecZ2Z
+#define gpufftGetProperty                hipfftGetProperty
+#define gpufftGetSize                    hipfftGetSize
+#define gpufftGetSize1d                  hipfftGetSize1d
+#define gpufftGetSize2d                  hipfftGetSize2d
+#define gpufftGetSize3d                  hipfftGetSize3d
+#define gpufftGetSizeMany                hipfftGetSizeMany
+#define gpufftGetSizeMany64              hipfftGetSizeMany64
+#define gpufftGetVersion                 hipfftGetVersion
+#define gpufftHandle                     hipfftHandle
+#define gpufftMakePlan1d                 hipfftMakePlan1d
+#define gpufftMakePlan2d                 hipfftMakePlan2d
+#define gpufftMakePlan3d                 hipfftMakePlan3d
+#define gpufftMakePlanMany               hipfftMakePlanMany
+#define gpufftMakePlanMany64             hipfftMakePlanMany64
+#define gpufftPlan1d                     hipfftPlan1d
+#define gpufftPlan2d                     hipfftPlan2d
+#define gpufftPlan3d                     hipfftPlan3d
+#define gpufftPlanMany                   hipfftPlanMany
+#define gpufftReal                       hipfftReal
+#define gpufftResult                     hipfftResult
+#define gpufftResult_t                   hipfftResult_t
+#define gpufftSetAutoAllocation          hipfftSetAutoAllocation
+#define gpufftSetStream                  hipfftSetStream
+#define gpufftSetWorkArea                hipfftSetWorkArea
+#define gpufftType                       hipfftType
+#define gpufftType_t                     hipfftType_t
+
 
 #endif

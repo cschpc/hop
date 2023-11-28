@@ -22,13 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_RUNTIME_CUDA_H__
-#define __HOP_RUNTIME_CUDA_H__
+#ifndef __HOP_HOP_RUNTIME_CUDA_H__
+#define __HOP_HOP_RUNTIME_CUDA_H__
 
 #include <cuda_runtime.h>
-#include "hop_runtime_api_cuda.h"
 
-#define gpuLaunchKernel(kernel, dimGrid, dimBlock, shared, stream, ...) \
-        kernel<<<dimGrid, dimBlock, shared, stream>>>(__VA_ARGS__)
+#include <hop_runtime_api.h>
+
 
 #endif

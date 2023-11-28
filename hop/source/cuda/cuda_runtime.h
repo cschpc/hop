@@ -22,12 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_SOURCE_CUDA_RUNTIME_H__
-#define __HOP_SOURCE_CUDA_RUNTIME_H__
+#ifndef __HOP_SOURCE_CUDA_CUDA_RUNTIME_H__
+#define __HOP_SOURCE_CUDA_CUDA_RUNTIME_H__
 
 #define HOP_SOURCE_CUDA
 
-#include "cuda_runtime_api.h"
+#include <cuda_runtime_api.h>
+#include <library_types.h>
+
+#define cudaOccupancyMaxPotentialBlockSize  \
+        gpuOccupancyMaxPotentialBlockSize
+#define cudaOccupancyMaxPotentialBlockSizeVariableSMem  \
+        gpuOccupancyMaxPotentialBlockSizeVariableSMem
+#define cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags  \
+        gpuOccupancyMaxPotentialBlockSizeVariableSMemWithFlags
+#define cudaOccupancyMaxPotentialBlockSizeWithFlags  \
+        gpuOccupancyMaxPotentialBlockSizeWithFlags
+
 #include <hop/hop_runtime.h>
 
 #endif

@@ -22,20 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_SOURCE_CUCOMPLEX_H__
-#define __HOP_SOURCE_CUCOMPLEX_H__
+#ifndef __HOP_SOURCE_CUDA_CUCOMPLEX_H__
+#define __HOP_SOURCE_CUDA_CUCOMPLEX_H__
 
 #define HOP_SOURCE_CUDA
 
-#define cuFloatComplex            gpuFloatComplex
-#define cuDoubleComplex           gpuDoubleComplex
-#define make_cuDoubleComplex      make_gpuDoubleComplex
-#define cuCreal                   gpuCreal
-#define cuCimag                   gpuCimag
-#define cuCadd                    gpuCadd
-#define cuCmul                    gpuCmul
-#define cuConj                    gpuConj
+#define cuCabs                           gpuCabs
+#define cuCabsf                          gpuCabsf
+#define cuCadd                           gpuCadd
+#define cuCaddf                          gpuCaddf
+#define cuCdiv                           gpuCdiv
+#define cuCdivf                          gpuCdivf
+#define cuCfma                           gpuCfma
+#define cuCfmaf                          gpuCfmaf
+#define cuCimag                          gpuCimag
+#define cuCimagf                         gpuCimagf
+#define cuCmul                           gpuCmul
+#define cuCmulf                          gpuCmulf
+#define cuComplex                        gpuComplex
+#define cuComplexDoubleToFloat           gpuComplexDoubleToFloat
+#define cuComplexFloatToDouble           gpuComplexFloatToDouble
+#define cuConj                           gpuConj
+#define cuConjf                          gpuConjf
+#define cuCreal                          gpuCreal
+#define cuCrealf                         gpuCrealf
+#define cuCsub                           gpuCsub
+#define cuCsubf                          gpuCsubf
+#define cuDoubleComplex                  gpuDoubleComplex
+#define cuFloatComplex                   gpuFloatComplex
+#define make_cuComplex                   make_gpuComplex
+#define make_cuDoubleComplex             make_gpuDoubleComplex
+#define make_cuFloatComplex              make_gpuFloatComplex
 
-#include <hop/hop_complex.h>
+#include <hop/hopComplex.h>
 
 #endif

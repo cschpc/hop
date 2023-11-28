@@ -22,18 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef __HOP_COMPLEX_CUDA_H__
-#define __HOP_COMPLEX_CUDA_H__
+#ifndef __HOP_HOP_COMPLEX_CUDA_H__
+#define __HOP_HOP_COMPLEX_CUDA_H__
 
 #include <cuComplex.h>
 
-#define gpuFloatComplex           cuFloatComplex
-#define gpuDoubleComplex          cuDoubleComplex
-#define make_gpuDoubleComplex     make_cuDoubleComplex
-#define gpuCreal                  cuCreal
-#define gpuCimag                  cuCimag
-#define gpuCadd                   cuCadd
-#define gpuCmul                   cuCmul
-#define gpuConj                   cuConj
+#define gpuCabs                          cuCabs
+#define gpuCabsf                         cuCabsf
+#define gpuCadd                          cuCadd
+#define gpuCaddf                         cuCaddf
+#define gpuCdiv                          cuCdiv
+#define gpuCdivf                         cuCdivf
+#define gpuCfma                          cuCfma
+#define gpuCfmaf                         cuCfmaf
+#define gpuCimag                         cuCimag
+#define gpuCimagf                        cuCimagf
+#define gpuCmul                          cuCmul
+#define gpuCmulf                         cuCmulf
+#define gpuComplex                       cuComplex
+#define gpuComplexDoubleToFloat          cuComplexDoubleToFloat
+#define gpuComplexFloatToDouble          cuComplexFloatToDouble
+#define gpuConj                          cuConj
+#define gpuConjf                         cuConjf
+#define gpuCreal                         cuCreal
+#define gpuCrealf                        cuCrealf
+#define gpuCsub                          cuCsub
+#define gpuCsubf                         cuCsubf
+#define gpuDoubleComplex                 cuDoubleComplex
+#define gpuFloatComplex                  cuFloatComplex
+#define make_gpuComplex                  make_cuComplex
+#define make_gpuDoubleComplex            make_cuDoubleComplex
+#define make_gpuFloatComplex             make_cuFloatComplex
+
 
 #endif
