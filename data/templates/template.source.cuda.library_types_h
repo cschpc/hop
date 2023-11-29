@@ -1,5 +1,6 @@
 #define HOP_SOURCE_${lang}
 ${content}
+
 #if !defined(HOP_OVERRIDE_LIBRARY_TYPES)
 #include <hop/hopblas.h>
 #endif

@@ -1,3 +1,4 @@
 #define HOP_SOURCE_${lang}
 ${content}
+
 #include <${include}>

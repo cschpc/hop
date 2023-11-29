@@ -117,8 +117,8 @@ def content(node, id_map, id_list, local=False):
         lines.extend(_defines(id_list[name], id_map))
     if len(lines):
         lines.insert(0, '')
-        if lines[-1]:
-            lines.append('')
+        if not lines[-1]:
+            lines.pop()
     return '\n'.join(lines)
 
 
