@@ -91,17 +91,20 @@ def _defines(id_list, id_map):
     return defs
 
 
-def _includes(node):
-    return ['#include <{}>'.format(x) for x in node if type(x) is Include]
+def _includes(node, local=False):
+    if local:
+        return ['#include "{}"'.format(x) for x in node if type(x) is Include]
+    else:
+        return ['#include <{}>'.format(x) for x in node if type(x) is Include]
 
 
 def _embed(node):
     return [x for x in node if type(x) is Embed]
 
 
-def content(node, id_map, id_list):
+def content(node, id_map, id_list, local=False):
     logging.debug('content() < node={}'.format(node))
-    lines = _includes(node)
+    lines = _includes(node, local)
     if len(lines):
         lines.append('')
     lines.extend(_defines(id_list.get(node.name, []), id_map))
@@ -147,13 +150,13 @@ def make_headers(metadata):
         # target header for hip
         path_hip = path.replace('.h', '_hip.h')
         content_hip = content(node, metadata['map']['target']['hip'],
-                              metadata['list']['hop'])
+                              metadata['list']['hop'], local=True)
         headers[path_hip] = target_header(path_hip, hipname, content_hip)
 
         # target header for cuda
         path_cuda = path.replace('.h', '_cuda.h')
         content_cuda = content(node, metadata['map']['target']['cuda'],
-                               metadata['list']['hop'])
+                               metadata['list']['hop'], local=True)
         headers[path_cuda] = target_header(path_cuda, cudaname, content_cuda)
 
     # source header for HIP
