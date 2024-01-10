@@ -1,5 +1,5 @@
 #define HOP_SOURCE_${lang}
 ${content}
 
-#include <hop/hop_runtime_api.h>
+#include <hop/hop_runtime.h>
 #include <hop/hoprtc.h>
