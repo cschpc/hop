@@ -1,4 +1,6 @@
+#if !defined(HOP_SOURCE_${lang})
 #define HOP_SOURCE_${lang}
+#endif
 ${content}
 
 #include <hop/hop_complex.h>
