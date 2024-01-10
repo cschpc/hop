@@ -313,5 +313,4 @@ SOFTWARE.
 #define gpublasZtrsmBatched              cublasZtrsmBatched
 #define gpublasZtrsv                     cublasZtrsv_v2
 
-
 #endif

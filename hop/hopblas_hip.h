@@ -309,5 +309,4 @@ SOFTWARE.
 #define gpublasZtrsmBatched              hipblasZtrsmBatched
 #define gpublasZtrsv                     hipblasZtrsv
 
-
 #endif

@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_CUDA_H__
 #define __HOP_SOURCE_CUDA_CUDA_H__
 
+#if !defined(HOP_SOURCE_CUDA)
 #define HOP_SOURCE_CUDA
+#endif
 
 #define CUDA_ARRAY3D_CUBEMAP             gpuArrayCubemap
 #define CUDA_ARRAY3D_DESCRIPTOR          GPU_ARRAY3D_DESCRIPTOR

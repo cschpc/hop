@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIP_HIP_COMPLEX_H__
 #define __HOP_SOURCE_HIP_HIP_COMPLEX_H__
 
+#if !defined(HOP_SOURCE_HIP)
 #define HOP_SOURCE_HIP
+#endif
 
 #define hipCabs                          gpuCabs
 #define hipCabsf                         gpuCabsf

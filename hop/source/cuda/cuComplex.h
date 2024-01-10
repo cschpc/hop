@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_CUCOMPLEX_H__
 #define __HOP_SOURCE_CUDA_CUCOMPLEX_H__
 
+#if !defined(HOP_SOURCE_CUDA)
 #define HOP_SOURCE_CUDA
+#endif
 
 #define cuCabs                           gpuCabs
 #define cuCabsf                          gpuCabsf
@@ -54,6 +56,6 @@ SOFTWARE.
 #define make_cuDoubleComplex             make_gpuDoubleComplex
 #define make_cuFloatComplex              make_gpuFloatComplex
 
-#include <hop/hopComplex.h>
+#include <hop/hop_complex.h>
 
 #endif

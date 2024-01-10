@@ -1214,5 +1214,4 @@ SOFTWARE.
 #define gpuTextureTypeCubemap            hipTextureTypeCubemap
 #define gpuTextureTypeCubemapLayered     hipTextureTypeCubemapLayered
 
-
 #endif

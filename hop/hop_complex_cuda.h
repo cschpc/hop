@@ -54,5 +54,4 @@ SOFTWARE.
 #define make_gpuDoubleComplex            make_cuDoubleComplex
 #define make_gpuFloatComplex             make_cuFloatComplex
 
-
 #endif

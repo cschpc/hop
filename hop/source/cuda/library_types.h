@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_LIBRARY_TYPES_H__
 #define __HOP_SOURCE_CUDA_LIBRARY_TYPES_H__
 
+#if !defined(HOP_SOURCE_CUDA)
 #define HOP_SOURCE_CUDA
+#endif
 
 #define CUDA_C_16BF                      GPUBLAS_C_16B
 #define CUDA_C_16F                       GPUBLAS_C_16F

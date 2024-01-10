@@ -93,5 +93,4 @@ SOFTWARE.
 #define gpufftType                       hipfftType
 #define gpufftType_t                     hipfftType_t
 
-
 #endif

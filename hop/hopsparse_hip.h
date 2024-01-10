@@ -652,5 +652,4 @@ SOFTWARE.
 #define gpusparseZnnz_compress           hipsparseZnnz_compress
 #define gpusparseZsctr                   hipsparseZsctr
 
-
 #endif

@@ -97,5 +97,4 @@ SOFTWARE.
 #define gpurtcResult                     nvrtcResult
 #define gpurtcVersion                    nvrtcVersion
 
-
 #endif

@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_CURAND_H__
 #define __HOP_SOURCE_CUDA_CURAND_H__
 
+#if !defined(HOP_SOURCE_CUDA)
 #define HOP_SOURCE_CUDA
+#endif
 
 #include <cuda_runtime.h>
 

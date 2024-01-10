@@ -86,5 +86,4 @@ SOFTWARE.
 #define gpurandSetStream                 curandSetStream
 #define gpurandStatus_t                  curandStatus
 
-
 #endif

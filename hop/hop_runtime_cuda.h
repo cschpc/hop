@@ -27,7 +27,6 @@ SOFTWARE.
 
 #include <cuda_runtime.h>
 
-#include <hop_runtime_api.h>
-
+#include "hop_runtime_api.h"
 
 #endif

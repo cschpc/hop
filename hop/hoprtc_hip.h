@@ -96,5 +96,4 @@ SOFTWARE.
 #define gpurtcResult                     hiprtcResult
 #define gpurtcVersion                    hiprtcVersion
 
-
 #endif

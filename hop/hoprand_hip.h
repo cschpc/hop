@@ -86,5 +86,4 @@ SOFTWARE.
 #define gpurandSetStream                 hiprandSetStream
 #define gpurandStatus_t                  hiprandStatus_t
 
-
 #endif

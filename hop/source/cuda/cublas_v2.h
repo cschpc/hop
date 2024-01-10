@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_CUBLAS_V2_H__
 #define __HOP_SOURCE_CUDA_CUBLAS_V2_H__
 
+#if !defined(HOP_SOURCE_CUDA)
 #define HOP_SOURCE_CUDA
+#endif
 
 #include <cuComplex.h>
 #include <driver_types.h>

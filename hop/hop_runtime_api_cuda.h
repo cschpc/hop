@@ -1220,5 +1220,4 @@ SOFTWARE.
 #define gpuTextureTypeCubemap            cudaTextureTypeCubemap
 #define gpuTextureTypeCubemapLayered     cudaTextureTypeCubemapLayered
 
-
 #endif

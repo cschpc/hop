@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_CUDA_CUSPARSE_H__
 #define __HOP_SOURCE_CUDA_CUSPARSE_H__
 
+#if !defined(HOP_SOURCE_CUDA)
 #define HOP_SOURCE_CUDA
+#endif
 
 #include <cuComplex.h>
 #include <cuda_runtime_api.h>

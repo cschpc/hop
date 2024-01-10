@@ -25,7 +25,9 @@ SOFTWARE.
 #ifndef __HOP_SOURCE_HIP_HIPBLAS_H__
 #define __HOP_SOURCE_HIP_HIPBLAS_H__
 
+#if !defined(HOP_SOURCE_HIP)
 #define HOP_SOURCE_HIP
+#endif
 
 #include <hip/hip_complex.h>
 #include <hip/hip_runtime_api.h>
