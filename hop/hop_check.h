@@ -25,16 +25,16 @@ SOFTWARE.
 #ifndef __HOP_CHECK_H__
 #define __HOP_CHECK_H__
 
-#if defined(HOP_SOURCE_HIP) and defined(HOP_TARGET_HIP) \
- or defined(HOP_SOURCE_CUDA) and defined(HOP_TARGET_CUDA)
+#if defined(HOP_SOURCE_HIP) && defined(HOP_TARGET_HIP) \
+ || defined(HOP_SOURCE_CUDA) && defined(HOP_TARGET_CUDA)
 #error "HOP source and target are the same: no need to HOP?"
 #endif
 
-#if defined(HOP_SOURCE_HIP) and !defined(HOP_TARGET_CUDA)
+#if defined(HOP_SOURCE_HIP) && !defined(HOP_TARGET_CUDA)
 #define HOP_TARGET_CUDA
 #endif
 
-#if defined(HOP_SOURCE_CUDA) and !defined(HOP_TARGET_HIP)
+#if defined(HOP_SOURCE_CUDA) && !defined(HOP_TARGET_HIP)
 #define HOP_TARGET_HIP
 #endif
 
