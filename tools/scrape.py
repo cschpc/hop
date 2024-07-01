@@ -19,15 +19,14 @@ def update_maps(args, metadata, triplets, known_ids):
         _hop = hop
         if cuda in metadata['map']['source']['cuda']:
             _hop = metadata['map']['source']['cuda'][cuda]
-        elif (cuda in known_ids['cuda']
-                and not translate.is_default_cuda(_hop, cuda)):
+        elif cuda in known_ids['cuda']:
             metadata['map']['source']['cuda'][cuda] = _hop
             count += 1
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(cuda, _hop))
-        if (hip in known_ids['hip']
-                and _hop not in metadata['map']['target']['hip']):
-            if not translate.is_default_hip(_hop, hip):
+        if hip in known_ids['hip']:
+            if (_hop not in metadata['map']['target']['hip']
+                    or translate.is_default_hip(_hop, hip)):
                 metadata['map']['target']['hip'][_hop] = hip
                 count += 1
                 if args.verbose:
@@ -36,15 +35,14 @@ def update_maps(args, metadata, triplets, known_ids):
         _hop = hop
         if hip in metadata['map']['source']['hip']:
             _hop = metadata['map']['source']['hip'][hip]
-        elif (hip in known_ids['hip']
-                and not translate.is_default_hip(_hop, hip)):
+        elif hip in known_ids['hip']:
             metadata['map']['source']['hip'][hip] = _hop
             count += 1
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(hip, _hop))
-        if (cuda in known_ids['cuda']
-                and _hop not in metadata['map']['target']['cuda']):
-            if not translate.is_default_cuda(_hop, cuda):
+        if cuda in known_ids['cuda']:
+            if (_hop not in metadata['map']['target']['cuda']
+                    or translate.is_default_cuda(_hop, cuda)):
                 metadata['map']['target']['cuda'][_hop] = cuda
                 count += 1
                 if args.verbose:
