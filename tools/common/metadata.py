@@ -111,6 +111,66 @@ def update_metadata(tgt, src):
             tgt['list'][label][filename].extend(src['list'][label][filename])
 
 
+class Datatype:
+    def __init__(self, ctype):
+        self._pointer = ctype.count('*')
+        self._basic = ctype.strip(' *')
+    def _format(self, basic, pointer):
+        return (basic + ' ' + '*' * pointer).strip()
+    def __str__(self):
+        return self._format(self._basic, self._pointer)
+    def __repr__(self):
+        return "Datatype('{}')".format(str(self))
+    def __eq__(self, other):
+        return str(self) == str(other)
+    def is_pointer(self):
+        return bool(self._pointer)
+    def as_void(self):
+        return self._format('void', self._pointer)
+
+
+class Argument:
+    def __init__(self, argument):
+        if type(argument) is str:
+            self.name = argument.split()[-1].strip('*')
+            self.datatype = Datatype(argument.rstrip(self.name))
+        else:
+            self.name = argument[0]
+            self.datatype = Datatype(argument[1])
+    def _format(self, name, datatype):
+        if datatype.is_pointer():
+            return str(datatype) + self.name
+        else:
+            return str(datatype) + ' ' + self.name
+    def __str__(self):
+        return self._format(self.name, self.datatype)
+    def __repr__(self):
+        return "Argument('{}')".format(str(self))
+    def __eq__(self, other):
+        return (self.datatype == other.datatype) and (self.name == other.name)
+    def as_void(self):
+        return self._format(self.name, Datatype(self.datatype.as_void()))
+
+
+class Proto(UniqueList):
+    _regex = re.compile('^([^(]+)\((.*)\)$')
+
+    def __init__(self, function):
+        if type(function) is str:
+            function = self._parse(function)
+        self.name = function[0]
+        super().__init__([Argument(x) for x in function[1]])
+    def _parse(self, function):
+        match = self._regex.match(function)
+        if not match:
+            raise ValueError('Invalid function prototype: {}'.format(function))
+        name, args = match.groups()
+        args = [x.strip() for x in args.split(',')]
+        print('name=', name)
+        print('args=', args)
+        return (name, args)
+
+
 class Map(collections.UserDict):
     """Custom dictionary for identifier maps
 
