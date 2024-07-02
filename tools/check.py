@@ -7,7 +7,7 @@ import logging
 from common.io import read_metadata, file_path
 from common.abc import UniqueList
 from common.parser import ArgumentParser
-from common.metadata import known_list_ids, make_triplet
+from common.metadata import known_list_ids, make_triplet, translate
 from common.reference import reference_map
 
 
@@ -88,6 +88,11 @@ def _check_id_list(filename, label, metadata, reference, warn, wishlist):
         if label == 'hip':
             if cuda not in reference['hip'].get(hip, []):
                 warn('Incorrect mapping: {} -> {} -> {}'.format(hip, hop, cuda))
+            ref = reference['hip'].get(hip, [])
+            if len(ref) > 1 and not translate.is_lib(hop) \
+                    and not translate.is_default_cuda(hop, cuda):
+                warn('Non-default mapping: {} -> {} -> {} <> {}'.format(
+                    hip, hop, cuda, translate.default(hip, 'cuda')))
             wishlist['cuda'].append(cuda)
         elif label == 'cuda':
             if hip != reference['cuda'].get(cuda):
