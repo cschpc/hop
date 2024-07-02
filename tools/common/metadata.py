@@ -281,8 +281,8 @@ class Translator:
         return cuda.removesuffix('_v2') == self.default(hop, 'cuda')
 
     def is_lib(self, name):
-        return (self.regex_lib_lower.match(name)
-                or self.regex_lib_upper.match(name))
+        return bool(self.regex_lib_lower.match(name)
+                    or self.regex_lib_upper.match(name))
 
     def match(self, name, default=False):
         if default:
