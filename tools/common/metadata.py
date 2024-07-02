@@ -171,6 +171,40 @@ class Proto(UniqueList):
         return (name, args)
 
 
+class VersionedID:
+    _regex = re.compile('^(.+)_v([0-9])$')
+
+    def __init__(self, name):
+        self.name, self.version = self._parse(name)
+    def _parse(self, name):
+        match = self._regex.match(name)
+        if match:
+            return (match.group(1), int(match.group(2)))
+        else:
+            return (name, 0)
+    def _as_str(self, version=None):
+        if version is None:
+            version = self.version
+        if version > 0:
+            return '{}_v{}'.format(self.name, version)
+        else:
+            return self.name
+    def __str__(self):
+        return self._as_str()
+    def has_version_suffix(self, name=None):
+        if name is None:
+            return self.version > 0
+        name, version = self._parse(name)
+        return version > 0
+    def supercedes(self, other):
+        return str(other) in self.superceded_versions()
+    def superceded_versions(self):
+        old = []
+        for v in range(0, self.version):
+            old.append(self._as_str(v))
+        return old
+
+
 class Map(collections.UserDict):
     """Custom dictionary for identifier maps
 
