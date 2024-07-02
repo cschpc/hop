@@ -42,7 +42,9 @@ def update_maps(args, metadata, triplets, known_ids):
                 print('  New mapping: {} -> {}'.format(hip, _hop))
         if cuda in known_ids['cuda']:
             if (_hop not in metadata['map']['target']['cuda']
-                    or translate.is_default_cuda(_hop, cuda)):
+                    or (translate.is_default_cuda(_hop, cuda)
+                        and metadata['map']['target']['cuda'][_hop].rstrip(
+                            '_v2') != cuda)):
                 metadata['map']['target']['cuda'][_hop] = cuda
                 count += 1
                 if args.verbose:
