@@ -7,7 +7,7 @@ import logging
 from common.io import read_metadata, write_metadata
 from common.parser import ArgumentParser
 from common.scrape import scrape_header, scrape_hipify
-from common.metadata import known_list_ids, translate
+from common.metadata import known_list_ids, translate, VersionedID
 
 
 def update_maps(args, metadata, triplets, known_ids):
@@ -41,14 +41,28 @@ def update_maps(args, metadata, triplets, known_ids):
             if args.verbose:
                 print('  New mapping: {} -> {}'.format(hip, _hop))
         if cuda in known_ids['cuda']:
-            if (_hop not in metadata['map']['target']['cuda']
-                    or (translate.is_default_cuda(_hop, cuda)
-                        and metadata['map']['target']['cuda'][_hop].rstrip(
-                            '_v2') != cuda)):
+            if _hop not in metadata['map']['target']['cuda']:
+                logging.debug('New CUDA target: {} -> {}'.format(_hop, cuda))
                 metadata['map']['target']['cuda'][_hop] = cuda
                 count += 1
                 if args.verbose:
                     print('  New mapping: {} -> {}'.format(_hop, cuda))
+            else:
+                current = VersionedID(metadata['map']['target']['cuda'][_hop])
+                if str(current) == cuda:
+                    logging.debug('Existing CUDA target: {}'.format(cuda))
+                    continue
+                if current.supercedes(cuda):
+                    logging.debug('Current CUDA target supercedes new: {} > {}'.format(current, cuda))
+                    continue
+                new = VersionedID(cuda)
+                if (new.supercedes(current)
+                        or translate.is_default_cuda(_hop, cuda)):
+                    logging.debug('Better CUDA target: {} -> {} ({})'.format(_hop, cuda, current))
+                    metadata['map']['target']['cuda'][_hop] = cuda
+                    count += 1
+                    if args.verbose:
+                        print('  Update mapping: {} -> {}'.format(_hop, cuda))
     logging.debug('updated metadata={}'.format(metadata))
     if args.verbose:
         print('  New mapping chains:', count)
