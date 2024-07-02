@@ -416,8 +416,8 @@ def create_link(path, source, target, force=False):
         if src.is_symlink() and src.readlink() == tgt:
             logging.debug('Link exists and is correct: {}'.format(src))
             return
-        if force or input(
-                'Link {} exists. Overwrite? [Y/n] ') in ['y', 'yes', '']:
+        if (force or input('Link {} exists. Overwrite? [Y/n] '.format(src)) \
+                in ['y', 'yes', '']):
             logging.debug('unlink: {}'.format(src))
             src.unlink()
         else:
