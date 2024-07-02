@@ -278,7 +278,7 @@ class Translator:
         return hip == self.default(hop, 'hip')
 
     def is_default_cuda(self, hop, cuda):
-        return cuda == self.default(hop, 'cuda')
+        return cuda.removesuffix('_v2') == self.default(hop, 'cuda')
 
     def is_lib(self, name):
         return (self.regex_lib_lower.match(name)
