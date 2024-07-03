@@ -77,13 +77,13 @@ SOFTWARE.
 #define gpurandGenerator_st              curandGenerator_st
 #define gpurandGenerator_t               curandGenerator_t
 #define gpurandGetVersion                curandGetVersion
-#define gpurandRngType_t                 curandRngType
+#define gpurandRngType_t                 curandRngType_t
 #define gpurandSetGeneratorOffset        curandSetGeneratorOffset
 #define gpurandSetPseudoRandomGeneratorSeed  \
         curandSetPseudoRandomGeneratorSeed
 #define gpurandSetQuasiRandomGeneratorDimensions  \
         curandSetQuasiRandomGeneratorDimensions
 #define gpurandSetStream                 curandSetStream
-#define gpurandStatus_t                  curandStatus
+#define gpurandStatus_t                  curandStatus_t
 
 #endif

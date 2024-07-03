@@ -1237,7 +1237,7 @@ SOFTWARE.
 #define cuWaitExternalSemaphoresAsync    gpuWaitExternalSemaphoresAsync
 #define cudaError_enum                   gpuError_t
 
-#include <hop/hop_runtime_api.h>
+#include <hop/hop_runtime.h>
 #include <hop/hoprtc.h>
 
 #endif
