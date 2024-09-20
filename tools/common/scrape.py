@@ -307,18 +307,22 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
             break
         name = line.split()[0]
         logging.debug('scrape_header: name={}'.format(name))
-        if name not in known_maps:
-            logging.debug('  ignore (known_maps)')
-            continue
-        if (name.startswith('_')
-                or name.endswith('_H')
-                or not translate.match(name)):
-            logging.debug('  ignore (_ | regex)')
-            continue
-        if name in included_ids:
-            count['old'] += 1
-            logging.debug('  ignore (included_ids)')
-            continue
+        if (args.whitelist_prefix is not False
+                and name.startswith(args.whitelist_prefix)):
+            logging.debug('  whitelisted')
+        else:
+            if name not in known_maps:
+                logging.debug('  ignore (known_maps)')
+                continue
+            if (name.startswith('_')
+                    or name.endswith('_H')
+                    or not translate.match(name)):
+                logging.debug('  ignore (_ | regex)')
+                continue
+            if name in included_ids:
+                count['old'] += 1
+                logging.debug('  ignore (included_ids)')
+                continue
         _add_hop(args, filename, name, label, metadata, known_ids, triplets,
                  count)
         _add_identifier(args, filename, name, label, metadata, known_ids,

@@ -127,6 +127,9 @@ if __name__ == '__main__':
             help='path to HIPIFY git repository / installation')
     parser.add_argument('files', nargs='+',
             help='header files to scrape')
+    parser.add_argument('-w', '--whitelist-prefix', default=False,
+            help='accept all IDs with this prefix and guess the translation '
+            'if needed')
     parser.add_argument('-r', '--no-preprocess',
             action='store_true', default=False,
             help='do not preprocess headers')
