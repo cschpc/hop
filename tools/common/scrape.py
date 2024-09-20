@@ -319,10 +319,10 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
                     or not translate.match(name)):
                 logging.debug('  ignore (_ | regex)')
                 continue
-            if name in included_ids:
-                count['old'] += 1
-                logging.debug('  ignore (included_ids)')
-                continue
+        if name in included_ids:
+            count['old'] += 1
+            logging.debug('  ignore (included_ids)')
+            continue
         _add_hop(args, filename, name, label, metadata, known_ids, triplets,
                  count)
         _add_identifier(args, filename, name, label, metadata, known_ids,
