@@ -223,9 +223,15 @@ def _known_triplet_ids(triplets):
     return ids
 
 
-def _add_identifier(args, filename, name, label, metadata, known_ids, count):
+def _add_identifier(args, filename, name, label, metadata, known_ids,
+                    triplets, count):
     if name in metadata['list'][label].get(filename, []):
         return
+    if label == 'cuda':
+        hop = _get_hop(metadata, triplets, name, label)
+        if hop not in known_ids['hop']:
+            logging.debug('_add_identifier: no known HOP counterpart for {}'.format(name))
+            return
     if name in known_ids[label]:
         if args.ignore_moved:
             return
@@ -249,6 +255,16 @@ def _all_hop_ids(metadata, filename):
     return ids
 
 
+def _get_hop(metadata, triplets, name, label, guess=True):
+    if name in metadata['map']['source'][label]:
+        hop = metadata['map']['source'][label][name]
+    else:
+        hop = _find_hop(triplets, name, label)
+    if not hop and guess:
+        hop = translate.to_hop(name)
+    return hop
+
+
 def _find_hop(triplets, name, label):
     if label == 'hip':
         index = 1
@@ -265,20 +281,17 @@ def _find_hop(triplets, name, label):
 
 def _add_hop(args, path, name, label, metadata, known_ids, triplets, count):
     filename = translate.translate(os.path.basename(path), 'hop')
-    if name in metadata['map']['source'][label]:
-        hop = metadata['map']['source'][label][name]
+    if label == 'hip':
+        hop = _get_hop(metadata, triplets, name, label, True)
     else:
-        hop = _find_hop(triplets, name, label)
+        hop = _get_hop(metadata, triplets, name, label, False)
     if not hop:
-        if label == 'hip':
-            hop = translate.to_hop(name)
-        else:
-            return
-    logging.debug('_add_hop: hop={}'.format(hop))
-    if (hop not in known_ids[label]
+        return
+    if (hop not in known_ids['hop']
             or (label == 'hip'
                 and hop not in _all_hop_ids(metadata, filename))):
-        _add_identifier(args, filename, hop, 'hop', metadata, known_ids, count)
+        _add_identifier(args, filename, hop, 'hop', metadata, known_ids,
+                        triplets, count)
 
 
 def scrape_header(args, path, metadata, known_ids, triplets, count):
@@ -306,9 +319,10 @@ def scrape_header(args, path, metadata, known_ids, triplets, count):
             count['old'] += 1
             logging.debug('  ignore (included_ids)')
             continue
-        _add_identifier(args, filename, name, label, metadata, known_ids, count)
         _add_hop(args, filename, name, label, metadata, known_ids, triplets,
                  count)
+        _add_identifier(args, filename, name, label, metadata, known_ids,
+                        triplets, count)
     if args.verbose:
         print('  Old identifiers:   {}'.format(count['old']))
         print('  New identifiers:   {}'.format(count['new']))
