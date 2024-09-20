@@ -9,7 +9,7 @@ from common.io import header_name, header_root, lang
 
 
 def _includes(path):
-    regex_include = re.compile('^#include [<"]([^>"]*)[">]')
+    regex_include = re.compile('^\s*#include [<"]([^>"]*)[">]')
     includes = []
     for line in open(path):
         if regex_include.match(line):
