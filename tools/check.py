@@ -91,7 +91,7 @@ def _check_id_list(filename, label, metadata, reference, warn, wishlist):
             ref = reference['hip'].get(hip, [])
             vid = VersionedID(cuda)
             if vid.has_version_suffix():
-                for x in vid.supercedes():
+                for x in vid.superceded_versions():
                     if x in ref:
                         ref.remove(x)
             if len(ref) > 1 and not translate.is_lib(hop) \
