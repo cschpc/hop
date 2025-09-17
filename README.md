@@ -54,14 +54,14 @@ Translate from HIP to CUDA:
 ### CUDA ⇒ HIP
 
 ```
-export HOP_FLAGS=-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP
+export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP"
 $CC -x hip $HOP_FLAGS foo.cu -o foo
 ```
 
 ### HIP ⇒ CUDA
 
 ```
-export HOP_FLAGS=-I$HOP_ROOT -I$HOP_ROOT/source/hip -DHOP_TARGET_CUDA
+export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/hip -DHOP_TARGET_CUDA"
 $CC -x cu $HOP_FLAGS foo.cpp -o foo
 ```
 
