@@ -13,7 +13,7 @@ include statements in C and C++ (also Fortran with ISO C bindings).
 
 ```
 export HOP_ROOT=/path/to/install/hop
-git clone https://github.com/mlouhivu/hop $HOP_ROOT
+git clone https://github.com/cschpc/hop.git $HOP_ROOT
 ```
 
 
