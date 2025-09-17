@@ -53,8 +53,17 @@ Translate from HIP to CUDA:
 
 ### CUDA ⇒ HIP
 
+If the source file includes CUDA headers:
+
 ```
 export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP"
+$CC -x hip $HOP_FLAGS foo.cu -o foo
+```
+
+If the source file does not include CUDA headers:
+
+```
+export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP -DHOP_SOURCE_CUDA -include $HOP_ROOT/hop/hop_runtime.h"
 $CC -x hip $HOP_FLAGS foo.cu -o foo
 ```
 
