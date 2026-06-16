@@ -1,0 +1,9 @@
+#if !defined(HOP_SOURCE_${lang})
+#define HOP_SOURCE_${lang}
+#endif
+${content}
+
+#define hipLaunchKernelGGL(kernel, blocks, threads, shared, stream, ...) \
+    kernel<<<blocks, threads, shared, stream>>>(__VA_ARGS__)
+
+#include <${include}>

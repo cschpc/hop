@@ -1216,6 +1216,9 @@ SOFTWARE.
 #define hipTextureTypeCubemap            gpuTextureTypeCubemap
 #define hipTextureTypeCubemapLayered     gpuTextureTypeCubemapLayered
 
+#define hipLaunchKernelGGL(kernel, blocks, threads, shared, stream, ...) \
+    kernel<<<blocks, threads, shared, stream>>>(__VA_ARGS__)
+
 #include <hop/hop_runtime_api.h>
 
 #endif
