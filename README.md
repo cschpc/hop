@@ -13,7 +13,7 @@ include statements in C and C++ (also Fortran with ISO C bindings).
 
 ```
 export HOP_ROOT=/path/to/install/hop
-git clone https://github.com/mlouhivu/hop $HOP_ROOT
+git clone https://github.com/cschpc/hop.git $HOP_ROOT
 ```
 
 
@@ -53,15 +53,24 @@ Translate from HIP to CUDA:
 
 ### CUDA ⇒ HIP
 
+If the source file includes CUDA headers:
+
 ```
-export HOP_FLAGS=-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP
+export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP"
+$CC -x hip $HOP_FLAGS foo.cu -o foo
+```
+
+If the source file does not include CUDA headers:
+
+```
+export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/cuda -DHOP_TARGET_HIP -DHOP_SOURCE_CUDA -include $HOP_ROOT/hop/hop_runtime.h"
 $CC -x hip $HOP_FLAGS foo.cu -o foo
 ```
 
 ### HIP ⇒ CUDA
 
 ```
-export HOP_FLAGS=-I$HOP_ROOT -I$HOP_ROOT/source/hip -DHOP_TARGET_CUDA
+export HOP_FLAGS="-I$HOP_ROOT -I$HOP_ROOT/source/hip -DHOP_TARGET_CUDA"
 $CC -x cu $HOP_FLAGS foo.cpp -o foo
 ```
 
